@@ -1,15 +1,15 @@
 import React, {Component} from 'react'
-import axios from 'axios'
 import YouTube from 'react-youtube'
+import socket from '../socket'
 
 class VideoPlayer extends Component {
-  constructor() {
-    super()
-    // let videoSrc = `https://www.youtube.com/embed/${
-    //   this.props.videoId
-    // }?autoplay=0`
+  constructor(props) {
+    super(props)
+    this.onReady = this.onReady.bind(this)
   }
-
+  onReady(e) {
+    this.props.videoId ? e.target.playVideo() : console.log('waiting')
+  }
   render() {
     const opts = {
       height: '390',
@@ -21,12 +21,15 @@ class VideoPlayer extends Component {
     }
     return (
       <div>
-        {/* <iframe
-        title="video player"
-        style={{pointerEvents: 'none'}}
-        src={videoSrc}
-      /> */}
-        <YouTube videoId="2g811Eo7K8U" opts={opts} />
+        <YouTube
+          videoId={this.props.videoId}
+          opts={opts}
+          //Added onPlayEventListener, emits msg when video starts playing
+          onPlay={() => {
+            socket.emit('play', this.props.videoId)
+          }}
+          onReady={this.onReady}
+        />
       </div>
     )
   }

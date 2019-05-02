@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import VideoPlayer from './videoPlayer'
 import axios from 'axios'
+import socket from '../socket'
 
 class VideoSearchBar extends Component {
   constructor(props) {
@@ -11,6 +12,9 @@ class VideoSearchBar extends Component {
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleClick = this.handleClick.bind(this)
+  }
+  componentDidMount() {
+    socket.on('play', videoId => this.setState({videoId: videoId}))
   }
 
   // Changes this.state.searchWords when user inputs a search word
