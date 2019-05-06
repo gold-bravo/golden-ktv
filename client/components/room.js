@@ -1,13 +1,23 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux' 
 import VideoSearchBar from './videoSearchBar'
+
 class Room extends Component {
   constructor(props) {
     super(props)
-    this.state = {name: '', room: ''}
   }
+
+  componentDidMount(){
+    console.log('props from Room component', this.props)
+  }
+
   render() {
     return <VideoSearchBar />
   }
 }
 
-export default Room
+const mSTP = state => ({
+  room: state.room
+})
+
+export default connect(mSTP)(Room)

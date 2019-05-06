@@ -1,4 +1,6 @@
 import React, {Component} from 'react'
+import {setRoom} from '../store/roomReducer'
+import {connect} from 'react-redux' 
 
 class RoomForm extends Component {
   constructor() {
@@ -18,6 +20,7 @@ class RoomForm extends Component {
   handleSubmit(event) {
     event.preventDefault()
     //PROBABLY WANT TO SOCKET.EMIT HERE WITH MY ROOM NUMBER
+    this.props.setRoom(this.state.room)
     this.props.history.push(`/room/${this.state.room}`)
   }
   render() {
@@ -47,4 +50,8 @@ class RoomForm extends Component {
   }
 }
 
-export default RoomForm
+const mDTP = dispatch => ({
+  setRoom: (roomNum) => dispatch(setRoom(roomNum))
+})
+
+export default connect(null, mDTP)(RoomForm)
