@@ -16,9 +16,9 @@ class VideoSearchBar extends Component {
     this.handleClick = this.handleClick.bind(this)
     this.handleEnd = this.handleEnd.bind(this)
   }
-  async componentDidMount() {
-    await socket.on('playing', data => this.setState({videoData: data}))
-    await socket.on('welcome', (data, time) => {
+  componentDidMount() {
+    socket.on('playing', data => this.setState({videoData: data}))
+    socket.on('welcome', (data, time) => {
       if (data) {
         console.log('IN SEARCH BAR')
         this.setState({videoData: data, curTime: time})
