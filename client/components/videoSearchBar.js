@@ -55,7 +55,7 @@ class VideoSearchBar extends Component {
         <button type="button" onClick={() => this.handleClick()}>
           Submit
         </button>
-        <VideoPlayer videoId={this.state.videoId} />
+        <VideoPlayer videoId={this.state.videoId} roomId={this.props.room} />
       </div>
     )
   }

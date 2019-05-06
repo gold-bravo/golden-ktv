@@ -8,7 +8,8 @@ class Room extends Component {
   }
 
   render() {
-    return <VideoSearchBar />
+    console.log(this.props)
+    return <VideoSearchBar room={this.props.room.room} />
   }
 }
 
