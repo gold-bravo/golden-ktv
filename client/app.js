@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
 import {Navbar} from './components'
 import Routes from './routes'
-import VideoSearchBar from './components/videoSearchBar'
+import Room from './components/room'
 import TokBox from './components/tokbox'
-import Room from './components/roomForm'
+import RoomForm from './components/roomForm'
 import {Switch, Route} from 'react-router-dom'
 class App extends Component {
   constructor() {
@@ -16,8 +16,8 @@ class App extends Component {
         <Navbar />
         <Routes />
         <Switch>
-          <Route path="/room" component={VideoSearchBar} />
-          <Route path="/" component={Room} />
+          <Route path="/room" component={Room} />
+          <Route path="/" component={RoomForm} />
           {/* <TokBox /> */}
         </Switch>
       </div>

@@ -7,9 +7,13 @@ class VideoPlayer extends Component {
     super(props)
     this.onReady = this.onReady.bind(this)
   }
+
   onReady(e) {
-    this.props.videoId ? e.target.playVideo() : console.log('waiting')
+    (this.props.videoId 
+      // && this.props.roomId
+      ) ? e.target.playVideo() : console.log('waiting')
   }
+
   render() {
     const opts = {
       height: '390',
@@ -19,14 +23,18 @@ class VideoPlayer extends Component {
         autoplay: 1
       }
     }
+    console.log('from videoplayer', this.props.roomId)
     return (
       <div>
         <YouTube
           videoId={this.props.videoId}
+
           opts={opts}
           //Added onPlayEventListener, emits msg when video starts playing
           onPlay={() => {
-            socket.emit('play', this.props.videoId)
+            let roomInfo = {videoId: this.props.videoId, roomId: this.props.roomId}
+            socket.emit('play', roomInfo)
+
           }}
           onReady={this.onReady}
         />
