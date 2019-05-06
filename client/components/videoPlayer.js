@@ -9,9 +9,13 @@ class VideoPlayer extends Component {
   }
 
   onReady(e) {
-    (this.props.videoId 
-      // && this.props.roomId
-      ) ? e.target.playVideo() : console.log('waiting')
+    this.props.videoId
+      ? // && this.props.roomId
+        e.target.playVideo()
+      : console.log('waiting')
+  }
+  componentDidMount() {
+    socket.on('newGuy', (id, roomNumber) => {})
   }
 
   render() {
@@ -28,13 +32,14 @@ class VideoPlayer extends Component {
       <div>
         <YouTube
           videoId={this.props.videoId}
-
           opts={opts}
           //Added onPlayEventListener, emits msg when video starts playing
           onPlay={() => {
-            let roomInfo = {videoId: this.props.videoId, roomId: this.props.roomId}
+            let roomInfo = {
+              videoId: this.props.videoId,
+              roomId: this.props.roomId
+            }
             socket.emit('play', roomInfo)
-
           }}
           onReady={this.onReady}
         />
