@@ -25,7 +25,7 @@ module.exports = io => {
     // roomInfo contains {videoId, roomId} (passed in from videoPlayer component)
     socket.on('play', roomInfo => {
       console.log('back-end playing', roomInfo)
-    // Specific room will play the room's corresponding video
+    // Specific room will play the room's respective video
       socket.to(roomInfo.roomId).emit('play', roomInfo.videoId)
     })
   })
