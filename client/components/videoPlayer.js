@@ -5,10 +5,33 @@ import socket from '../socket'
 class VideoPlayer extends Component {
   constructor(props) {
     super(props)
+    this.state = {
+      curTime: null
+    }
     this.onReady = this.onReady.bind(this)
   }
+  componentDidMount() {
+    socket.on('welcome', (data, time) => {
+      if (data) {
+        this.setState({curTime: time})
+      }
+    })
+  }
+
+  //need custom logics
+  // e.target.getPlayerState() !== 1 &&
   onReady(e) {
-    this.props.videoId ? e.target.playVideo() : console.log('waiting')
+    if (this.props.data[0] && this.state.curTime) {
+      const timeNow = (Date.now() - this.state.curTime) / 1000
+      e.target.seekTo(timeNow)
+      this.setState({curTime: null})
+    }
+    // this.props.data[0] && this.props.data[0].id
+    //   ? e.target.playVideo()
+    //   : console.log('waiting')
+    socket.on('playing', () => {
+      e.target.playVideo()
+    })
   }
   render() {
     const opts = {
@@ -16,21 +39,22 @@ class VideoPlayer extends Component {
       width: '640',
       playerVars: {
         // https://developers.google.com/youtube/player_parameters
-        autoplay: 1
+        autoplay: 0
       }
     }
     return (
-      <div>
+      <>
         <YouTube
-          videoId={this.props.videoId}
+          videoId={this.props.data[0] && this.props.data[0].id}
           opts={opts}
           //Added onPlayEventListener, emits msg when video starts playing
           onPlay={() => {
-            socket.emit('play', this.props.videoId)
+            socket.emit('play', this.props.data, Date.now())
           }}
+          onEnd={this.props.handleEnd}
           onReady={this.onReady}
         />
-      </div>
+      </>
     )
   }
 }

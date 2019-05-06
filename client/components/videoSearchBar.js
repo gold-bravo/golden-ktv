@@ -2,19 +2,32 @@ import React, {Component} from 'react'
 import VideoPlayer from './videoPlayer'
 import axios from 'axios'
 import socket from '../socket'
+import VideoQueue from './VideoQueue'
 
 class VideoSearchBar extends Component {
   constructor(props) {
     super(props)
     this.state = {
       searchWords: '',
-      videoId: ''
+      videoData: []
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleClick = this.handleClick.bind(this)
+    this.handleEnd = this.handleEnd.bind(this)
   }
   componentDidMount() {
-    socket.on('play', videoId => this.setState({videoId: videoId}))
+    socket.on('playing', data => this.setState({videoData: data}))
+    socket.on('welcome', data => {
+      if (data) {
+        this.setState({videoData: data})
+      }
+    })
+  }
+  handleEnd() {
+    this.setState({
+      videoData: this.state.videoData.slice(1)
+    })
+    socket.emit('end', this.state.videoData)
   }
 
   // Changes this.state.searchWords when user inputs a search word
@@ -28,7 +41,6 @@ class VideoSearchBar extends Component {
   // Passes this.state.searchWords into Youtube Api to retrieve the top five videos
   // Obtains the videoId and resets this.state.videoId
   async handleClick() {
-    console.log('checking', this.state.searchWords)
     const KEY = await axios.get('/api/youtubeapi')
     const youtube = await axios.create({
       baseURL: 'https://www.googleapis.com/youtube/v3',
@@ -40,12 +52,22 @@ class VideoSearchBar extends Component {
     })
     const {data} = await youtube.get('/search', {
       params: {
-        q: this.state.searchWords + `karaoke`
+        q: this.state.searchWords + ` karaoke`
       }
     })
-    this.setState({
-      videoId: data.items[0].id.videoId
-    })
+
+    // Uncomment to check how the data looks like from Youtube API
+    // console.log(data)
+    // console.log(data.items[0].snippet.title)
+    // Checking to see the Search returned valid videoid
+    if (data.items[0].id.videoId) {
+      this.setState({
+        videoData: this.state.videoData.concat({
+          id: data.items[0].id.videoId,
+          title: data.items[0].snippet.title
+        })
+      })
+    }
   }
 
   render() {
@@ -55,7 +77,8 @@ class VideoSearchBar extends Component {
         <button type="button" onClick={() => this.handleClick()}>
           Submit
         </button>
-        <VideoPlayer videoId={this.state.videoId} />
+        <VideoPlayer data={this.state.videoData} handleEnd={this.handleEnd} />
+        <VideoQueue data={this.state.videoData} />
       </div>
     )
   }
