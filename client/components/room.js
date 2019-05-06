@@ -1,14 +1,10 @@
 import React, {Component} from 'react'
-import {connect} from 'react-redux' 
+import {connect} from 'react-redux'
 import VideoSearchBar from './videoSearchBar'
 
 class Room extends Component {
   constructor(props) {
     super(props)
-  }
-
-  componentDidMount(){
-    console.log('props from Room component', this.props)
   }
 
   render() {
@@ -17,7 +13,7 @@ class Room extends Component {
 }
 
 const mSTP = state => ({
-  room: state.room
+  room: state.roomReducer
 })
 
 export default connect(mSTP)(Room)

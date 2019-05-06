@@ -24,6 +24,7 @@ export const setRoom = roomNum => async dispatch => {
 const roomReducer = (state = defaultRoom, action) => {
   switch (action.type) {
     case GET_ROOM:
+      console.log('here!')
       return {...state, room: action.roomNum}
     default:
       return defaultRoom
