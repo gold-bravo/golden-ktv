@@ -9,17 +9,19 @@ class VideoSearchBar extends Component {
     super(props)
     this.state = {
       searchWords: '',
-      videoData: []
+      videoData: [],
+      curTime: null
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.handleEnd = this.handleEnd.bind(this)
   }
-  componentDidMount() {
-    socket.on('playing', data => this.setState({videoData: data}))
-    socket.on('welcome', data => {
+  async componentDidMount() {
+    await socket.on('playing', data => this.setState({videoData: data}))
+    await socket.on('welcome', (data, time) => {
       if (data) {
-        this.setState({videoData: data})
+        console.log('IN SEARCH BAR')
+        this.setState({videoData: data, curTime: time})
       }
     })
   }
@@ -77,7 +79,11 @@ class VideoSearchBar extends Component {
         <button type="button" onClick={() => this.handleClick()}>
           Submit
         </button>
-        <VideoPlayer data={this.state.videoData} handleEnd={this.handleEnd} />
+        <VideoPlayer
+          data={this.state.videoData}
+          handleEnd={this.handleEnd}
+          curTime={this.state.curTime}
+        />
         <VideoQueue data={this.state.videoData} />
       </div>
     )

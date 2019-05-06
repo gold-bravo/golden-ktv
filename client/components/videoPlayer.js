@@ -5,26 +5,18 @@ import socket from '../socket'
 class VideoPlayer extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      curTime: null
-    }
     this.onReady = this.onReady.bind(this)
-  }
-  componentDidMount() {
-    socket.on('welcome', (data, time) => {
-      if (data) {
-        this.setState({curTime: time})
-      }
-    })
   }
 
   //need custom logics
-  // e.target.getPlayerState() !== 1 &&
   onReady(e) {
-    if (this.props.data[0] && this.state.curTime) {
-      const timeNow = (Date.now() - this.state.curTime) / 1000
+    if (this.props.data[0] && this.props.curTime) {
+      const timeNow = (Date.now() - this.props.curTime) / 1000
+      console.log('please work', timeNow)
+      console.log(this.props.data[0].id)
       e.target.seekTo(timeNow)
-      this.setState({curTime: null})
+      e.target.playVideo()
+      // this.setState({curTime: null})
     }
     // this.props.data[0] && this.props.data[0].id
     //   ? e.target.playVideo()
