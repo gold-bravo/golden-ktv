@@ -1,7 +1,7 @@
 module.exports = io => {
   // let users = []
   // let connections = []
-  // let rooms = []
+  let rooms = []
   io.on('connection', socket => {
     console.log(`A socket connection to the server has been made: ${socket.id}`)
     // connections.push(socket)
@@ -11,6 +11,12 @@ module.exports = io => {
     socket.on('disconnect', () => {
       console.log(`Connection ${socket.id} has left the building`)
       // connections.splice(connections.indexOf(socket), 1)
+    })
+    socket.on('join room', roomNumber => {
+      if (!rooms.includes(rooms)) {
+        rooms.push(roomNumber)
+      }
+      console.log(rooms)
     })
     //console log back-end playing when playing YT video
     socket.on('play', videoId => {

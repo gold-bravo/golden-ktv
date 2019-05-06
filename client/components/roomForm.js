@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 
-class Room extends Component {
+class RoomForm extends Component {
   constructor() {
     super()
     this.state = {
@@ -17,6 +17,7 @@ class Room extends Component {
 
   handleSubmit(event) {
     event.preventDefault()
+    //PROBABLY WANT TO SOCKET.EMIT HERE WITH MY ROOM NUMBER
     this.props.history.push(`/room/${this.state.room}`)
   }
   render() {
@@ -46,4 +47,4 @@ class Room extends Component {
   }
 }
 
-export default Room
+export default RoomForm
