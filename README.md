@@ -1,4 +1,6 @@
-# Boilermaker
+# Golden Karaoke
+
+![Alt text](./public/logo.jpg?raw=true 'Golden Karaoke')
 
 _Good things come in pairs_
 
