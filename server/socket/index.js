@@ -1,13 +1,12 @@
 module.exports = io => {
   // let users = []
   // let connections = []
-  // let curData
-  // let playTime
   let rooms = {}
 
   io.on('connection', socket => {
     console.log(`A socket connection to the server has been made: ${socket.id}`)
 
+    //on disconnect probably do something to the disconnected socket
     socket.on('disconnect', () => {
       console.log(`Connection ${socket.id} has left the building`)
       // connections.splice(connections.indexOf(socket), 1)
