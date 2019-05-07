@@ -20,14 +20,14 @@ class VideoSearchBar extends Component {
     socket.on('playing', data => this.setState({videoData: data}))
     socket.on('welcome', (data, time) => {
       if (data) {
-        console.log('IN SEARCH BAR')
         this.setState({videoData: data, curTime: time})
       }
     })
   }
   handleEnd() {
     this.setState({
-      videoData: this.state.videoData.slice(1)
+      videoData: this.state.videoData.slice(1),
+      curTime: null
     })
     socket.emit('end', this.state.videoData)
   }

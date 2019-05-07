@@ -13,12 +13,15 @@ module.exports = io => {
     //console log back-end playing when playing YT video
     socket.on('play', (data, time) => {
       curData = data
-      playTime = time
-      // console.log(curData, time)
+      if (time) {
+        console.log(time)
+        playTime = time
+      }
       socket.broadcast.emit('playing', curData)
     })
+
     socket.on('end', data => {
-      // console.log('ended')
+      console.log('ended')
       playTime = null
       curData = data
     })
