@@ -6,14 +6,33 @@ class VideoPlayer extends Component {
   constructor(props) {
     super(props)
     this.onReady = this.onReady.bind(this)
+    this.handleStateChange = this.handleStateChange.bind(this)
+    this.handlePlay = this.handlePlay.bind(this)
   }
 
-  onReady(e) {
+  onReady(event) {
+    const player = event.target
     this.props.videoId
       ? // && this.props.roomId
-        e.target.playVideo()
+        player.playVideo()
       : console.log('waiting')
   }
+
+  handleStateChange(event) {
+    const player = event.target
+    console.log(player.getCurrentTime())
+  }
+
+  handlePlay() {
+    let roomInfo = {
+      videoId: this.props.videoId,
+      roomId: this.props.roomId
+    }
+    socket.emit('play', roomInfo)
+  }
+
+  handleSync() {}
+
   componentDidMount() {
     socket.on('newGuy', (id, roomNumber) => {})
   }
@@ -34,15 +53,13 @@ class VideoPlayer extends Component {
           videoId={this.props.videoId}
           opts={opts}
           //Added onPlayEventListener, emits msg when video starts playing
-          onPlay={() => {
-            let roomInfo = {
-              videoId: this.props.videoId,
-              roomId: this.props.roomId
-            }
-            socket.emit('play', roomInfo)
-          }}
+          onPlay={this.handlePlay}
           onReady={this.onReady}
+          onStateChange={this.handleStateChange}
         />
+        <button type="button" onClick={this.handleSync}>
+          Sync
+        </button>
       </div>
     )
   }

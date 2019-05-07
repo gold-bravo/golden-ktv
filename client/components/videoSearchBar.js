@@ -18,9 +18,9 @@ class VideoSearchBar extends Component {
   }
 
   // Changes this.state.searchWords when user inputs a search word
-  handleChange(e) {
+  handleChange(event) {
     this.setState({
-      searchWords: e.target.value
+      searchWords: event.target.value
     })
   }
 
@@ -40,7 +40,7 @@ class VideoSearchBar extends Component {
     })
     const {data} = await youtube.get('/search', {
       params: {
-        q: this.state.searchWords + `karaoke`
+        q: `${this.state.searchWords} karaoke`
       }
     })
     this.setState({
