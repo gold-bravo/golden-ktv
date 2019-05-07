@@ -3,7 +3,6 @@ var apiKey = process.env.apiKey;
 var sessionId = process.env.sessionId;
 var token = process.env.token;
 
-
 // Handling all of our errors here by alerting them
 function handleError(error) {
     if (error) {
@@ -16,7 +15,7 @@ function handleError(error) {
   
   function initializeSession() {
     var session = OT.initSession(apiKey, sessionId);
-  
+    console.log('session is created!')
     // Subscribe to a newly created stream
     session.on('streamCreated', function(event) {
       session.subscribe(event.stream, 'subscriber', {
