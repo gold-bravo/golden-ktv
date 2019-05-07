@@ -29,7 +29,7 @@ class VideoSearchBar extends Component {
       videoData: this.state.videoData.slice(1),
       curTime: null
     })
-    socket.emit('end', this.state.videoData)
+    socket.emit('end', this.state.videoData, this.props.room)
   }
 
   // Changes this.state.searchWords when user inputs a search word
@@ -57,7 +57,6 @@ class VideoSearchBar extends Component {
         q: this.state.searchWords + ` karaoke`
       }
     })
-
     // Uncomment to check how the data looks like from Youtube API
     // console.log(data)
     // console.log(data.items[0].snippet.title)
@@ -69,6 +68,7 @@ class VideoSearchBar extends Component {
           title: data.items[0].snippet.title
         })
       })
+      socket.emit('queue added', this.state.videoData)
     }
   }
 
@@ -76,13 +76,14 @@ class VideoSearchBar extends Component {
     return (
       <div className="video-searchbar">
         <input placeholder="Start search here" onChange={this.handleChange} />
-        <button type="button" onClick={() => this.handleClick()}>
+        <button type="button" onClick={this.handleClick}>
           Submit
         </button>
         <VideoPlayer
           data={this.state.videoData}
           handleEnd={this.handleEnd}
           curTime={this.state.curTime}
+          roomId={this.props.room}
         />
         <VideoQueue data={this.state.videoData} />
       </div>

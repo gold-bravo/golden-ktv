@@ -9,9 +9,7 @@ class VideoPlayer extends Component {
   }
   componentDidMount() {
     socket.on('playing', () => {
-      if (this.props.data[0]) {
-        this.player.getInternalPlayer().playVideo()
-      }
+      this.player.getInternalPlayer().playVideo()
     })
   }
   ref = player => {
@@ -48,10 +46,16 @@ class VideoPlayer extends Component {
             ref={this.ref}
             onReady={this.onReady}
             onPlay={() => {
+              // send current time info only if you started playing for the firsttime
               if (this.props.curTime) {
-                socket.emit('play', this.props.data)
+                socket.emit('play', this.props.data, null, this.props.roomId)
               } else {
-                socket.emit('play', this.props.data, Date.now())
+                socket.emit(
+                  'play',
+                  this.props.data,
+                  Date.now(),
+                  this.props.roomId
+                )
               }
             }}
             onEnded={this.props.handleEnd}

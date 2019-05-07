@@ -1,14 +1,12 @@
-let curData
-let playTime
-
 module.exports = io => {
   // let users = []
   // let connections = []
-  let rooms = []
+  // let curData
+  // let playTime
+  let rooms = {}
 
   io.on('connection', socket => {
     console.log(`A socket connection to the server has been made: ${socket.id}`)
-    io.to(socket.id).emit('welcome', curData, playTime)
 
     socket.on('disconnect', () => {
       console.log(`Connection ${socket.id} has left the building`)
@@ -17,8 +15,16 @@ module.exports = io => {
 
     socket.on('join room', roomNumber => {
       // If roomNumber is not in our room storage, add the roomNumber
-      if (!rooms.includes(roomNumber)) {
-        rooms.push(roomNumber)
+      if (!rooms.hasOwnProperty(roomNumber)) {
+        rooms[roomNumber] = {}
+      } else {
+        io
+          .to(socket.id)
+          .emit(
+            'welcome',
+            rooms[roomNumber].curData,
+            rooms[roomNumber].playTime
+          )
       }
       // Socket is now connected to the specific roomNumber
       socket.join(roomNumber)
@@ -26,25 +32,27 @@ module.exports = io => {
     })
 
     //console log back-end playing when playing YT video
-    socket.on('play', (data, time) => {
-      curData = data
+    socket.on('play', (data, time, roomNumber) => {
+      console.log(roomNumber)
+      rooms[roomNumber].curData = data
       if (time) {
         console.log(time)
-        playTime = time
+        rooms[roomNumber].playTime = time
       }
-      socket.broadcast.emit('playing', curData)
+      socket.to(roomNumber).emit('playing', rooms[roomNumber].curData)
     })
 
-    socket.on('end', data => {
+    socket.on('end', (data, roomNumber) => {
       console.log('ended')
-      playTime = null
-      curData = data
+      rooms[roomNumber].playTime = null
+      rooms[roomNumber].curData = data
+    })
     // Console log back-end playing when playing YT video
     // roomInfo contains {videoId, roomId} (passed in from videoPlayer component)
-    socket.on('play', roomInfo => {
-      console.log('back-end playing', roomInfo)
+    // socket.on('play', roomInfo => {
+    // console.log('back-end playing', roomInfo)
     // Specific room will play the room's respective video
-      socket.to(roomInfo.roomId).emit('play', roomInfo.videoId)
-    })
+    // socket.to(roomInfo.roomId).emit('play', roomInfo.videoId)
+    // })
   })
 }
