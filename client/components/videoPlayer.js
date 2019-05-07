@@ -24,34 +24,16 @@ class VideoPlayer extends Component {
       this.player.getInternalPlayer().playVideo()
     }
   }
+  handleStop = () => {
+    this.player.getInternalPlayer().stopVideo()
+  }
   render() {
-    // const opts = {
-    //   height: '390',
-    //   width: '640',
-    //   playerVars: {
-    // https://developers.google.com/youtube/player_parameters
-    //     autoplay: 0
-    //   }
-    // }
     const vidId = this.props.data[0] && this.props.data[0].id
     return (
-      // <>
-      //   <YouTube
-      //     videoId={vidId}
-      //     opts={opts}
-      //     //Added onPlayEventListener, emits msg when video starts playing
-      //     onPlay={e => {
-      //       if (this.props.curTime) {
-      //         const timeNow = (Date.now() - this.props.curTime) / 1000
-      //         e.target.seekTo(timeNow)
-      //       }
-      //       socket.emit('play', this.props.data, Date.now())
-      //     }}
-      //     onEnd={this.props.handleEnd}
-      //     onReady={this.onReady}
-      //   />
-      // </>
       <div className="player-wrapper">
+        <button type="button" onClick={this.handleStop}>
+          Stop
+        </button>
         {vidId ? (
           <ReactPlayer
             className="react-player"
