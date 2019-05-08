@@ -58,11 +58,11 @@ class VideoSearchBar extends Component {
     })
     const {data} = await youtube.get('/search', {
       params: {
-        q: this.state.searchWords + ` karaoke`
+        q: this.state.searchWords + ` karaoke -karafun`
       }
     })
     // Uncomment to check how the data looks like from Youtube API
-    // console.log(data)
+    console.log(data)
     // console.log(data.items[0].snippet.title)
     // Checking to see the Search returned valid videoid
     if (data.items[0].id.videoId) {
