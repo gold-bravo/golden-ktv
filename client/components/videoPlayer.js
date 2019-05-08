@@ -13,13 +13,13 @@ class VideoPlayer extends Component {
   }
   onReady() {
     if (this.props.data[0] && this.props.curTime) {
-      console.log('hello')
       const timeNow = (Date.now() - this.props.curTime) / 1000
       //   console.log('working')
-      //   console.log(timeNow)
-      // this.player.getInternalPlayer().seekTo(timeNow, true)
-      this.player.getInternalPlayer().seekTo(timeNow)
+      console.log('hello')
+      console.log(timeNow)
+      // this.player.getInternalPlayer()
       // this.player.getInternalPlayer().playVideo()
+      this.player.getInternalPlayer().seekTo(400)
     }
     // else {
     // }
@@ -49,7 +49,6 @@ class VideoPlayer extends Component {
 
   render() {
     const vidId = this.props.data[0] && this.props.data[0].id
-    socket.on('playing', () => console.log('I am playing'))
     return (
       <div className="player-wrapper">
         <button type="button" onClick={this.handlePause}>
@@ -80,10 +79,8 @@ class VideoPlayer extends Component {
           onStart={() => {
             socket.emit('play', this.props.data, Date.now(), this.props.roomId)
           }}
-          onPlay={this.onPlay}
-          onEnded={() => {
-            this.props.handleEnd()
-          }}
+          // onPlay={this.onPlay}
+          onEnded={this.props.handleEnd}
         />
       </div>
     )
