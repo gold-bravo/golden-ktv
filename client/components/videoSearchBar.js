@@ -88,7 +88,7 @@ class VideoSearchBar extends Component {
       }),
       videoResults: []
     })
-    socket.emit('queue added', this.state.videoData)
+    socket.emit('queue added', this.state.videoData, this.props.room)
   }
 
   render() {
