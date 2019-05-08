@@ -1,13 +1,11 @@
 module.exports = io => {
   // let users = []
   // let connections = []
-  // let curData
-  // let playTime
   let rooms = {}
 
   io.on('connection', socket => {
     console.log(`A socket connection to the server has been made: ${socket.id}`)
-
+    socket.emit('no refresh', socket.id)
     socket.on('disconnect', () => {
       console.log(`Connection ${socket.id} has left the building`)
       // connections.splice(connections.indexOf(socket), 1)
@@ -15,31 +13,45 @@ module.exports = io => {
 
     socket.on('join room', roomNumber => {
       // If roomNumber is not in our room storage, add the roomNumber
+      //TODO://create user on join room
+      // socket.user = socket.id
+      // users.push(socket.user)
       if (!rooms.hasOwnProperty(roomNumber)) {
         rooms[roomNumber] = {}
-      } else {
+      } else if (rooms[roomNumber].curData) {
+        console.log(socket.id)
         io
           .to(socket.id)
           .emit(
             'welcome',
             rooms[roomNumber].curData,
-            rooms[roomNumber].playTime
+            rooms[roomNumber].playTime ? rooms[roomNumber].playTime : null
           )
       }
       // Socket is now connected to the specific roomNumber
       socket.join(roomNumber)
-      console.log(rooms)
+      console.log('join room', rooms)
+    })
+
+    //Listen for queue added, tell others to update queue
+    socket.on('queue added', (data, roomNumber) => {
+      console.log(roomNumber)
+      rooms[roomNumber].curData = data
+      console.log('queue added', data)
+      socket.to(roomNumber).emit('update queue', rooms[roomNumber].curData)
     })
 
     //console log back-end playing when playing YT video
     socket.on('play', (data, time, roomNumber) => {
-      console.log(roomNumber)
-      rooms[roomNumber].curData = data
-      if (time) {
-        console.log(time)
+      console.log('play', roomNumber)
+      if (!rooms[roomNumber].playTime) {
+        console.log('play', time)
         rooms[roomNumber].playTime = time
+        // rooms[roomNumber].curData = data
+        socket.to(roomNumber).emit('playing')
       }
-      socket.to(roomNumber).emit('playing', rooms[roomNumber].curData)
+      //maybe don't need to emit curdata?
+      // socket.to(roomNumber).emit('playing', rooms[roomNumber].curData)
     })
 
     socket.on('end', (data, roomNumber) => {
@@ -56,3 +68,11 @@ module.exports = io => {
     // })
   })
 }
+
+//TODO:on disconnect probably do something to the disconnected socket
+// destroy room when there is no user
+// if not registered in a room kick out of the room
+// limit number of search per user in a given time
+// host user designate func
+// play sync - allow only host to play? or whoever's turn to sing, only that person to play?
+//

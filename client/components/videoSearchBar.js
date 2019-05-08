@@ -20,11 +20,15 @@ class VideoSearchBar extends Component {
     this.handleClick = this.handleClick.bind(this)
   }
   componentDidMount() {
-    socket.on('playing', data => this.setState({videoData: data}))
+    // prob don't need now
+    // socket.on('playing', data => this.setState({videoData: data}))
     socket.on('welcome', (data, time) => {
       if (data) {
         this.setState({videoData: data, curTime: time})
       }
+    })
+    socket.on('update queue', data => {
+      this.setState({videoData: data})
     })
   }
   handleEnd() {
@@ -62,8 +66,6 @@ class VideoSearchBar extends Component {
     })
     // Uncomment to check how the data looks like from Youtube API
     // console.log(data)
-    // console.log(data.items[0].snippet.title)
-    // Checking to see the Search returned valid videoid
 
     // Filters out the videos without a videoId
     const videoItems = data.items.filter(video => video.id.videoId)
@@ -74,8 +76,7 @@ class VideoSearchBar extends Component {
   }
 
   // Adds the clicked videoResult into the queue
-  handleClick(video){
-    console.log('handleClick')
+  handleClick(video) {
     this.setState({
       videoData: this.state.videoData.concat({
         id: video.id.videoId,
@@ -84,7 +85,7 @@ class VideoSearchBar extends Component {
       }),
       videoResults: []
     })
-    socket.emit('queue added', this.state.videoData)
+    socket.emit('queue added', this.state.videoData, this.props.room)
   }
 
   render() {
@@ -100,7 +101,10 @@ class VideoSearchBar extends Component {
           curTime={this.state.curTime}
           roomId={this.props.room}
         />
-        <VideoResults data={this.state.videoResults} handleClick={this.handleClick} />
+        <VideoResults
+          data={this.state.videoResults}
+          handleClick={this.handleClick}
+        />
         <VideoQueue data={this.state.videoData} />
       </div>
     )
