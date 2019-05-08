@@ -17,11 +17,15 @@ class VideoSearchBar extends Component {
     this.handleEnd = this.handleEnd.bind(this)
   }
   componentDidMount() {
-    socket.on('playing', data => this.setState({videoData: data}))
+    // prob don't need now
+    // socket.on('playing', data => this.setState({videoData: data}))
     socket.on('welcome', (data, time) => {
       if (data) {
         this.setState({videoData: data, curTime: time})
       }
+    })
+    socket.on('update queue', data => {
+      this.setState({videoData: data})
     })
   }
   handleEnd() {
@@ -68,7 +72,7 @@ class VideoSearchBar extends Component {
           title: data.items[0].snippet.title
         })
       })
-      socket.emit('queue added', this.state.videoData)
+      socket.emit('queue added', this.state.videoData, this.props.room)
     }
   }
 
