@@ -1,15 +1,27 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import VideoSearchBar from './videoSearchBar'
+import {OTSession, OTPublisher, OTStreams, OTSubscriber} from 'opentok-react'
 
 class Room extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   render() {
     console.log(this.props)
-    return <VideoSearchBar room={this.props.room.room} />
+    return (
+      <div>
+        <VideoSearchBar room={this.props.room.room} />
+        <OTSession
+          //TODO: Please fill out keys
+          apiKey=""
+          sessionId=""
+          token=""
+        >
+          <OTPublisher />
+          <OTStreams>
+            <OTSubscriber />
+          </OTStreams>
+        </OTSession>
+      </div>
+    )
   }
 }
 
