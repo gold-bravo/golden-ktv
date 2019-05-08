@@ -65,9 +65,7 @@ class VideoSearchBar extends Component {
       }
     })
     // Uncomment to check how the data looks like from Youtube API
-    console.log(data)
-    // console.log(data.items[0].snippet.title)
-    // Checking to see the Search returned valid videoid
+    // console.log(data)
 
     // Filters out the videos without a videoId
     const videoItems = data.items.filter(video => video.id.videoId)
@@ -79,7 +77,6 @@ class VideoSearchBar extends Component {
 
   // Adds the clicked videoResult into the queue
   handleClick(video) {
-    console.log('handleClick')
     this.setState({
       videoData: this.state.videoData.concat({
         id: video.id.videoId,
