@@ -11,20 +11,21 @@ import {
 } from 'opentok-react'
 
 class Room extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {streams: []}
   }
-  async componentWillMount() {
-    const {data} = await axios.get('/api/tokbox')
+  async componentDidMount() {
+    let roomNum = this.props.location.pathname.slice(10)
+    const {data} = await axios.get(`/api/room/${roomNum}`)
     this.sessionHelper = createSession({
       //waiting for stuff
       apiKey: data.KEY,
+      sessionId: data.sessionId,
       onStreamsUpdated: streams => {
         this.setState({streams})
       }
     })
-    console.log(this.sessionHelper, 'what;s happen')
   }
 
   componentWillUnmount() {
@@ -32,17 +33,18 @@ class Room extends Component {
   }
 
   render() {
+    console.log(this.props.room.room)
     return (
       <div>
         <VideoSearchBar room={this.props.room.room} />
         {/* <OTSession
         //TODO: Please fill out keys
         > */}
-        <OTPublisher session={this.sessionHelper.session} />
+        {/* <OTPublisher session={this.sessionHelper.session} />
         <OTStreams>
           <OTSubscriber />
         </OTStreams>
-        {/* </OTSession> */}
+        </OTSession> */}
       </div>
     )
   }
