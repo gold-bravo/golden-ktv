@@ -1,13 +1,15 @@
 import React, {Component} from 'react'
 import {setRoom} from '../store/roomReducer'
-import {connect} from 'react-redux' 
+import {connect} from 'react-redux'
+import axios from 'axios'
 
 class RoomForm extends Component {
   constructor() {
     super()
     this.state = {
       name: '',
-      room: ''
+      room: '',
+      sessionId: ''
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -17,10 +19,13 @@ class RoomForm extends Component {
     this.setState({[event.target.name]: event.target.value})
   }
 
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault()
     //PROBABLY WANT TO SOCKET.EMIT HERE WITH MY ROOM NUMBER
     this.props.setRoom(this.state.room)
+    const {data} = await axios.put('/api/room', {roomNum: this.state.room})
+    console.log('handling stuff', data)
+    this.setState({sessionId: data.sessionId})
     this.props.history.push(`/room/${this.state.room}`)
   }
   render() {
@@ -51,7 +56,7 @@ class RoomForm extends Component {
 }
 
 const mDTP = dispatch => ({
-  setRoom: (roomNum) => dispatch(setRoom(roomNum))
+  setRoom: roomNum => dispatch(setRoom(roomNum))
 })
 
 export default connect(null, mDTP)(RoomForm)
