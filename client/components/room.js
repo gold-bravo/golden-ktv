@@ -36,7 +36,7 @@ class Room extends Component {
   }
 
   componentWillUnmount() {
-    this.sessionHelper.disconnect()
+    // this.sessionHelper.disconnect()
   }
 
   render() {

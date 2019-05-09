@@ -34,6 +34,19 @@ router.put('/', async (req, res, next) => {
             })
           )
       })
+    } else {
+      let token = opentok.generateToken(roomSearch[0].sessionId)
+      roomSearch[0]
+        .update({
+          users: [...roomSearch[0].users, {[name]: token}]
+        })
+        .then(() =>
+          res.send({
+            KEY,
+            sessionId: roomSearch[0].sessionId,
+            token: token
+          })
+        )
     }
   } catch (error) {
     console.error(error)
