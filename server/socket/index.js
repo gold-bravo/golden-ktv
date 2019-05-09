@@ -35,9 +35,8 @@ module.exports = io => {
 
     //Listen for queue added, tell others to update queue
     socket.on('queue added', (data, roomNumber) => {
-      console.log(roomNumber)
       rooms[roomNumber].curData = data
-      console.log('queue added', data)
+      console.log('queue added', data, roomNumber)
       socket.to(roomNumber).emit('update queue', rooms[roomNumber].curData)
     })
 

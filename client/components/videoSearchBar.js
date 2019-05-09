@@ -76,15 +76,20 @@ class VideoSearchBar extends Component {
   }
 
   // Adds the clicked videoResult into the queue
-  handleClick(video) {
+  async handleClick(video) {
+    const newQueueItem = {
+      id: video.id.videoId,
+      title: video.snippet.title,
+      img: video.snippet.thumbnails.default.url
+    }
+
+    await this.setState(state => {
+      return {videoData: state.videoData.concat(newQueueItem)}
+    })
     this.setState({
-      videoData: this.state.videoData.concat({
-        id: video.id.videoId,
-        title: video.snippet.title,
-        img: video.snippet.thumbnails.default.url
-      }),
       videoResults: []
     })
+
     socket.emit('queue added', this.state.videoData, this.props.room)
   }
 

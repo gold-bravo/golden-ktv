@@ -6,33 +6,33 @@ class VideoPlayer extends Component {
   constructor(props) {
     super(props)
     this.onReady = this.onReady.bind(this)
-    this.onPlay = this.onPlay.bind(this)
+    // this.onPlay = this.onPlay.bind(this)
   }
+
   ref = player => {
     this.player = player
   }
+  // this.props.data[0] &&
   onReady() {
-    if (this.props.data[0] && this.props.curTime) {
-      const timeNow = (Date.now() - this.props.curTime) / 1000
-      //   console.log('working')
-      console.log('hello')
-      console.log(timeNow)
-      // this.player.getInternalPlayer()
-      // this.player.getInternalPlayer().playVideo()
-      this.player.getInternalPlayer().seekTo(400)
-    }
-    // else {
-    // }
-    socket.on('playing', () => {
-      this.player.getInternalPlayer().playVideo()
-    })
-  }
-  onPlay() {
     if (this.props.curTime) {
       const timeNow = (Date.now() - this.props.curTime) / 1000
-      this.player.seekTo(timeNow)
+      //   console.log('working')
+      console.log(timeNow)
+      this.player.seekTo(40)
+      // this.player.getInternalPlayer().playVideo()
+      // this.player.getInternalPlayer()
+    } else {
+      // socket.on('playing', () => {
+      //   this.player.getInternalPlayer().playVideo()
+      // })
     }
   }
+  // onPlay() {
+  //   if (this.props.curTime) {
+  //     const timeNow = (Date.now() - this.props.curTime) / 1000
+  //     this.player.seekTo(timeNow)
+  //   }
+  // }
   handlePause = () => {
     this.player.getInternalPlayer().pauseVideo()
   }
@@ -77,6 +77,7 @@ class VideoPlayer extends Component {
           ref={this.ref}
           onReady={this.onReady}
           onStart={() => {
+            console.log('starting now', this.props.data)
             socket.emit('play', this.props.data, Date.now(), this.props.roomId)
           }}
           // onPlay={this.onPlay}
