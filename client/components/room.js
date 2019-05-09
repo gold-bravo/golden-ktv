@@ -9,7 +9,7 @@ import {
   OTSubscriber,
   createSession
 } from 'opentok-react'
-
+import socket from '../socket'
 class Room extends Component {
   constructor(props) {
     super(props)
@@ -19,6 +19,12 @@ class Room extends Component {
     let roomNum = this.props.location.pathname.slice(10)
     const {data} = await axios.get(`/api/room/${roomNum}`)
     console.log(data)
+
+    socket.on('no refresh', id => {
+      if (id) {
+        this.props.history.push('/')
+      }
+    })
     // this.sessionHelper = createSession({
     //   //waiting for stuff
     //   apiKey: data.KEY,
@@ -35,6 +41,9 @@ class Room extends Component {
 
   render() {
     console.log(this.props.room.room)
+  }
+
+  render() {
     return (
       <div>
         <VideoSearchBar room={this.props.room.room} />
