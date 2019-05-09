@@ -20,7 +20,13 @@ router.put('/', async (req, res, next) => {
         if (err) throw err
         roomSearch[0]
           .update({sessionId: session.sessionId})
-          .then(() => res.send({KEY, sessionId: roomSearch[0].sessionId}))
+          .then(() =>
+            res.send({
+              KEY,
+              sessionId: roomSearch[0].sessionId,
+              token: opentok.generateToken(roomSearch[0].sessionId)
+            })
+          )
       })
     }
   } catch (error) {

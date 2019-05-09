@@ -24,6 +24,7 @@ class RoomForm extends Component {
     //PROBABLY WANT TO SOCKET.EMIT HERE WITH MY ROOM NUMBER
     this.props.setRoom(this.state.room)
     const {data} = await axios.put('/api/room', {roomNum: this.state.room})
+    console.log('handling stuff', data)
     this.setState({sessionId: data.sessionId})
     this.props.history.push(`/api/room/${this.state.room}`)
   }

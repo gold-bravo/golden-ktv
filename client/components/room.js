@@ -18,14 +18,15 @@ class Room extends Component {
   async componentDidMount() {
     let roomNum = this.props.location.pathname.slice(10)
     const {data} = await axios.get(`/api/room/${roomNum}`)
-    this.sessionHelper = createSession({
-      //waiting for stuff
-      apiKey: data.KEY,
-      sessionId: data.sessionId,
-      onStreamsUpdated: streams => {
-        this.setState({streams})
-      }
-    })
+    console.log(data)
+    // this.sessionHelper = createSession({
+    //   //waiting for stuff
+    //   apiKey: data.KEY,
+    //   sessionId: data.sessionId,
+    //   onStreamsUpdated: streams => {
+    //     this.setState({streams})
+    //   }
+    // })
   }
 
   componentWillUnmount() {
