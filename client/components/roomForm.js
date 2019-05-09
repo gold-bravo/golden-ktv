@@ -23,7 +23,10 @@ class RoomForm extends Component {
     event.preventDefault()
     //PROBABLY WANT TO SOCKET.EMIT HERE WITH MY ROOM NUMBER
     this.props.setRoom(this.state.room)
-    const {data} = await axios.put('/api/room', {roomNum: this.state.room})
+    const {data} = await axios.put('/api/room', {
+      roomNum: this.state.room,
+      name: this.state.name
+    })
     console.log('handling stuff', data)
     this.setState({sessionId: data.sessionId})
     this.props.history.push(`/room/${this.state.room}`)

@@ -10,6 +10,7 @@ router.put('/', async (req, res, next) => {
     const SECRET = process.env.TOKBOX_SECRET
     let opentok = new OpenTok(KEY, SECRET)
     let roomNumber = req.body.roomNum
+    let name = req.body.name
     const roomSearch = await Room.findOrCreate({
       where: {roomNum: roomNumber}
     })
@@ -18,13 +19,18 @@ router.put('/', async (req, res, next) => {
       console.log('Im in here!')
       opentok.createSession((err, session) => {
         if (err) throw err
+        let token = opentok.generateToken(session.sessionId)
+        console.log(roomSearch[0])
         roomSearch[0]
-          .update({sessionId: session.sessionId})
+          .update({
+            sessionId: session.sessionId,
+            users: [...roomSearch[0].users, {[name]: token}]
+          })
           .then(() =>
             res.send({
               KEY,
               sessionId: roomSearch[0].sessionId,
-              token: opentok.generateToken(roomSearch[0].sessionId)
+              token: token
             })
           )
       })
