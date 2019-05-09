@@ -622,7 +622,8 @@ function (_Component) {
                 this.props.setRoom(this.state.room);
                 _context.next = 4;
                 return axios__WEBPACK_IMPORTED_MODULE_3___default.a.put('/api/room', {
-                  roomNum: this.state.room
+                  roomNum: this.state.room,
+                  name: this.state.name
                 });
 
               case 4:

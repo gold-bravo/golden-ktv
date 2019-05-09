@@ -1,11 +1,12 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 
-const Room = db.define('Rooms', {
+const Room = db.define('Room', {
   curTime: {type: Sequelize.FLOAT},
-  queue: {type: Sequelize.ARRAY(Sequelize.STRING)},
-  users: {type: Sequelize.ARRAY(Sequelize.STRING)},
-  sessionId: {type: Sequelize.STRING}
+  roomNum: {type: Sequelize.STRING},
+  queue: {type: Sequelize.ARRAY(Sequelize.TEXT), defaultValue: []},
+  users: {type: Sequelize.ARRAY(Sequelize.TEXT), defaultValue: []},
+  sessionId: {type: Sequelize.TEXT}
 })
 
 module.exports = Room
