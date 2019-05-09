@@ -178,10 +178,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var VideoQueue = function VideoQueue(props) {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, props.data.map(function (el) {
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
-      key: el.id
-    }, el.title);
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, props.data.map(function (video) {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      key: video.id
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      src: video.img
+    }), video.title));
   }));
 };
 
@@ -401,9 +403,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _videoSearchBar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./videoSearchBar */ "./client/components/videoSearchBar.js");
-/* harmony import */ var opentok_react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! opentok-react */ "./node_modules/opentok-react/dist/index.js");
-/* harmony import */ var opentok_react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(opentok_react__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var opentok_react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! opentok-react */ "./node_modules/opentok-react/dist/index.js");
+/* harmony import */ var opentok_react__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(opentok_react__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _socket__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../socket */ "./client/socket.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -426,29 +435,90 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
+
 var Room =
 /*#__PURE__*/
 function (_Component) {
   _inherits(Room, _Component);
 
-  function Room() {
+  function Room(props) {
+    var _this;
+
     _classCallCheck(this, Room);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(Room).apply(this, arguments));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Room).call(this, props));
+    _this.state = {
+      streams: []
+    };
+    return _this;
   }
 
   _createClass(Room, [{
+    key: "componentDidMount",
+    value: function () {
+      var _componentDidMount = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee() {
+        var _this2 = this;
+
+        var roomNum, _ref, data;
+
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                roomNum = this.props.location.pathname.slice(6);
+                _context.next = 3;
+                return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/api/room/".concat(roomNum));
+
+              case 3:
+                _ref = _context.sent;
+                data = _ref.data;
+                console.log(data);
+                _socket__WEBPACK_IMPORTED_MODULE_5__["default"].on('no refresh', function (id) {
+                  if (id) {
+                    _this2.props.history.push('/');
+                  }
+                }); // this.sessionHelper = createSession({
+                //   //waiting for stuff
+                //   apiKey: data.KEY,
+                //   sessionId: data.sessionId,
+                //   onStreamsUpdated: streams => {
+                //     this.setState({streams})
+                //   }
+                // })
+
+              case 7:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function componentDidMount() {
+        return _componentDidMount.apply(this, arguments);
+      }
+
+      return componentDidMount;
+    }()
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      this.sessionHelper.disconnect();
+    }
+  }, {
     key: "render",
     value: function render() {
-      console.log(this.props);
+      console.log(this.props.room.room);
+    }
+  }, {
+    key: "render",
+    value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_videoSearchBar__WEBPACK_IMPORTED_MODULE_2__["default"], {
         room: this.props.room.room
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_3__["OTSession"] //TODO: Please fill out keys
-      , {
-        apiKey: "",
-        sessionId: "",
-        token: ""
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_3__["OTPublisher"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_3__["OTStreams"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_3__["OTSubscriber"], null))));
+      }));
     }
   }]);
 
@@ -478,7 +548,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _store_roomReducer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../store/roomReducer */ "./client/store/roomReducer.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -502,6 +578,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var RoomForm =
 /*#__PURE__*/
 function (_Component) {
@@ -515,7 +592,8 @@ function (_Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(RoomForm).call(this));
     _this.state = {
       name: '',
-      room: ''
+      room: '',
+      sessionId: ''
     };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
@@ -529,12 +607,47 @@ function (_Component) {
     }
   }, {
     key: "handleSubmit",
-    value: function handleSubmit(event) {
-      event.preventDefault(); //PROBABLY WANT TO SOCKET.EMIT HERE WITH MY ROOM NUMBER
+    value: function () {
+      var _handleSubmit = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee(event) {
+        var _ref, data;
 
-      this.props.setRoom(this.state.room);
-      this.props.history.push("/room/".concat(this.state.room));
-    }
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                event.preventDefault(); //PROBABLY WANT TO SOCKET.EMIT HERE WITH MY ROOM NUMBER
+
+                this.props.setRoom(this.state.room);
+                _context.next = 4;
+                return axios__WEBPACK_IMPORTED_MODULE_3___default.a.put('/api/room', {
+                  roomNum: this.state.room
+                });
+
+              case 4:
+                _ref = _context.sent;
+                data = _ref.data;
+                console.log('handling stuff', data);
+                this.setState({
+                  sessionId: data.sessionId
+                });
+                this.props.history.push("/room/".concat(this.state.room));
+
+              case 9:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function handleSubmit(_x) {
+        return _handleSubmit.apply(this, arguments);
+      }
+
+      return handleSubmit;
+    }()
   }, {
     key: "render",
     value: function render() {
@@ -850,48 +963,68 @@ function (_Component) {
       _this.player = player;
     });
 
-    _defineProperty(_assertThisInitialized(_this), "handleStop", function () {
-      _this.player.getInternalPlayer().stopVideo();
+    _defineProperty(_assertThisInitialized(_this), "handlePause", function () {
+      _this.player.getInternalPlayer().pauseVideo();
     });
 
-    _this.onReady = _this.onReady.bind(_assertThisInitialized(_this));
+    _defineProperty(_assertThisInitialized(_this), "test", function () {
+      var curTime = _this.player.getInternalPlayer().getCurrentTime();
+
+      _this.player.getInternalPlayer().seekTo(curTime + 1);
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "test2", function () {
+      _this.player.getInternalPlayer().loadVideoById(_this.props.data[1].id);
+    });
+
+    _this.onReady = _this.onReady.bind(_assertThisInitialized(_this)); // this.onPlay = this.onPlay.bind(this)
+
     return _this;
   }
 
   _createClass(VideoPlayer, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var _this2 = this;
-
-      _socket__WEBPACK_IMPORTED_MODULE_1__["default"].on('playing', function () {
-        _this2.player.getInternalPlayer().playVideo();
-      });
-    }
-  }, {
     key: "onReady",
+    // this.props.data[0] &&
     value: function onReady() {
-      if (this.props.data[0] && this.props.curTime) {
-        var timeNow = (Date.now() - this.props.curTime) / 1000;
-        this.player.seekTo(timeNow);
-        this.player.getInternalPlayer().playVideo();
-      }
-    }
+      if (this.props.curTime) {
+        var timeNow = (Date.now() - this.props.curTime) / 1000; //   console.log('working')
+
+        console.log(timeNow);
+        this.player.seekTo(40); // this.player.getInternalPlayer().playVideo()
+        // this.player.getInternalPlayer()
+      } else {// socket.on('playing', () => {
+          //   this.player.getInternalPlayer().playVideo()
+          // })
+        }
+    } // onPlay() {
+    //   if (this.props.curTime) {
+    //     const timeNow = (Date.now() - this.props.curTime) / 1000
+    //     this.player.seekTo(timeNow)
+    //   }
+    // }
+
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this2 = this;
 
       var vidId = this.props.data[0] && this.props.data[0].id;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "player-wrapper"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
-        onClick: this.handleStop
-      }, "Stop"), vidId ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_player__WEBPACK_IMPORTED_MODULE_2___default.a, {
+        onClick: this.handlePause
+      }, "Stop"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        onClick: this.test
+      }, "TEST"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        onClick: this.test2
+      }, "NEXT"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_player__WEBPACK_IMPORTED_MODULE_2___default.a, {
         className: "react-player" // width="70%"
         // height="70%"
         ,
-        url: "https://www.youtube.com/watch?v=".concat(vidId),
+        url: vidId ? "https://www.youtube.com/watch?v=".concat(vidId) : 'https://www.youtube.com/watch?v=N-E3Hyg7rh4',
         config: {
           youtube: {
             playerVars: {
@@ -901,16 +1034,13 @@ function (_Component) {
         },
         ref: this.ref,
         onReady: this.onReady,
-        onPlay: function onPlay() {
-          // send current time info only if you started playing for the firsttime
-          if (_this3.props.curTime) {
-            _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('play', _this3.props.data, null, _this3.props.roomId);
-          } else {
-            _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('play', _this3.props.data, Date.now(), _this3.props.roomId);
-          }
-        },
+        onStart: function onStart() {
+          console.log('starting now', _this2.props.data);
+          _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('play', _this2.props.data, Date.now(), _this2.props.roomId);
+        } // onPlay={this.onPlay}
+        ,
         onEnded: this.props.handleEnd
-      }) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Add Some Music"));
+      }));
     }
   }]);
 
@@ -918,6 +1048,73 @@ function (_Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (VideoPlayer);
+
+/***/ }),
+
+/***/ "./client/components/videoResults.js":
+/*!*******************************************!*\
+  !*** ./client/components/videoResults.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var VideoResults =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(VideoResults, _Component);
+
+  function VideoResults(props) {
+    _classCallCheck(this, VideoResults);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(VideoResults).call(this, props));
+  }
+
+  _createClass(VideoResults, [{
+    key: "render",
+    value: function render() {
+      var _this = this;
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.props.data.map(function (video) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          key: video.etag,
+          onClick: function onClick() {
+            return _this.props.handleClick(video);
+          }
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+          src: video.snippet.thumbnails.medium.url
+        }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, video.snippet.title));
+      }));
+    }
+  }]);
+
+  return VideoResults;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (VideoResults);
 
 /***/ }),
 
@@ -937,6 +1134,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _socket__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../socket */ "./client/socket.js");
 /* harmony import */ var _VideoQueue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./VideoQueue */ "./client/components/VideoQueue.js");
+/* harmony import */ var _videoResults__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./videoResults */ "./client/components/videoResults.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -965,6 +1163,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var VideoSearchBar =
 /*#__PURE__*/
 function (_Component) {
@@ -979,11 +1178,13 @@ function (_Component) {
     _this.state = {
       searchWords: '',
       videoData: [],
+      videoResults: [],
       curTime: null
     };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
-    _this.handleClick = _this.handleClick.bind(_assertThisInitialized(_this));
+    _this.handleSearch = _this.handleSearch.bind(_assertThisInitialized(_this));
     _this.handleEnd = _this.handleEnd.bind(_assertThisInitialized(_this));
+    _this.handleClick = _this.handleClick.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -992,11 +1193,8 @@ function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('playing', function (data) {
-        return _this2.setState({
-          videoData: data
-        });
-      });
+      // prob don't need now
+      // socket.on('playing', data => this.setState({videoData: data}))
       _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('welcome', function (data, time) {
         if (data) {
           _this2.setState({
@@ -1004,6 +1202,11 @@ function (_Component) {
             curTime: time
           });
         }
+      });
+      _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('update queue', function (data) {
+        _this2.setState({
+          videoData: data
+        });
       });
     }
   }, {
@@ -1022,17 +1225,17 @@ function (_Component) {
       this.setState({
         searchWords: e.target.value
       });
-    } // Changes the state when user clicks submit
+    } // Changes the state when user clicks SEARCH
     // Passes this.state.searchWords into Youtube Api to retrieve the top five videos
     // Obtains the videoId and resets this.state.videoId
 
   }, {
-    key: "handleClick",
+    key: "handleSearch",
     value: function () {
-      var _handleClick = _asyncToGenerator(
+      var _handleSearch = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee() {
-        var KEY, youtube, _ref, data;
+        var KEY, youtube, _ref, data, videoItems;
 
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
@@ -1058,29 +1261,24 @@ function (_Component) {
                 _context.next = 8;
                 return youtube.get('/search', {
                   params: {
-                    q: this.state.searchWords + " karaoke"
+                    q: this.state.searchWords + " karaoke -karafun"
                   }
                 });
 
               case 8:
                 _ref = _context.sent;
                 data = _ref.data;
-
                 // Uncomment to check how the data looks like from Youtube API
                 // console.log(data)
-                // console.log(data.items[0].snippet.title)
-                // Checking to see the Search returned valid videoid
-                if (data.items[0].id.videoId) {
-                  this.setState({
-                    videoData: this.state.videoData.concat({
-                      id: data.items[0].id.videoId,
-                      title: data.items[0].snippet.title
-                    })
-                  });
-                  _socket__WEBPACK_IMPORTED_MODULE_3__["default"].emit('queue added', this.state.videoData);
-                }
+                // Filters out the videos without a videoId
+                videoItems = data.items.filter(function (video) {
+                  return video.id.videoId;
+                });
+                this.setState({
+                  videoResults: videoItems
+                });
 
-              case 11:
+              case 12:
               case "end":
                 return _context.stop();
             }
@@ -1088,7 +1286,51 @@ function (_Component) {
         }, _callee, this);
       }));
 
-      function handleClick() {
+      function handleSearch() {
+        return _handleSearch.apply(this, arguments);
+      }
+
+      return handleSearch;
+    }() // Adds the clicked videoResult into the queue
+
+  }, {
+    key: "handleClick",
+    value: function () {
+      var _handleClick = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee2(video) {
+        var newQueueItem;
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                newQueueItem = {
+                  id: video.id.videoId,
+                  title: video.snippet.title,
+                  img: video.snippet.thumbnails["default"].url
+                };
+                _context2.next = 3;
+                return this.setState(function (state) {
+                  return {
+                    videoData: state.videoData.concat(newQueueItem)
+                  };
+                });
+
+              case 3:
+                this.setState({
+                  videoResults: []
+                });
+                _socket__WEBPACK_IMPORTED_MODULE_3__["default"].emit('queue added', this.state.videoData, this.props.room);
+
+              case 5:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function handleClick(_x) {
         return _handleClick.apply(this, arguments);
       }
 
@@ -1104,12 +1346,15 @@ function (_Component) {
         onChange: this.handleChange
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
-        onClick: this.handleClick
-      }, "Submit"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_videoPlayer__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        onClick: this.handleSearch
+      }, "Search"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_videoPlayer__WEBPACK_IMPORTED_MODULE_1__["default"], {
         data: this.state.videoData,
         handleEnd: this.handleEnd,
         curTime: this.state.curTime,
         roomId: this.props.room
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_videoResults__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        data: this.state.videoResults,
+        handleClick: this.handleClick
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_VideoQueue__WEBPACK_IMPORTED_MODULE_4__["default"], {
         data: this.state.videoData
       }));

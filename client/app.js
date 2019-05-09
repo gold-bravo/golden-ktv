@@ -16,7 +16,7 @@ class App extends Component {
         <Navbar />
         <Routes />
         <Switch>
-          <Route path="/api/room" component={Room} />
+          <Route path="/room" component={Room} />
           <Route path="/" component={RoomForm} />
           {/* <TokBox /> */}
         </Switch>

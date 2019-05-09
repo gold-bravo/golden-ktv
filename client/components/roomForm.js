@@ -26,7 +26,7 @@ class RoomForm extends Component {
     const {data} = await axios.put('/api/room', {roomNum: this.state.room})
     console.log('handling stuff', data)
     this.setState({sessionId: data.sessionId})
-    this.props.history.push(`/api/room/${this.state.room}`)
+    this.props.history.push(`/room/${this.state.room}`)
   }
   render() {
     return (

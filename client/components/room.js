@@ -16,7 +16,7 @@ class Room extends Component {
     this.state = {streams: []}
   }
   async componentDidMount() {
-    let roomNum = this.props.location.pathname.slice(10)
+    let roomNum = this.props.location.pathname.slice(6)
     const {data} = await axios.get(`/api/room/${roomNum}`)
     console.log(data)
 
