@@ -3,6 +3,7 @@ import VideoPlayer from './videoPlayer'
 import axios from 'axios'
 import socket from '../socket'
 import VideoQueue from './VideoQueue'
+import VideoResults from './videoResults'
 
 class VideoSearchBar extends Component {
   constructor(props) {
@@ -10,18 +11,24 @@ class VideoSearchBar extends Component {
     this.state = {
       searchWords: '',
       videoData: [],
+      videoResults: [],
       curTime: null
     }
     this.handleChange = this.handleChange.bind(this)
-    this.handleClick = this.handleClick.bind(this)
+    this.handleSearch = this.handleSearch.bind(this)
     this.handleEnd = this.handleEnd.bind(this)
+    this.handleClick = this.handleClick.bind(this)
   }
   componentDidMount() {
-    socket.on('playing', data => this.setState({videoData: data}))
+    // prob don't need now
+    // socket.on('playing', data => this.setState({videoData: data}))
     socket.on('welcome', (data, time) => {
       if (data) {
         this.setState({videoData: data, curTime: time})
       }
+    })
+    socket.on('update queue', data => {
+      this.setState({videoData: data})
     })
   }
   handleEnd() {
@@ -39,10 +46,10 @@ class VideoSearchBar extends Component {
     })
   }
 
-  // Changes the state when user clicks submit
+  // Changes the state when user clicks SEARCH
   // Passes this.state.searchWords into Youtube Api to retrieve the top five videos
   // Obtains the videoId and resets this.state.videoId
-  async handleClick() {
+  async handleSearch() {
     const KEY = await axios.get('/api/youtubeapi')
     const youtube = await axios.create({
       baseURL: 'https://www.googleapis.com/youtube/v3',
@@ -54,36 +61,54 @@ class VideoSearchBar extends Component {
     })
     const {data} = await youtube.get('/search', {
       params: {
-        q: this.state.searchWords + ` karaoke`
+        q: this.state.searchWords + ` karaoke -karafun`
       }
     })
     // Uncomment to check how the data looks like from Youtube API
     // console.log(data)
-    // console.log(data.items[0].snippet.title)
-    // Checking to see the Search returned valid videoid
-    if (data.items[0].id.videoId) {
-      this.setState({
-        videoData: this.state.videoData.concat({
-          id: data.items[0].id.videoId,
-          title: data.items[0].snippet.title
-        })
-      })
-      socket.emit('queue added', this.state.videoData)
+
+    // Filters out the videos without a videoId
+    const videoItems = data.items.filter(video => video.id.videoId)
+
+    this.setState({
+      videoResults: videoItems
+    })
+  }
+
+  // Adds the clicked videoResult into the queue
+  async handleClick(video) {
+    const newQueueItem = {
+      id: video.id.videoId,
+      title: video.snippet.title,
+      img: video.snippet.thumbnails.default.url
     }
+
+    await this.setState(state => {
+      return {videoData: state.videoData.concat(newQueueItem)}
+    })
+    this.setState({
+      videoResults: []
+    })
+
+    socket.emit('queue added', this.state.videoData, this.props.room)
   }
 
   render() {
     return (
       <div className="video-searchbar">
         <input placeholder="Start search here" onChange={this.handleChange} />
-        <button type="button" onClick={this.handleClick}>
-          Submit
+        <button type="button" onClick={this.handleSearch}>
+          Search
         </button>
         <VideoPlayer
           data={this.state.videoData}
           handleEnd={this.handleEnd}
           curTime={this.state.curTime}
           roomId={this.props.room}
+        />
+        <VideoResults
+          data={this.state.videoResults}
+          handleClick={this.handleClick}
         />
         <VideoQueue data={this.state.videoData} />
       </div>
