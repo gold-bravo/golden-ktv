@@ -22,12 +22,20 @@ class RoomForm extends Component {
   async handleSubmit(event) {
     event.preventDefault()
     //PROBABLY WANT TO SOCKET.EMIT HERE WITH MY ROOM NUMBER
-    this.props.setRoom(this.state.room)
+
     const {data} = await axios.put('/api/room', {
       roomNum: this.state.room,
       name: this.state.name
     })
-    console.log('handling stuff', data)
+
+    await this.props.setRoom({
+      roomNum: this.state.room,
+      session: this.state.sessionId,
+      token: data.token,
+      apiKey: data.KEY
+    })
+
+    console.log('handling stuff', this.state)
     this.setState({sessionId: data.sessionId})
     this.props.history.push(`/room/${this.state.room}`)
   }
@@ -59,7 +67,7 @@ class RoomForm extends Component {
 }
 
 const mDTP = dispatch => ({
-  setRoom: roomNum => dispatch(setRoom(roomNum))
+  setRoom: roomInfo => dispatch(setRoom(roomInfo))
 })
 
 export default connect(null, mDTP)(RoomForm)

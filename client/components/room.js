@@ -14,6 +14,7 @@ import socket from '../socket'
 class Room extends Component {
   constructor(props) {
     super(props)
+    console.log('Room peops', this.props)
     this.state = {streams: []}
   }
 
@@ -40,7 +41,7 @@ class Room extends Component {
 }
 
 const mSTP = state => ({
-  room: state.roomReducer.room
+  room: state.roomReducer.roomNum
 })
 
 export default connect(mSTP)(Room)

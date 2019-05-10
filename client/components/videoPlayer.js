@@ -67,13 +67,14 @@ class VideoPlayer extends Component {
           NEXT
         </button>
         <ReactPlayer
-          className="react-player"
+          className="react-player" 
+          playing={true}
           // width="70%"
           // height="70%"
           url={
             vidId
               ? `www.youtube.com/watch?v=${vidId}`
-              : 'www.youtube.com/watch?v=N-E3Hyg7rh4'
+              : 'www.youtube.com/watch?v=a7-yKkDA4gQ'
           }
           config={{
             youtube: {

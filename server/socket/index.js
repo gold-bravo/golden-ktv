@@ -17,13 +17,16 @@ module.exports = io => {
       if (!rooms.hasOwnProperty(roomNumber)) {
         rooms[roomNumber] = {}
       }
-      socket.join(roomNumber)
+
+      socket.join(roomNumber).emit('success', roomNumber)
       // Socket is now connected to the specific roomNumber
     })
 
     //STEP TWO: When successful, the new user can be feed the new data.
+    //When videoSearchBar component is successfully mounted
     socket.on('success', roomNumber => {
       console.log('in sucess', roomNumber)
+      console.log('rooms[roomNumber].curData', rooms[roomNumber].curData)
       const newUser = socket.id
       //STEP THREE: Now emit back the welcome socket.
       io
@@ -37,18 +40,20 @@ module.exports = io => {
 
     //Listen for queue added, tell others to update queue
     socket.on('queue added', (data, roomNumber) => {
-      rooms[roomNumber].curData = data
       console.log('queue added', data, roomNumber)
+      rooms[roomNumber].curData = data
+
       socket.to(roomNumber).emit('update queue', rooms[roomNumber].curData)
     })
 
     //console log back-end playing when playing YT video
     socket.on('play', (data, time, roomNumber) => {
       console.log('play', roomNumber)
+      console.log('data', data)
       if (!rooms[roomNumber].playTime) {
-        console.log('play', time)
+        //console.log('play', time)
         rooms[roomNumber].playTime = time
-        // rooms[roomNumber].curData = data
+        rooms[roomNumber].curData = data
         socket.to(roomNumber).emit('playing')
       }
       //maybe don't need to emit curdata?

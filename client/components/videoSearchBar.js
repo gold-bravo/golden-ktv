@@ -30,7 +30,7 @@ class VideoSearchBar extends Component {
       }
     })
     //STEP ONE: EMIT SUCCESSFUL VISIT TO THE ROOM
-    socket.emit('success', this.props.room)
+    // socket.emit('success', this.props.room)
     console.log('mounted')
     socket.on('update queue', data => {
       this.setState({videoData: data})
@@ -90,12 +90,13 @@ class VideoSearchBar extends Component {
     }
 
     await this.setState(state => {
-      return {videoData: state.videoData.concat(newQueueItem)}
+      return {videoData: [...state.videoData, newQueueItem]}
     })
     this.setState({
       videoResults: []
     })
 
+    console.log('inside handleClick', this.props)
     socket.emit('queue added', this.state.videoData, this.props.room)
   }
 
