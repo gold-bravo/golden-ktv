@@ -70,7 +70,6 @@ class VideoPlayer extends Component {
           className="react-player"
           // width="70%"
           // height="70%"
-          playing={true}
           url={
             vidId
               ? `www.youtube.com/watch?v=${vidId}`
