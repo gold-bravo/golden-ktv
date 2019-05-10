@@ -17,13 +17,16 @@ module.exports = io => {
       if (!rooms.hasOwnProperty(roomNumber)) {
         rooms[roomNumber] = {}
       }
-      socket.join(roomNumber)
+      // socket.join(roomNumber)
+      console.log(socket.id)
+      socket.join(roomNumber).emit('success', roomNumber)
       // Socket is now connected to the specific roomNumber
     })
 
     //STEP TWO: When successful, the new user can be feed the new data.
     socket.on('success', roomNumber => {
-      console.log('in sucess', roomNumber)
+      console.log('in success', roomNumber)
+      console.log(socket.id)
       const newUser = socket.id
       //STEP THREE: Now emit back the welcome socket.
       io
@@ -48,7 +51,7 @@ module.exports = io => {
       if (!rooms[roomNumber].playTime) {
         console.log('play', time)
         rooms[roomNumber].playTime = time
-        // rooms[roomNumber].curData = data
+        rooms[roomNumber].curData = data
         socket.to(roomNumber).emit('playing')
       }
       //maybe don't need to emit curdata?

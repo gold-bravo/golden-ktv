@@ -36,6 +36,9 @@ class VideoSearchBar extends Component {
       this.setState({videoData: data})
     })
   }
+  componentWillUnmount() {
+    socket.removeAllListeners()
+  }
   handleEnd() {
     //changed this to be a callback because VSCode was complaining
     this.setState(prevState => ({
@@ -92,6 +95,7 @@ class VideoSearchBar extends Component {
     await this.setState(state => {
       return {videoData: state.videoData.concat(newQueueItem)}
     })
+
     this.setState({
       videoResults: []
     })

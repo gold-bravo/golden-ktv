@@ -1028,6 +1028,9 @@ function (_Component) {
         type: "button",
         onClick: this.test2
       }, "NEXT"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_player__WEBPACK_IMPORTED_MODULE_2___default.a, {
+        style: {
+          pointerEvents: 'none'
+        },
         className: "react-player" // width="70%"
         // height="70%"
         ,
@@ -1055,7 +1058,7 @@ function (_Component) {
   return VideoPlayer;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-/* harmony default export */ __webpack_exports__["default"] = (VideoPlayer);
+/* harmony default export */ __webpack_exports__["default"] = (VideoPlayer); //TODO: SKIP-BTN, SEEK+/- BTN, Manual START, Disable AutoPlay
 
 /***/ }),
 
@@ -1222,6 +1225,11 @@ function (_Component) {
           videoData: data
         });
       });
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      _socket__WEBPACK_IMPORTED_MODULE_3__["default"].removeAllListeners();
     }
   }, {
     key: "handleEnd",
@@ -52885,7 +52893,7 @@ function warning(message) {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
+/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

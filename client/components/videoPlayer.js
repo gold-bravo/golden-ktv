@@ -67,6 +67,7 @@ class VideoPlayer extends Component {
           NEXT
         </button>
         <ReactPlayer
+          style={{pointerEvents: 'none'}}
           className="react-player"
           // width="70%"
           // height="70%"
@@ -96,3 +97,5 @@ class VideoPlayer extends Component {
 }
 
 export default VideoPlayer
+
+//TODO: SKIP-BTN, SEEK+/- BTN, Manual START, Disable AutoPlay
