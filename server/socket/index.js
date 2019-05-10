@@ -14,23 +14,25 @@ module.exports = io => {
     socket.on('join room', roomNumber => {
       // If roomNumber is not in our room storage, add the roomNumber
       //TODO://create user on join room
-      // socket.user = socket.id
-      // users.push(socket.user)
       if (!rooms.hasOwnProperty(roomNumber)) {
         rooms[roomNumber] = {}
-      } else if (rooms[roomNumber].curData) {
-        console.log(socket.id)
-        io
-          .to(socket.id)
-          .emit(
-            'welcome',
-            rooms[roomNumber].curData,
-            rooms[roomNumber].playTime ? rooms[roomNumber].playTime : null
-          )
       }
-      // Socket is now connected to the specific roomNumber
       socket.join(roomNumber)
-      console.log('join room', rooms)
+      // Socket is now connected to the specific roomNumber
+    })
+
+    //STEP TWO: When successful, the new user can be feed the new data.
+    socket.on('success', roomNumber => {
+      console.log('in sucess', roomNumber)
+      const newUser = socket.id
+      //STEP THREE: Now emit back the welcome socket.
+      io
+        .to(newUser)
+        .emit(
+          'welcome',
+          rooms[roomNumber].curData,
+          rooms[roomNumber].playTime ? rooms[roomNumber].playTime : null
+        )
     })
 
     //Listen for queue added, tell others to update queue

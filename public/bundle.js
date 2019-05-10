@@ -504,10 +504,6 @@ function (_Component) {
       return componentDidMount;
     }()
   }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {// this.sessionHelper.disconnect()
-    }
-  }, {
     key: "render",
     value: function render() {
       console.log(this.props.room.room);
@@ -977,37 +973,48 @@ function (_Component) {
       _this.player.getInternalPlayer().loadVideoById(_this.props.data[1].id);
     });
 
-    _this.onReady = _this.onReady.bind(_assertThisInitialized(_this)); // this.onPlay = this.onPlay.bind(this)
-
+    _this.onStart = _this.onStart.bind(_assertThisInitialized(_this));
+    _this.onPlay = _this.onPlay.bind(_assertThisInitialized(_this));
     return _this;
-  }
+  } //This allows the player to be manipulated by React buttons
+
 
   _createClass(VideoPlayer, [{
-    key: "onReady",
-    // this.props.data[0] &&
-    value: function onReady() {
-      if (this.props.curTime) {
-        var timeNow = (Date.now() - this.props.curTime) / 1000; //   console.log('working')
+    key: "onStart",
+    //TODO: This method is running twice for some reason rn
+    value: function onStart() {
+      var _this2 = this;
 
+      console.log('starting now', this.props.data);
+      _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('play', this.props.data, Date.now(), this.props.roomId);
+
+      if (this.props.curTime && this.props.data[0]) {
+        var timeNow = (Date.now() - this.props.curTime) / 1000;
+        console.log('working', this.props.data[0]);
         console.log(timeNow);
-        this.player.seekTo(40); // this.player.getInternalPlayer().playVideo()
-        // this.player.getInternalPlayer()
-      } else {// socket.on('playing', () => {
-          //   this.player.getInternalPlayer().playVideo()
-          // })
-        }
-    } // onPlay() {
-    //   if (this.props.curTime) {
-    //     const timeNow = (Date.now() - this.props.curTime) / 1000
-    //     this.player.seekTo(timeNow)
-    //   }
-    // }
-
+        this.player.seekTo(timeNow);
+        this.player.getInternalPlayer().playVideo();
+        this.player.getInternalPlayer();
+      } else {
+        _socket__WEBPACK_IMPORTED_MODULE_1__["default"].on('playing', function () {
+          _this2.player.getInternalPlayer().playVideo();
+        });
+      }
+    }
+  }, {
+    key: "onPlay",
+    value: function onPlay() {// TODO: This does not work, it runs continously while video is playing
+      // if (this.props.curTime && this.props.data[0]) {
+      //   const timeNow = this.player.getCurrentTime()
+      //   console.log('working', this.props.data[0])
+      //   console.log(timeNow)
+      //   this.player.seekTo(timeNow)
+      //   this.player.getInternalPlayer().playVideo()
+      // }
+    }
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
-
       var vidId = this.props.data[0] && this.props.data[0].id;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "player-wrapper"
@@ -1024,7 +1031,8 @@ function (_Component) {
         className: "react-player" // width="70%"
         // height="70%"
         ,
-        url: vidId ? "https://www.youtube.com/watch?v=".concat(vidId) : 'https://www.youtube.com/watch?v=N-E3Hyg7rh4',
+        playing: true,
+        url: vidId ? "www.youtube.com/watch?v=".concat(vidId) : 'www.youtube.com/watch?v=N-E3Hyg7rh4',
         config: {
           youtube: {
             playerVars: {
@@ -1033,12 +1041,12 @@ function (_Component) {
           }
         },
         ref: this.ref,
-        onReady: this.onReady,
-        onStart: function onStart() {
-          console.log('starting now', _this2.props.data);
-          _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('play', _this2.props.data, Date.now(), _this2.props.roomId);
-        } // onPlay={this.onPlay}
+        onStart: this.onStart // onStart={() => {
+        //   console.log('starting now', this.props.data)
+        //   socket.emit('play', this.props.data, Date.now(), this.props.roomId)
+        // }}
         ,
+        onPlay: this.onPlay,
         onEnded: this.props.handleEnd
       }));
     }
@@ -1195,14 +1203,20 @@ function (_Component) {
 
       // prob don't need now
       // socket.on('playing', data => this.setState({videoData: data}))
+      //STEP FOUR: Now the welcome is finally set.
       _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('welcome', function (data, time) {
+        console.log('in welcome, if null means first visit', data, time);
+
         if (data) {
           _this2.setState({
             videoData: data,
             curTime: time
           });
         }
-      });
+      }); //STEP ONE: EMIT SUCCESSFUL VISIT TO THE ROOM
+
+      _socket__WEBPACK_IMPORTED_MODULE_3__["default"].emit('success', this.props.room);
+      console.log('mounted');
       _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('update queue', function (data) {
         _this2.setState({
           videoData: data
@@ -1212,9 +1226,12 @@ function (_Component) {
   }, {
     key: "handleEnd",
     value: function handleEnd() {
-      this.setState({
-        videoData: this.state.videoData.slice(1),
-        curTime: null
+      //changed this to be a callback because VSCode was complaining
+      this.setState(function (prevState) {
+        return {
+          videoData: prevState.videoData.slice(1),
+          curTime: null
+        };
       });
       _socket__WEBPACK_IMPORTED_MODULE_3__["default"].emit('end', this.state.videoData, this.props.room);
     } // Changes this.state.searchWords when user inputs a search word
@@ -1261,7 +1278,7 @@ function (_Component) {
                 _context.next = 8;
                 return youtube.get('/search', {
                   params: {
-                    q: this.state.searchWords + " karaoke -karafun"
+                    q: this.state.searchWords + " karaoke -karafun -singkingkaraoke"
                   }
                 });
 
@@ -1620,10 +1637,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 
 
 var GET_ROOM = 'GET_ROOM';
@@ -1639,43 +1652,14 @@ var getRoom = function getRoom(roomNum) {
 };
 
 var setRoom = function setRoom(roomNum) {
-  return (
-    /*#__PURE__*/
-    function () {
-      var _ref = _asyncToGenerator(
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee(dispatch) {
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.prev = 0;
-                _context.next = 3;
-                return _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('join room', roomNum);
-
-              case 3:
-                dispatch(getRoom(roomNum));
-                _context.next = 9;
-                break;
-
-              case 6:
-                _context.prev = 6;
-                _context.t0 = _context["catch"](0);
-                console.log('Error in thunk');
-
-              case 9:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, null, [[0, 6]]);
-      }));
-
-      return function (_x) {
-        return _ref.apply(this, arguments);
-      };
-    }()
-  );
+  return function (dispatch) {
+    try {
+      _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('join room', roomNum);
+      dispatch(getRoom(roomNum));
+    } catch (error) {
+      console.log('Error in thunk');
+    }
+  };
 };
 
 var roomReducer = function roomReducer() {
