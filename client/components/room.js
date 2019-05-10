@@ -35,10 +35,6 @@ class Room extends Component {
     // })
   }
 
-  componentWillUnmount() {
-    // this.sessionHelper.disconnect()
-  }
-
   render() {
     console.log(this.props.room.room)
   }

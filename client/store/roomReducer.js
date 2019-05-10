@@ -12,9 +12,9 @@ const getRoom = roomNum => {
   }
 }
 
-export const setRoom = roomNum => async dispatch => {
+export const setRoom = roomNum => dispatch => {
   try {
-    await socket.emit('join room', roomNum)
+    socket.emit('join room', roomNum)
     dispatch(getRoom(roomNum))
   } catch (error) {
     console.log('Error in thunk')

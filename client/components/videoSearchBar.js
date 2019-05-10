@@ -22,20 +22,26 @@ class VideoSearchBar extends Component {
   componentDidMount() {
     // prob don't need now
     // socket.on('playing', data => this.setState({videoData: data}))
+    //STEP FOUR: Now the welcome is finally set.
     socket.on('welcome', (data, time) => {
+      console.log('in welcome, if null means first visit', data, time)
       if (data) {
         this.setState({videoData: data, curTime: time})
       }
     })
+    //STEP ONE: EMIT SUCCESSFUL VISIT TO THE ROOM
+    socket.emit('success', this.props.room)
+    console.log('mounted')
     socket.on('update queue', data => {
       this.setState({videoData: data})
     })
   }
   handleEnd() {
-    this.setState({
-      videoData: this.state.videoData.slice(1),
+    //changed this to be a callback because VSCode was complaining
+    this.setState(prevState => ({
+      videoData: prevState.videoData.slice(1),
       curTime: null
-    })
+    }))
     socket.emit('end', this.state.videoData, this.props.room)
   }
 
@@ -61,7 +67,7 @@ class VideoSearchBar extends Component {
     })
     const {data} = await youtube.get('/search', {
       params: {
-        q: this.state.searchWords + ` karaoke -karafun`
+        q: this.state.searchWords + ` karaoke -karafun -singkingkaraoke`
       }
     })
     // Uncomment to check how the data looks like from Youtube API

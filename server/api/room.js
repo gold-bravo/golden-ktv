@@ -16,7 +16,6 @@ router.put('/', async (req, res, next) => {
     })
     //roomSearch1 means I was created, !roomSearch[0].sessionId means that I have no session ID, and the only time I don't have a sessionId is when I was first created
     if (!roomSearch[0].sessionId) {
-      console.log('Im in here!')
       opentok.createSession((err, session) => {
         if (err) throw err
         let token = opentok.generateToken(session.sessionId)
@@ -56,7 +55,6 @@ router.put('/', async (req, res, next) => {
 router.get('/:roomId', async (req, res, next) => {
   try {
     const foundRoom = await Room.findOne({where: {roomNum: req.params.roomId}})
-    console.log(foundRoom.sessionId, 'here found')
     res.send({sessionId: foundRoom.sessionId})
   } catch (error) {
     console.error(error)
