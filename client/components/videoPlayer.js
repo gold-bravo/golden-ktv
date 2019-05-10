@@ -7,6 +7,7 @@ class VideoPlayer extends Component {
     super(props)
     this.onStart = this.onStart.bind(this)
     this.onPlay = this.onPlay.bind(this)
+    this.seek = this.seek.bind(this)
   }
   //This allows the player to be manipulated by React buttons
   ref = player => {
@@ -43,15 +44,16 @@ class VideoPlayer extends Component {
     this.player.getInternalPlayer().pauseVideo()
   }
   //testing testing
-  test = () => {
+  seek = direction => {
     const curTime = this.player.getInternalPlayer().getCurrentTime()
-    this.player.getInternalPlayer().seekTo(curTime + 1)
+    const seekAheadOrBack = direction === '+' ? curTime + 1 : curTime - 1
+    this.player.getInternalPlayer().seekTo(seekAheadOrBack)
   }
   //skip to next song
   //update local and backend state also
-  test2 = () => {
-    this.player.getInternalPlayer().loadVideoById(this.props.data[1].id)
-  }
+  // skipToNext = () => {
+  //   this.player.getInternalPlayer().loadVideoById(this.props.data[1].id)
+  // }
 
   render() {
     const vidId = this.props.data[0] && this.props.data[0].id
@@ -60,36 +62,52 @@ class VideoPlayer extends Component {
         <button type="button" onClick={this.handlePause}>
           Stop
         </button>
-        <button type="button" onClick={this.test}>
-          TEST
+        <button type="button" onClick={() => this.seek('+')}>
+          ++
         </button>
-        <button type="button" onClick={this.test2}>
-          NEXT
+        <button type="button" onClick={() => this.seek('-')}>
+          --
+        </button>
+        <button type="button" onClick={this.props.handleSkipEnd}>
+          NEXT SONG
+        </button>
+        <button
+          type="button"
+          onClick={() => this.player.seekTo(this.player.getDuration() - 10)}
+        >
+          Take Me To End
+        </button>
+        <button
+          type="button"
+          onClick={() => this.player.getInternalPlayer().playVideo()}
+        >
+          PLAY
         </button>
         <ReactPlayer
           style={{pointerEvents: 'none'}}
           className="react-player"
           // width="70%"
           // height="70%"
-          playing={true}
           url={
             vidId
               ? `www.youtube.com/watch?v=${vidId}`
               : 'www.youtube.com/watch?v=N-E3Hyg7rh4'
           }
-          config={{
-            youtube: {
-              playerVars: {controls: 1}
-            }
-          }}
+          // config={{
+          //   youtube: {
+          //     playerVars: {controls: 0}
+          //   }
+          // }}
+          controls={true}
           ref={this.ref}
           onStart={this.onStart}
+          // volume={}
           // onStart={() => {
           //   console.log('starting now', this.props.data)
           //   socket.emit('play', this.props.data, Date.now(), this.props.roomId)
           // }}
           onPlay={this.onPlay}
-          onEnded={this.props.handleEnd}
+          onEnded={this.props.handleSkipEnd}
         />
       </div>
     )

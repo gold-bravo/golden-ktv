@@ -62,6 +62,7 @@ module.exports = io => {
       console.log('ended')
       rooms[roomNumber].playTime = null
       rooms[roomNumber].curData = data
+      socket.to(roomNumber).emit('update queue', rooms[roomNumber].curData)
     })
     // Console log back-end playing when playing YT video
     // roomInfo contains {videoId, roomId} (passed in from videoPlayer component)

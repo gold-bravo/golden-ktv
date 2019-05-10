@@ -16,7 +16,7 @@ class VideoSearchBar extends Component {
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
-    this.handleEnd = this.handleEnd.bind(this)
+    this.handleSkipEnd = this.handleSkipEnd.bind(this)
     this.handleClick = this.handleClick.bind(this)
   }
   componentDidMount() {
@@ -29,8 +29,8 @@ class VideoSearchBar extends Component {
         this.setState({videoData: data, curTime: time})
       }
     })
-    //STEP ONE: EMIT SUCCESSFUL VISIT TO THE ROOM
-    socket.emit('success', this.props.room)
+    // STEP ONE: EMIT SUCCESSFUL VISIT TO THE ROOM
+    // socket.emit('success', this.props.room)
     console.log('mounted')
     socket.on('update queue', data => {
       this.setState({videoData: data})
@@ -39,7 +39,7 @@ class VideoSearchBar extends Component {
   componentWillUnmount() {
     socket.removeAllListeners()
   }
-  handleEnd() {
+  handleSkipEnd() {
     //changed this to be a callback because VSCode was complaining
     this.setState(prevState => ({
       videoData: prevState.videoData.slice(1),
@@ -112,7 +112,7 @@ class VideoSearchBar extends Component {
         </button>
         <VideoPlayer
           data={this.state.videoData}
-          handleEnd={this.handleEnd}
+          handleSkipEnd={this.handleSkipEnd}
           curTime={this.state.curTime}
           roomId={this.props.room}
         />
