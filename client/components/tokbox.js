@@ -1,15 +1,16 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
 import {OTSession, OTPublisher, OTStreams, OTSubscriber} from 'opentok-react'
 
 //Remember to fill these fields before use!
-let apiKey
-let token
-let sessionId
+let apiKey = ''
+let token = ''
+let sessionId = ''
 
 class TokBox extends Component {
   constructor(props) {
     super(props)
-
+    console.log(this.props)
     this.state = {
       error: null,
       connection: 'Connecting',
@@ -112,4 +113,8 @@ class TokBox extends Component {
   }
 }
 
-export default TokBox
+const mSTP = state => ({
+  room: state.roomReducer.room
+})
+
+export default connect(mSTP)(TokBox)
