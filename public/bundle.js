@@ -459,20 +459,29 @@ function (_Component) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
+                if (!this.props.room.roomNum) {
+                  _context.next = 6;
+                  break;
+                }
+
+                _context.next = 3;
                 return axios__WEBPACK_IMPORTED_MODULE_4___default.a.get("/api/room/".concat(this.props.room.roomNum));
 
-              case 2:
+              case 3:
                 _ref = _context.sent;
                 data = _ref.data;
                 console.log(data, 'room');
-                _socket__WEBPACK_IMPORTED_MODULE_5__["default"].on('no refresh', function (id) {
-                  if (id) {
+
+              case 6:
+                _socket__WEBPACK_IMPORTED_MODULE_5__["default"].on('no refresh', function (room) {
+                  console.log(room, _socket__WEBPACK_IMPORTED_MODULE_5__["default"].id);
+
+                  if (!room) {
                     _this.props.history.push('/');
                   }
                 });
 
-              case 6:
+              case 7:
               case "end":
                 return _context.stop();
             }
@@ -491,7 +500,7 @@ function (_Component) {
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_videoSearchBar__WEBPACK_IMPORTED_MODULE_2__["default"], {
         room: this.props.room.roomNum
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_tokbox__WEBPACK_IMPORTED_MODULE_3__["default"], null));
+      }), this.props.room.apiKey ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_tokbox__WEBPACK_IMPORTED_MODULE_3__["default"], null) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null));
     }
   }]);
 
@@ -756,7 +765,7 @@ function (_Component) {
     _this.state = {
       error: null,
       connection: 'Connecting',
-      publishVideo: true
+      publishVideo: false
     };
     _this.sessionEventHandlers = {
       sessionConnected: function sessionConnected() {
@@ -961,51 +970,64 @@ function (_Component) {
       _this.player.getInternalPlayer().pauseVideo();
     });
 
-    _defineProperty(_assertThisInitialized(_this), "test", function () {
-      var curTime = _this.player.getInternalPlayer().getCurrentTime();
+    _defineProperty(_assertThisInitialized(_this), "seek", function (direction) {
+      if (_this.player.getInternalPlayer().getPlayerState() === 1) {
+        var curTime = _this.player.getInternalPlayer().getCurrentTime();
 
-      _this.player.getInternalPlayer().seekTo(curTime + 1);
+        var seekAheadOrBack = direction === '+' ? curTime + 1 : curTime - 1;
+
+        _this.player.getInternalPlayer().seekTo(seekAheadOrBack);
+      }
     });
 
-    _defineProperty(_assertThisInitialized(_this), "test2", function () {
-      _this.player.getInternalPlayer().loadVideoById(_this.props.data[1].id);
-    });
+    _this.onStart = _this.onStart.bind(_assertThisInitialized(_this)); // this.onPlay = this.onPlay.bind(this)
 
-    _this.onStart = _this.onStart.bind(_assertThisInitialized(_this));
+    _this.seek = _this.seek.bind(_assertThisInitialized(_this));
     _this.onReady = _this.onReady.bind(_assertThisInitialized(_this));
     return _this;
-  }
+  } //This allows the player to be manipulated by React buttons
+
 
   _createClass(VideoPlayer, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var _this2 = this;
-
-      _socket__WEBPACK_IMPORTED_MODULE_1__["default"].on('playing', function () {
-        _this2.player.getInternalPlayer().playVideo();
-      });
-    } //This allows the player to be manipulated by React buttons
-
-  }, {
     key: "onStart",
     //TODO: This method is running twice for some reason rn
     value: function onStart() {
-      console.log('starting now', this.props.data);
-      _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('play', this.props.data, Date.now(), this.props.roomId);
+      // console.log('starting now', this.props.data)
+      // socket.emit('play', this.props.data, Date.now(), this.props.roomId)
+      // if (this.props.curTime && this.props.data[0]) {
+      //   const timeNow = (Date.now() - this.props.curTime) / 1000
+      //   console.log('working', this.props.data[0])
+      //   console.log(timeNow)
+      //   this.player.seekTo(timeNow)
+      //   this.player.getInternalPlayer().playVideo()
+      // }
+      if (!this.props.curTime) {
+        console.log('starting now', this.props.data);
+        _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('play', this.props.data, Date.now(), this.props.roomId);
+      } else {
+        console.log('PUSH ME TO CURRENT TIME');
+        var timeNow = (Date.now() - this.props.curTime) / 1000;
+        this.player.getInternalPlayer().seekTo(timeNow);
+      }
     }
   }, {
     key: "onReady",
     value: function onReady() {
-      if (this.props.curTime && this.props.data[0]) {
-        var timeNow = (Date.now() - this.props.curTime) / 1000;
-        console.log('working', this.props.data[0]);
-        console.log(timeNow);
-        this.player.seekTo(parseFloat(timeNow));
+      var _this2 = this;
+
+      if (this.props.curTime) {
+        this.player.getInternalPlayer().playVideo();
       }
+
+      _socket__WEBPACK_IMPORTED_MODULE_1__["default"].on('playing', function () {
+        _this2.player.getInternalPlayer().playVideo();
+      });
     }
   }, {
     key: "render",
     value: function render() {
+      var _this3 = this;
+
       var vidId = this.props.data[0] && this.props.data[0].id;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "player-wrapper"
@@ -1014,26 +1036,54 @@ function (_Component) {
         onClick: this.handlePause
       }, "Stop"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
-        onClick: this.test
-      }, "TEST"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: function onClick() {
+          return _this3.seek('+');
+        }
+      }, "++"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
-        onClick: this.test2
-      }, "NEXT"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_player__WEBPACK_IMPORTED_MODULE_2___default.a, {
+        onClick: function onClick() {
+          return _this3.seek('-');
+        }
+      }, "--"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        onClick: function onClick() {
+          if (_this3.player.getInternalPlayer().getPlayerState() === 1) {
+            _this3.player.seekTo(_this3.player.getDuration() - 1);
+          } else {
+            console.log('in else');
+            setTimeout(function () {
+              _this3.player.seekTo(_this3.player.getDuration() - 1);
+            }, 800);
+
+            _this3.player.getInternalPlayer().playVideo();
+          }
+        }
+      }, "NEXT SONG"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        onClick: function onClick() {
+          return _this3.player.seekTo(_this3.player.getDuration() - 5);
+        }
+      }, "Take Me To End"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        onClick: function onClick() {
+          return _this3.player.getInternalPlayer().playVideo();
+        }
+      }, "PLAY"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_player__WEBPACK_IMPORTED_MODULE_2___default.a, {
+        style: {
+          pointerEvents: 'none'
+        },
         className: "react-player" // width="70%"
         // height="70%"
         ,
         url: vidId ? "https://www.youtube.com/watch?v=".concat(vidId) : 'https://www.youtube.com/watch?v=yKNxeF4KMsY',
-        config: {
-          youtube: {
-            playerVars: {
-              controls: 1
-            }
-          }
-        },
+        controls: true,
         ref: this.ref,
         onStart: this.onStart,
-        onReady: this.onReady,
-        onEnded: this.props.handleEnd
+        onReady: this.onReady // volume={}
+        // onPlay={this.onPlay}
+        ,
+        onError: this.props.handleSkipEnd,
+        onEnded: this.props.handleSkipEnd
       }));
     }
   }]);
@@ -1041,7 +1091,7 @@ function (_Component) {
   return VideoPlayer;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-/* harmony default export */ __webpack_exports__["default"] = (VideoPlayer);
+/* harmony default export */ __webpack_exports__["default"] = (VideoPlayer); //TODO: SKIP-BTN, SEEK+/- BTN, Manual START, Disable AutoPlay
 
 /***/ }),
 
@@ -1181,11 +1231,12 @@ function (_Component) {
       searchWords: '',
       videoData: [],
       videoResults: [],
-      curTime: null
+      curTime: null,
+      userId: ''
     };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
     _this.handleSearch = _this.handleSearch.bind(_assertThisInitialized(_this));
-    _this.handleEnd = _this.handleEnd.bind(_assertThisInitialized(_this));
+    _this.handleSkipEnd = _this.handleSkipEnd.bind(_assertThisInitialized(_this));
     _this.handleClick = _this.handleClick.bind(_assertThisInitialized(_this));
     return _this;
   }
@@ -1198,6 +1249,7 @@ function (_Component) {
       // prob don't need now
       // socket.on('playing', data => this.setState({videoData: data}))
       //STEP FOUR: Now the welcome is finally set.
+      //TODO:Possibly adding socket.id to state as userId
       _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('welcome', function (data, time) {
         console.log('in welcome, if null means first visit or video has not played', data, time);
 
@@ -1209,7 +1261,7 @@ function (_Component) {
             curTime: time
           });
         }
-      }); //STEP ONE: EMIT SUCCESSFUL VISIT TO THE ROOM
+      }); // STEP ONE: EMIT SUCCESSFUL VISIT TO THE ROOM
 
       _socket__WEBPACK_IMPORTED_MODULE_3__["default"].emit('success', this.props.room);
       _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('update queue', function (data) {
@@ -1217,10 +1269,22 @@ function (_Component) {
           videoData: data
         });
       });
+      _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('send id', function (id) {
+        console.log(id);
+
+        _this2.setState({
+          userId: id
+        });
+      });
     }
   }, {
-    key: "handleEnd",
-    value: function handleEnd() {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      _socket__WEBPACK_IMPORTED_MODULE_3__["default"].removeAllListeners();
+    }
+  }, {
+    key: "handleSkipEnd",
+    value: function handleSkipEnd() {
       //changed this to be a callback because VSCode was complaining
       this.setState(function (prevState) {
         return {
@@ -1316,25 +1380,27 @@ function (_Component) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
+                console.log(this.state.userId);
                 newQueueItem = {
                   id: video.id.videoId,
                   title: video.snippet.title,
-                  img: video.snippet.thumbnails["default"].url
+                  img: video.snippet.thumbnails["default"].url,
+                  userId: this.state.userId
                 };
-                _context2.next = 3;
+                _context2.next = 4;
                 return this.setState(function (state) {
                   return {
                     videoData: [].concat(_toConsumableArray(state.videoData), [newQueueItem])
                   };
                 });
 
-              case 3:
+              case 4:
                 this.setState({
                   videoResults: []
                 });
                 _socket__WEBPACK_IMPORTED_MODULE_3__["default"].emit('queue added', this.state.videoData, this.props.room);
 
-              case 5:
+              case 6:
               case "end":
                 return _context2.stop();
             }
@@ -1361,7 +1427,7 @@ function (_Component) {
         onClick: this.handleSearch
       }, "Search"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_videoPlayer__WEBPACK_IMPORTED_MODULE_1__["default"], {
         data: this.state.videoData,
-        handleEnd: this.handleEnd,
+        handleSkipEnd: this.handleSkipEnd,
         curTime: this.state.curTime,
         roomId: this.props.room
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_videoResults__WEBPACK_IMPORTED_MODULE_5__["default"], {
@@ -52914,7 +52980,7 @@ function warning(message) {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
+/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

@@ -11,11 +11,13 @@ class Room extends Component {
   }
 
   async componentDidMount() {
-    const {data} = await axios.get(`/api/room/${this.props.room.roomNum}`)
-    console.log(data, 'room')
-
-    socket.on('no refresh', id => {
-      if (id) {
+    if (this.props.room.roomNum) {
+      const {data} = await axios.get(`/api/room/${this.props.room.roomNum}`)
+      console.log(data, 'room')
+    }
+    socket.on('no refresh', room => {
+      console.log(room, socket.id)
+      if (!room) {
         this.props.history.push('/')
       }
     })
@@ -25,7 +27,7 @@ class Room extends Component {
     return (
       <div>
         <VideoSearchBar room={this.props.room.roomNum} />
-        <Tokbox />
+        {this.props.room.apiKey ? <Tokbox /> : <div />}
       </div>
     )
   }

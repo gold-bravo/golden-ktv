@@ -5,7 +5,8 @@ module.exports = io => {
 
   io.on('connection', socket => {
     console.log(`A socket connection to the server has been made: ${socket.id}`)
-    socket.emit('no refresh', socket.id)
+    socket.emit('no refresh', socket.room)
+    socket.emit('send id', socket.id)
     socket.on('disconnect', () => {
       console.log(`Connection ${socket.id} has left the building`)
       // connections.splice(connections.indexOf(socket), 1)
@@ -13,10 +14,15 @@ module.exports = io => {
 
     socket.on('join room', roomNumber => {
       // If roomNumber is not in our room storage, add the roomNumber
-      //TODO://create user on join room
+      socket.room = roomNumber
       if (!rooms.hasOwnProperty(roomNumber)) {
         rooms[roomNumber] = {}
       }
+      console.log(socket.id)
+      // socket.join(roomNumber)
+      // socket.emit('success', roomNumber)
+
+      //////////////////////////////////////////////////////////
 
       socket.join(roomNumber).emit('success', roomNumber)
       // Socket is now connected to the specific roomNumber
@@ -24,17 +30,18 @@ module.exports = io => {
 
     //STEP TWO: When videoSearchBar component is successfully mounted, the new user can be feed the new data.
     socket.on('success', roomNumber => {
-      // console.log('rooms[roomNumber].curData', rooms[roomNumber].curData)
+      console.log('in success', roomNumber, socket.id)
       const newUser = socket.id
       //STEP THREE: Now emit back the welcome socket.
-      console.log(rooms[roomNumber], 'newUser')
-      io
-        .to(newUser)
-        .emit(
+      if (socket.room) {
+        io.to(newUser).emit(
           'welcome',
           rooms[roomNumber].curData,
           rooms[roomNumber].playTime ? rooms[roomNumber].playTime : null
+          // socket.id
+          // May consider sending id to the front-end
         )
+      }
     })
 
     //Listen for queue added, tell others to update queue
@@ -53,6 +60,7 @@ module.exports = io => {
       if (!rooms[roomNumber].playTime) {
         rooms[roomNumber].playTime = time
         rooms[roomNumber].curData = data
+        // socket.to(roomNumber).emit('playing')
       }
       socket.to(roomNumber).emit('playing')
       // else {
@@ -64,6 +72,7 @@ module.exports = io => {
       console.log('ended')
       rooms[roomNumber].playTime = null
       rooms[roomNumber].curData = data
+      socket.to(roomNumber).emit('update queue', rooms[roomNumber].curData)
     })
     // Console log back-end playing when playing YT video
     // roomInfo contains {videoId, roomId} (passed in from videoPlayer component)
