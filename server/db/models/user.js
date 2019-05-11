@@ -16,6 +16,10 @@ const User = db.define('user', {
       return () => this.getDataValue('password')
     }
   },
+  screenName: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
   songHistory: {
     type: Sequelize.ARRAY(Sequelize.JSON),
     defaultValue: []
