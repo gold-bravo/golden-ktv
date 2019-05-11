@@ -100,9 +100,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components */ "./client/components/index.js");
 /* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./routes */ "./client/routes.js");
 /* harmony import */ var _components_room__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/room */ "./client/components/room.js");
-/* harmony import */ var _components_tokbox__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/tokbox */ "./client/components/tokbox.js");
-/* harmony import */ var _components_roomForm__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/roomForm */ "./client/components/roomForm.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _components_roomForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/roomForm */ "./client/components/roomForm.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -120,7 +119,6 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
 
 
 
@@ -147,12 +145,12 @@ function (_Component) {
   _createClass(App, [{
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components__WEBPACK_IMPORTED_MODULE_1__["Navbar"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_routes__WEBPACK_IMPORTED_MODULE_2__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__["Switch"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__["Route"], {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components__WEBPACK_IMPORTED_MODULE_1__["Navbar"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_routes__WEBPACK_IMPORTED_MODULE_2__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Switch"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
         path: "/room",
         component: _components_room__WEBPACK_IMPORTED_MODULE_3__["default"]
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__["Route"], {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
         path: "/",
-        component: _components_roomForm__WEBPACK_IMPORTED_MODULE_5__["default"]
+        component: _components_roomForm__WEBPACK_IMPORTED_MODULE_4__["default"]
       })));
     }
   }]);
@@ -178,13 +176,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var VideoQueue = function VideoQueue(props) {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, props.data.map(function (video) {
+  return props.data.map(function (video) {
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       key: video.id
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
       src: video.img
     }), video.title));
-  }));
+  });
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (VideoQueue);
@@ -406,9 +404,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _tokbox__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./tokbox */ "./client/components/tokbox.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var opentok_react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! opentok-react */ "./node_modules/opentok-react/dist/index.js");
-/* harmony import */ var opentok_react__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(opentok_react__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _socket__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../socket */ "./client/socket.js");
+/* harmony import */ var _socket__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../socket */ "./client/socket.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -438,23 +434,15 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-
 var Room =
 /*#__PURE__*/
 function (_Component) {
   _inherits(Room, _Component);
 
   function Room(props) {
-    var _this;
-
     _classCallCheck(this, Room);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Room).call(this, props));
-    console.log('Room peops', _this.props);
-    _this.state = {
-      streams: []
-    };
-    return _this;
+    return _possibleConstructorReturn(this, _getPrototypeOf(Room).call(this, props));
   }
 
   _createClass(Room, [{
@@ -463,29 +451,28 @@ function (_Component) {
       var _componentDidMount = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee() {
-        var _this2 = this;
+        var _this = this;
 
-        var roomNum, _ref, data;
+        var _ref, data;
 
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                roomNum = this.props.location.pathname.slice(6);
-                _context.next = 3;
-                return axios__WEBPACK_IMPORTED_MODULE_4___default.a.get("/api/room/".concat(roomNum));
+                _context.next = 2;
+                return axios__WEBPACK_IMPORTED_MODULE_4___default.a.get("/api/room/".concat(this.props.room.roomNum));
 
-              case 3:
+              case 2:
                 _ref = _context.sent;
                 data = _ref.data;
-                console.log(data);
-                _socket__WEBPACK_IMPORTED_MODULE_6__["default"].on('no refresh', function (id) {
+                console.log(data, 'room');
+                _socket__WEBPACK_IMPORTED_MODULE_5__["default"].on('no refresh', function (id) {
                   if (id) {
-                    _this2.props.history.push('/');
+                    _this.props.history.push('/');
                   }
                 });
 
-              case 7:
+              case 6:
               case "end":
                 return _context.stop();
             }
@@ -503,8 +490,8 @@ function (_Component) {
     key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_videoSearchBar__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        room: this.props.room
-      }));
+        room: this.props.room.roomNum
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_tokbox__WEBPACK_IMPORTED_MODULE_3__["default"], null));
     }
   }]);
 
@@ -513,7 +500,7 @@ function (_Component) {
 
 var mSTP = function mSTP(state) {
   return {
-    room: state.roomReducer.roomNum
+    room: state.roomReducer
   };
 };
 
@@ -617,16 +604,16 @@ function (_Component) {
                 _context.next = 7;
                 return this.props.setRoom({
                   roomNum: this.state.room,
-                  session: this.state.sessionId,
+                  session: data.sessionId,
                   token: data.token,
                   apiKey: data.KEY
                 });
 
               case 7:
-                console.log('handling stuff', this.state);
                 this.setState({
                   sessionId: data.sessionId
                 });
+                console.log('handling stuff', this.state);
                 this.props.history.push("/room/".concat(this.state.room));
 
               case 10:
@@ -717,10 +704,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
  //Remember to fill these fields before use!
-
-var apiKey = '';
-var token = '';
-var sessionId = '';
+// let apiKey = ''
+// let token = ''
+// let sessionId = ''
 
 var TokBox =
 /*#__PURE__*/
@@ -766,7 +752,7 @@ function (_Component) {
       });
     });
 
-    console.log(_this.props);
+    console.log(_this.props, 'credits');
     _this.state = {
       error: null,
       connection: 'Connecting',
@@ -820,12 +806,15 @@ function (_Component) {
   _createClass(TokBox, [{
     key: "render",
     value: function render() {
-      // const {apiKey, sessionId, token} = this.props.credentials
+      var _this$props$credentia = this.props.credentials,
+          apiKey = _this$props$credentia.apiKey,
+          session = _this$props$credentia.session,
+          token = _this$props$credentia.token;
       var publishVideo = this.state.publishVideo;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_2__["OTSession"], {
-        apiKey: apiKey,
-        sessionId: sessionId,
-        token: token,
+        apiKey: this.props.credentials.apiKey,
+        sessionId: this.props.credentials.session,
+        token: this.props.credentials.token,
         onError: this.onSessionError,
         eventHandlers: this.sessionEventHandlers
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
@@ -858,7 +847,7 @@ function (_Component) {
 
 var mSTP = function mSTP(state) {
   return {
-    room: state.roomReducer.room
+    credentials: state.roomReducer
   };
 };
 
@@ -961,6 +950,7 @@ function (_Component) {
 
     _classCallCheck(this, VideoPlayer);
 
+    console.log(props, 'in videoPlayer');
     _this = _possibleConstructorReturn(this, _getPrototypeOf(VideoPlayer).call(this, props));
 
     _defineProperty(_assertThisInitialized(_this), "ref", function (player) {
@@ -982,43 +972,36 @@ function (_Component) {
     });
 
     _this.onStart = _this.onStart.bind(_assertThisInitialized(_this));
-    _this.onPlay = _this.onPlay.bind(_assertThisInitialized(_this));
+    _this.onReady = _this.onReady.bind(_assertThisInitialized(_this));
     return _this;
-  } //This allows the player to be manipulated by React buttons
-
+  }
 
   _createClass(VideoPlayer, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      _socket__WEBPACK_IMPORTED_MODULE_1__["default"].on('playing', function () {
+        _this2.player.getInternalPlayer().playVideo();
+      });
+    } //This allows the player to be manipulated by React buttons
+
+  }, {
     key: "onStart",
     //TODO: This method is running twice for some reason rn
     value: function onStart() {
-      var _this2 = this;
-
       console.log('starting now', this.props.data);
       _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('play', this.props.data, Date.now(), this.props.roomId);
-
+    }
+  }, {
+    key: "onReady",
+    value: function onReady() {
       if (this.props.curTime && this.props.data[0]) {
         var timeNow = (Date.now() - this.props.curTime) / 1000;
         console.log('working', this.props.data[0]);
         console.log(timeNow);
-        this.player.seekTo(timeNow);
-        this.player.getInternalPlayer().playVideo();
-        this.player.getInternalPlayer();
-      } else {
-        _socket__WEBPACK_IMPORTED_MODULE_1__["default"].on('playing', function () {
-          _this2.player.getInternalPlayer().playVideo();
-        });
+        this.player.seekTo(parseFloat(timeNow));
       }
-    }
-  }, {
-    key: "onPlay",
-    value: function onPlay() {// TODO: This does not work, it runs continously while video is playing
-      // if (this.props.curTime && this.props.data[0]) {
-      //   const timeNow = this.player.getCurrentTime()
-      //   console.log('working', this.props.data[0])
-      //   console.log(timeNow)
-      //   this.player.seekTo(timeNow)
-      //   this.player.getInternalPlayer().playVideo()
-      // }
     }
   }, {
     key: "render",
@@ -1036,11 +1019,10 @@ function (_Component) {
         type: "button",
         onClick: this.test2
       }, "NEXT"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_player__WEBPACK_IMPORTED_MODULE_2___default.a, {
-        className: "react-player",
-        playing: true // width="70%"
+        className: "react-player" // width="70%"
         // height="70%"
         ,
-        url: vidId ? "www.youtube.com/watch?v=".concat(vidId) : 'www.youtube.com/watch?v=a7-yKkDA4gQ',
+        url: vidId ? "https://www.youtube.com/watch?v=".concat(vidId) : 'https://www.youtube.com/watch?v=yKNxeF4KMsY',
         config: {
           youtube: {
             playerVars: {
@@ -1049,12 +1031,8 @@ function (_Component) {
           }
         },
         ref: this.ref,
-        onStart: this.onStart // onStart={() => {
-        //   console.log('starting now', this.props.data)
-        //   socket.emit('play', this.props.data, Date.now(), this.props.roomId)
-        // }}
-        ,
-        onPlay: this.onPlay,
+        onStart: this.onStart,
+        onReady: this.onReady,
         onEnded: this.props.handleEnd
       }));
     }
@@ -1103,10 +1081,10 @@ var VideoResults =
 function (_Component) {
   _inherits(VideoResults, _Component);
 
-  function VideoResults(props) {
+  function VideoResults() {
     _classCallCheck(this, VideoResults);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(VideoResults).call(this, props));
+    return _possibleConstructorReturn(this, _getPrototypeOf(VideoResults).apply(this, arguments));
   }
 
   _createClass(VideoResults, [{
@@ -1221,18 +1199,19 @@ function (_Component) {
       // socket.on('playing', data => this.setState({videoData: data}))
       //STEP FOUR: Now the welcome is finally set.
       _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('welcome', function (data, time) {
-        console.log('in welcome, if null means first visit', data, time);
+        console.log('in welcome, if null means first visit or video has not played', data, time);
 
         if (data) {
+          console.log('data mounted on searchBar');
+
           _this2.setState({
             videoData: data,
             curTime: time
           });
         }
       }); //STEP ONE: EMIT SUCCESSFUL VISIT TO THE ROOM
-      // socket.emit('success', this.props.room)
 
-      console.log('mounted');
+      _socket__WEBPACK_IMPORTED_MODULE_3__["default"].emit('success', this.props.room);
       _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('update queue', function (data) {
         _this2.setState({
           videoData: data
@@ -1353,10 +1332,9 @@ function (_Component) {
                 this.setState({
                   videoResults: []
                 });
-                console.log('inside handleClick', this.props);
                 _socket__WEBPACK_IMPORTED_MODULE_3__["default"].emit('queue added', this.state.videoData, this.props.room);
 
-              case 6:
+              case 5:
               case "end":
                 return _context2.stop();
             }
@@ -1721,7 +1699,7 @@ var roomReducer = function roomReducer() {
 
   switch (action.type) {
     case GET_ROOM_INFO:
-      console.log('here!');
+      console.log('here!', action.roomInfo);
       return _objectSpread({}, action.roomInfo);
 
     default:
@@ -52936,7 +52914,7 @@ function warning(message) {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
+/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

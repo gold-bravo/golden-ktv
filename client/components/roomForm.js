@@ -30,13 +30,13 @@ class RoomForm extends Component {
 
     await this.props.setRoom({
       roomNum: this.state.room,
-      session: this.state.sessionId,
+      session: data.sessionId,
       token: data.token,
       apiKey: data.KEY
     })
 
-    console.log('handling stuff', this.state)
     this.setState({sessionId: data.sessionId})
+    console.log('handling stuff', this.state)
     this.props.history.push(`/room/${this.state.room}`)
   }
   render() {

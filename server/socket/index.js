@@ -22,13 +22,12 @@ module.exports = io => {
       // Socket is now connected to the specific roomNumber
     })
 
-    //STEP TWO: When successful, the new user can be feed the new data.
-    //When videoSearchBar component is successfully mounted
+    //STEP TWO: When videoSearchBar component is successfully mounted, the new user can be feed the new data.
     socket.on('success', roomNumber => {
-      console.log('in sucess', roomNumber)
-      console.log('rooms[roomNumber].curData', rooms[roomNumber].curData)
+      // console.log('rooms[roomNumber].curData', rooms[roomNumber].curData)
       const newUser = socket.id
       //STEP THREE: Now emit back the welcome socket.
+      console.log(rooms[roomNumber], 'newUser')
       io
         .to(newUser)
         .emit(
@@ -40,7 +39,7 @@ module.exports = io => {
 
     //Listen for queue added, tell others to update queue
     socket.on('queue added', (data, roomNumber) => {
-      console.log('queue added', data, roomNumber)
+      // console.log('queue added', data, roomNumber)
       rooms[roomNumber].curData = data
 
       socket.to(roomNumber).emit('update queue', rooms[roomNumber].curData)
@@ -48,16 +47,17 @@ module.exports = io => {
 
     //console log back-end playing when playing YT video
     socket.on('play', (data, time, roomNumber) => {
-      console.log('play', roomNumber)
-      console.log('data', data)
+      console.log('play', rooms[roomNumber])
+      console.log('time', time)
+      //If a room has no playTime, either it is the first video or a video that is loaded but not played
       if (!rooms[roomNumber].playTime) {
-        //console.log('play', time)
         rooms[roomNumber].playTime = time
         rooms[roomNumber].curData = data
-        socket.to(roomNumber).emit('playing')
       }
-      //maybe don't need to emit curdata?
-      // socket.to(roomNumber).emit('playing', rooms[roomNumber].curData)
+      socket.to(roomNumber).emit('playing')
+      // else {
+      //   socket.to(socket.id).emit('playing', rooms[roomNumber].curData)
+      // }
     })
 
     socket.on('end', (data, roomNumber) => {

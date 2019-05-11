@@ -29,7 +29,7 @@ export const setRoom = roomInfo => async dispatch => {
 const roomReducer = (state = defaultRoomInfo, action) => {
   switch (action.type) {
     case GET_ROOM_INFO:
-      console.log('here!')
+      console.log('here!', action.roomInfo)
       return {...action.roomInfo}
     default:
       return state
