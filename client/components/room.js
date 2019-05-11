@@ -20,8 +20,8 @@ class Room extends Component {
     const {data} = await axios.get(`/api/room/${roomNum}`)
     console.log(data)
 
-    socket.on('no refresh', id => {
-      if (id) {
+    socket.on('no refresh', room => {
+      if (!room) {
         this.props.history.push('/')
       }
     })

@@ -12,7 +12,8 @@ class VideoSearchBar extends Component {
       searchWords: '',
       videoData: [],
       videoResults: [],
-      curTime: null
+      curTime: null,
+      userId: ''
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
@@ -23,17 +24,25 @@ class VideoSearchBar extends Component {
     // prob don't need now
     // socket.on('playing', data => this.setState({videoData: data}))
     //STEP FOUR: Now the welcome is finally set.
-    socket.on('welcome', (data, time) => {
+    socket.on('welcome', (data, time, id) => {
       console.log('in welcome, if null means first visit', data, time)
       if (data) {
-        this.setState({videoData: data, curTime: time})
+        this.setState({
+          videoData: data,
+          curTime: time,
+          userId: id
+        })
       }
     })
     // STEP ONE: EMIT SUCCESSFUL VISIT TO THE ROOM
-    // socket.emit('success', this.props.room)
+    socket.emit('success', this.props.room)
     console.log('mounted')
     socket.on('update queue', data => {
       this.setState({videoData: data})
+    })
+    socket.on('send id', id => {
+      console.log(id)
+      this.setState({userId: id})
     })
   }
   componentWillUnmount() {
@@ -86,10 +95,12 @@ class VideoSearchBar extends Component {
 
   // Adds the clicked videoResult into the queue
   async handleClick(video) {
+    console.log(this.state.userId)
     const newQueueItem = {
       id: video.id.videoId,
       title: video.snippet.title,
-      img: video.snippet.thumbnails.default.url
+      img: video.snippet.thumbnails.default.url,
+      userId: this.state.userId
     }
 
     await this.setState(state => {

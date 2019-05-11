@@ -476,8 +476,8 @@ function (_Component) {
                 _ref = _context.sent;
                 data = _ref.data;
                 console.log(data);
-                _socket__WEBPACK_IMPORTED_MODULE_5__["default"].on('no refresh', function (id) {
-                  if (id) {
+                _socket__WEBPACK_IMPORTED_MODULE_5__["default"].on('no refresh', function (room) {
+                  if (!room) {
                     _this2.props.history.push('/');
                   }
                 }); // this.sessionHelper = createSession({
@@ -964,16 +964,19 @@ function (_Component) {
     });
 
     _defineProperty(_assertThisInitialized(_this), "seek", function (direction) {
-      var curTime = _this.player.getInternalPlayer().getCurrentTime();
+      if (_this.player.getInternalPlayer().getPlayerState() === 1) {
+        var curTime = _this.player.getInternalPlayer().getCurrentTime();
 
-      var seekAheadOrBack = direction === '+' ? curTime + 1 : curTime - 1;
+        var seekAheadOrBack = direction === '+' ? curTime + 1 : curTime - 1;
 
-      _this.player.getInternalPlayer().seekTo(seekAheadOrBack);
+        _this.player.getInternalPlayer().seekTo(seekAheadOrBack);
+      }
     });
 
     _this.onStart = _this.onStart.bind(_assertThisInitialized(_this));
     _this.onPlay = _this.onPlay.bind(_assertThisInitialized(_this));
     _this.seek = _this.seek.bind(_assertThisInitialized(_this));
+    _this.onReady = _this.onReady.bind(_assertThisInitialized(_this));
     return _this;
   } //This allows the player to be manipulated by React buttons
 
@@ -982,23 +985,36 @@ function (_Component) {
     key: "onStart",
     //TODO: This method is running twice for some reason rn
     value: function onStart() {
+      // console.log('starting now', this.props.data)
+      // socket.emit('play', this.props.data, Date.now(), this.props.roomId)
+      // if (this.props.curTime && this.props.data[0]) {
+      //   const timeNow = (Date.now() - this.props.curTime) / 1000
+      //   console.log('working', this.props.data[0])
+      //   console.log(timeNow)
+      //   this.player.seekTo(timeNow)
+      //   this.player.getInternalPlayer().playVideo()
+      // }
+      if (!this.props.curTime) {
+        console.log('starting now', this.props.data);
+        _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('play', this.props.data, Date.now(), this.props.roomId);
+      } else {
+        console.log('PUSH ME TO CURRENT TIME');
+        var timeNow = (Date.now() - this.props.curTime) / 1000;
+        this.player.getInternalPlayer().seekTo(timeNow);
+      }
+    }
+  }, {
+    key: "onReady",
+    value: function onReady() {
       var _this2 = this;
 
-      console.log('starting now', this.props.data);
-      _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('play', this.props.data, Date.now(), this.props.roomId);
-
-      if (this.props.curTime && this.props.data[0]) {
-        var timeNow = (Date.now() - this.props.curTime) / 1000;
-        console.log('working', this.props.data[0]);
-        console.log(timeNow);
-        this.player.seekTo(timeNow);
+      if (this.props.curTime) {
         this.player.getInternalPlayer().playVideo();
-        this.player.getInternalPlayer();
-      } else {
-        _socket__WEBPACK_IMPORTED_MODULE_1__["default"].on('playing', function () {
-          _this2.player.getInternalPlayer().playVideo();
-        });
       }
+
+      _socket__WEBPACK_IMPORTED_MODULE_1__["default"].on('playing', function () {
+        _this2.player.getInternalPlayer().playVideo();
+      });
     }
   }, {
     key: "onPlay",
@@ -1013,11 +1029,6 @@ function (_Component) {
     }
   }, {
     key: "render",
-    //skip to next song
-    //update local and backend state also
-    // skipToNext = () => {
-    //   this.player.getInternalPlayer().loadVideoById(this.props.data[1].id)
-    // }
     value: function render() {
       var _this3 = this;
 
@@ -1039,11 +1050,22 @@ function (_Component) {
         }
       }, "--"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
-        onClick: this.props.handleSkipEnd
+        onClick: function onClick() {
+          if (_this3.player.getInternalPlayer().getPlayerState() === 1) {
+            _this3.player.seekTo(_this3.player.getDuration() - 1);
+          } else {
+            console.log('in else');
+            setTimeout(function () {
+              _this3.player.seekTo(_this3.player.getDuration() - 1);
+            }, 800);
+
+            _this3.player.getInternalPlayer().playVideo();
+          }
+        }
       }, "NEXT SONG"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         onClick: function onClick() {
-          return _this3.player.seekTo(_this3.player.getDuration() - 10);
+          return _this3.player.seekTo(_this3.player.getDuration() - 5);
         }
       }, "Take Me To End"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
@@ -1057,21 +1079,14 @@ function (_Component) {
         className: "react-player" // width="70%"
         // height="70%"
         ,
-        url: vidId ? "www.youtube.com/watch?v=".concat(vidId) : 'www.youtube.com/watch?v=N-E3Hyg7rh4' // config={{
-        //   youtube: {
-        //     playerVars: {controls: 0}
-        //   }
-        // }}
-        ,
+        url: vidId ? "www.youtube.com/watch?v=".concat(vidId) : 'www.youtube.com/watch?v=N-E3Hyg7rh4',
         controls: true,
         ref: this.ref,
-        onStart: this.onStart // volume={}
-        // onStart={() => {
-        //   console.log('starting now', this.props.data)
-        //   socket.emit('play', this.props.data, Date.now(), this.props.roomId)
-        // }}
+        onStart: this.onStart,
+        onReady: this.onReady // volume={}
         ,
         onPlay: this.onPlay,
+        onError: this.props.handleSkipEnd,
         onEnded: this.props.handleSkipEnd
       }));
     }
@@ -1212,7 +1227,8 @@ function (_Component) {
       searchWords: '',
       videoData: [],
       videoResults: [],
-      curTime: null
+      curTime: null,
+      userId: ''
     };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
     _this.handleSearch = _this.handleSearch.bind(_assertThisInitialized(_this));
@@ -1229,22 +1245,30 @@ function (_Component) {
       // prob don't need now
       // socket.on('playing', data => this.setState({videoData: data}))
       //STEP FOUR: Now the welcome is finally set.
-      _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('welcome', function (data, time) {
+      _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('welcome', function (data, time, id) {
         console.log('in welcome, if null means first visit', data, time);
 
         if (data) {
           _this2.setState({
             videoData: data,
-            curTime: time
+            curTime: time,
+            userId: id
           });
         }
       }); // STEP ONE: EMIT SUCCESSFUL VISIT TO THE ROOM
-      // socket.emit('success', this.props.room)
 
+      _socket__WEBPACK_IMPORTED_MODULE_3__["default"].emit('success', this.props.room);
       console.log('mounted');
       _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('update queue', function (data) {
         _this2.setState({
           videoData: data
+        });
+      });
+      _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('send id', function (id) {
+        console.log(id);
+
+        _this2.setState({
+          userId: id
         });
       });
     }
@@ -1351,25 +1375,27 @@ function (_Component) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
+                console.log(this.state.userId);
                 newQueueItem = {
                   id: video.id.videoId,
                   title: video.snippet.title,
-                  img: video.snippet.thumbnails["default"].url
+                  img: video.snippet.thumbnails["default"].url,
+                  userId: this.state.userId
                 };
-                _context2.next = 3;
+                _context2.next = 4;
                 return this.setState(function (state) {
                   return {
                     videoData: state.videoData.concat(newQueueItem)
                   };
                 });
 
-              case 3:
+              case 4:
                 this.setState({
                   videoResults: []
                 });
                 _socket__WEBPACK_IMPORTED_MODULE_3__["default"].emit('queue added', this.state.videoData, this.props.room);
 
-              case 5:
+              case 6:
               case "end":
                 return _context2.stop();
             }
