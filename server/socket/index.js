@@ -18,47 +18,30 @@ module.exports = io => {
       if (!rooms.hasOwnProperty(roomNumber)) {
         rooms[roomNumber] = {}
       }
-<<<<<<< HEAD
-      // socket.join(roomNumber)
       console.log(socket.id)
-      socket.join(roomNumber)
+      // socket.join(roomNumber)
       // socket.emit('success', roomNumber)
-=======
+
+      //////////////////////////////////////////////////////////
 
       socket.join(roomNumber).emit('success', roomNumber)
->>>>>>> testing
       // Socket is now connected to the specific roomNumber
     })
 
     //STEP TWO: When videoSearchBar component is successfully mounted, the new user can be feed the new data.
     socket.on('success', roomNumber => {
-<<<<<<< HEAD
       console.log('in success', roomNumber, socket.id)
       const newUser = socket.id
       //STEP THREE: Now emit back the welcome socket.
       if (socket.room) {
-        io
-          .to(newUser)
-          .emit(
-            'welcome',
-            rooms[roomNumber].curData,
-            rooms[roomNumber].playTime ? rooms[roomNumber].playTime : null,
-            socket.id
-          )
-      }
-=======
-      // console.log('rooms[roomNumber].curData', rooms[roomNumber].curData)
-      const newUser = socket.id
-      //STEP THREE: Now emit back the welcome socket.
-      console.log(rooms[roomNumber], 'newUser')
-      io
-        .to(newUser)
-        .emit(
+        io.to(newUser).emit(
           'welcome',
           rooms[roomNumber].curData,
           rooms[roomNumber].playTime ? rooms[roomNumber].playTime : null
+          // socket.id
+          // May consider sending id to the front-end
         )
->>>>>>> testing
+      }
     })
 
     //Listen for queue added, tell others to update queue
@@ -77,10 +60,7 @@ module.exports = io => {
       if (!rooms[roomNumber].playTime) {
         rooms[roomNumber].playTime = time
         rooms[roomNumber].curData = data
-<<<<<<< HEAD
-        socket.to(roomNumber).emit('playing')
-=======
->>>>>>> testing
+        // socket.to(roomNumber).emit('playing')
       }
       socket.to(roomNumber).emit('playing')
       // else {

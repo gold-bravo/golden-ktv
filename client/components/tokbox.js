@@ -14,7 +14,7 @@ class TokBox extends Component {
     this.state = {
       error: null,
       connection: 'Connecting',
-      publishVideo: true
+      publishVideo: false
     }
 
     this.sessionEventHandlers = {

@@ -7,7 +7,7 @@ class VideoPlayer extends Component {
     console.log(props, 'in videoPlayer')
     super(props)
     this.onStart = this.onStart.bind(this)
-    this.onPlay = this.onPlay.bind(this)
+    // this.onPlay = this.onPlay.bind(this)
     this.seek = this.seek.bind(this)
     this.onReady = this.onReady.bind(this)
   }
@@ -110,7 +110,7 @@ class VideoPlayer extends Component {
           onStart={this.onStart}
           onReady={this.onReady}
           // volume={}
-          onPlay={this.onPlay}
+          // onPlay={this.onPlay}
           onError={this.props.handleSkipEnd}
           onEnded={this.props.handleSkipEnd}
         />
