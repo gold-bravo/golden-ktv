@@ -925,6 +925,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _socket__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../socket */ "./client/socket.js");
 /* harmony import */ var react_player__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-player */ "./node_modules/react-player/lib/ReactPlayer.js");
 /* harmony import */ var react_player__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_player__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -944,6 +945,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -980,10 +982,21 @@ function (_Component) {
       }
     });
 
-    _this.onStart = _this.onStart.bind(_assertThisInitialized(_this)); // this.onPlay = this.onPlay.bind(this)
+    _defineProperty(_assertThisInitialized(_this), "leaveRoom", function () {
+      var filteredData = _this.props.data.filter(function (item) {
+        return item.userId !== _this.props.userId;
+      });
 
+      _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('leaving', filteredData, _this.props.roomId);
+
+      _this.props.history.push('/'); //What if someone tries to leave the room when it is turn to sing? or if you are the host?
+
+    });
+
+    _this.onStart = _this.onStart.bind(_assertThisInitialized(_this));
     _this.seek = _this.seek.bind(_assertThisInitialized(_this));
-    _this.onReady = _this.onReady.bind(_assertThisInitialized(_this));
+    _this.onReady = _this.onReady.bind(_assertThisInitialized(_this)); // this.onPlay = this.onPlay.bind(this)
+
     return _this;
   } //This allows the player to be manipulated by React buttons
 
@@ -992,15 +1005,6 @@ function (_Component) {
     key: "onStart",
     //TODO: This method is running twice for some reason rn
     value: function onStart() {
-      // console.log('starting now', this.props.data)
-      // socket.emit('play', this.props.data, Date.now(), this.props.roomId)
-      // if (this.props.curTime && this.props.data[0]) {
-      //   const timeNow = (Date.now() - this.props.curTime) / 1000
-      //   console.log('working', this.props.data[0])
-      //   console.log(timeNow)
-      //   this.player.seekTo(timeNow)
-      //   this.player.getInternalPlayer().playVideo()
-      // }
       if (!this.props.curTime) {
         console.log('starting now', this.props.data);
         _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('play', this.props.data, Date.now(), this.props.roomId);
@@ -1028,23 +1032,26 @@ function (_Component) {
     value: function render() {
       var _this3 = this;
 
-      var vidId = this.props.data[0] && this.props.data[0].id;
+      var vidId = this.props.data[0] && this.props.data[0].id; //show display btn only if you are the host or it's your turn to sing
+
+      var yourTurn = this.props.data[0] && this.props.data[0].userId === this.props.userId;
+      var displayPlayBtn = yourTurn || this.props.isHost;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "player-wrapper"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         onClick: this.handlePause
-      }, "Stop"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "button",
-        onClick: function onClick() {
-          return _this3.seek('+');
-        }
-      }, "++"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, "Pause"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         onClick: function onClick() {
           return _this3.seek('-');
         }
       }, "--"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        onClick: function onClick() {
+          return _this3.seek('+');
+        }
+      }, "++"), this.props.isHost ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         onClick: function onClick() {
           if (_this3.player.getInternalPlayer().getPlayerState() === 1) {
@@ -1053,7 +1060,7 @@ function (_Component) {
             console.log('in else');
             setTimeout(function () {
               _this3.player.seekTo(_this3.player.getDuration() - 1);
-            }, 800);
+            }, 1000);
 
             _this3.player.getInternalPlayer().playVideo();
           }
@@ -1063,12 +1070,14 @@ function (_Component) {
         onClick: function onClick() {
           return _this3.player.seekTo(_this3.player.getDuration() - 5);
         }
-      }, "Take Me To End"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, "Take Me To End")) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null), displayPlayBtn ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         onClick: function onClick() {
           return _this3.player.getInternalPlayer().playVideo();
         }
-      }, "PLAY"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_player__WEBPACK_IMPORTED_MODULE_2___default.a, {
+      }, "PLAY")) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        onClick: this.leaveRoom
+      }, "LEAVING ROOM"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_player__WEBPACK_IMPORTED_MODULE_2___default.a, {
         style: {
           pointerEvents: 'none'
         },
@@ -1080,10 +1089,13 @@ function (_Component) {
         ref: this.ref,
         onStart: this.onStart,
         onReady: this.onReady // volume={}
-        // onPlay={this.onPlay}
         ,
         onError: this.props.handleSkipEnd,
-        onEnded: this.props.handleSkipEnd
+        onEnded: function onEnded() {
+          if (displayPlayBtn) {
+            _this3.props.handleSkipEnd();
+          }
+        }
       }));
     }
   }]);
@@ -1091,7 +1103,7 @@ function (_Component) {
   return VideoPlayer;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-/* harmony default export */ __webpack_exports__["default"] = (VideoPlayer); //TODO: SKIP-BTN, SEEK+/- BTN, Manual START, Disable AutoPlay
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["withRouter"])(VideoPlayer));
 
 /***/ }),
 
@@ -1232,7 +1244,8 @@ function (_Component) {
       videoData: [],
       videoResults: [],
       curTime: null,
-      userId: ''
+      userId: '',
+      isHost: false
     };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
     _this.handleSearch = _this.handleSearch.bind(_assertThisInitialized(_this));
@@ -1269,9 +1282,15 @@ function (_Component) {
           videoData: data
         });
       });
-      _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('send id', function (id) {
-        console.log(id);
+      _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('you are the host', function () {
+        console.log('U DA HOST');
 
+        _this2.setState({
+          isHost: true
+        });
+      });
+      _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('send id', function (id) {
+        // console.log(id)
         _this2.setState({
           userId: id
         });
@@ -1380,27 +1399,26 @@ function (_Component) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                console.log(this.state.userId);
                 newQueueItem = {
                   id: video.id.videoId,
                   title: video.snippet.title,
                   img: video.snippet.thumbnails["default"].url,
                   userId: this.state.userId
                 };
-                _context2.next = 4;
+                _context2.next = 3;
                 return this.setState(function (state) {
                   return {
                     videoData: [].concat(_toConsumableArray(state.videoData), [newQueueItem])
                   };
                 });
 
-              case 4:
+              case 3:
                 this.setState({
                   videoResults: []
                 });
                 _socket__WEBPACK_IMPORTED_MODULE_3__["default"].emit('queue added', this.state.videoData, this.props.room);
 
-              case 6:
+              case 5:
               case "end":
                 return _context2.stop();
             }
@@ -1429,7 +1447,9 @@ function (_Component) {
         data: this.state.videoData,
         handleSkipEnd: this.handleSkipEnd,
         curTime: this.state.curTime,
-        roomId: this.props.room
+        roomId: this.props.room,
+        userId: this.state.userId,
+        isHost: this.state.isHost
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_videoResults__WEBPACK_IMPORTED_MODULE_5__["default"], {
         data: this.state.videoResults,
         handleClick: this.handleClick

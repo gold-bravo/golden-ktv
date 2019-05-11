@@ -6,7 +6,7 @@ module.exports = io => {
   io.on('connection', socket => {
     console.log(`A socket connection to the server has been made: ${socket.id}`)
     socket.emit('no refresh', socket.room)
-    socket.emit('send id', socket.id)
+    // socket.emit('send id', socket.id)
     socket.on('disconnect', () => {
       console.log(`Connection ${socket.id} has left the building`)
       // connections.splice(connections.indexOf(socket), 1)
@@ -17,8 +17,10 @@ module.exports = io => {
       socket.room = roomNumber
       if (!rooms.hasOwnProperty(roomNumber)) {
         rooms[roomNumber] = {}
+        socket.emit('you are the host')
       }
       console.log(socket.id)
+      socket.emit('send id', socket.id)
       // socket.join(roomNumber)
       // socket.emit('success', roomNumber)
 
@@ -38,17 +40,19 @@ module.exports = io => {
           'welcome',
           rooms[roomNumber].curData,
           rooms[roomNumber].playTime ? rooms[roomNumber].playTime : null
-          // socket.id
-          // May consider sending id to the front-end
         )
       }
     })
-
     //Listen for queue added, tell others to update queue
     socket.on('queue added', (data, roomNumber) => {
-      // console.log('queue added', data, roomNumber)
+      console.log('queue added', data)
       rooms[roomNumber].curData = data
+      socket.to(roomNumber).emit('update queue', rooms[roomNumber].curData)
+    })
 
+    socket.on('leaving', (data, roomNumber) => {
+      rooms[roomNumber].curData = data
+      console.log('leaving', data)
       socket.to(roomNumber).emit('update queue', rooms[roomNumber].curData)
     })
 

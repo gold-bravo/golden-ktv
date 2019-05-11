@@ -1,15 +1,17 @@
 import React, {Component} from 'react'
 import socket from '../socket'
 import ReactPlayer from 'react-player'
+import {withRouter} from 'react-router-dom'
+
 
 class VideoPlayer extends Component {
   constructor(props) {
     console.log(props, 'in videoPlayer')
     super(props)
     this.onStart = this.onStart.bind(this)
-    // this.onPlay = this.onPlay.bind(this)
     this.seek = this.seek.bind(this)
     this.onReady = this.onReady.bind(this)
+    // this.onPlay = this.onPlay.bind(this)
   }
   //This allows the player to be manipulated by React buttons
   ref = player => {
@@ -17,15 +19,6 @@ class VideoPlayer extends Component {
   }
   //TODO: This method is running twice for some reason rn
   onStart() {
-    // console.log('starting now', this.props.data)
-    // socket.emit('play', this.props.data, Date.now(), this.props.roomId)
-    // if (this.props.curTime && this.props.data[0]) {
-    //   const timeNow = (Date.now() - this.props.curTime) / 1000
-    //   console.log('working', this.props.data[0])
-    //   console.log(timeNow)
-    //   this.player.seekTo(timeNow)
-    //   this.player.getInternalPlayer().playVideo()
-    // }
     if (!this.props.curTime) {
       console.log('starting now', this.props.data)
       socket.emit('play', this.props.data, Date.now(), this.props.roomId)
@@ -35,6 +28,7 @@ class VideoPlayer extends Component {
       this.player.getInternalPlayer().seekTo(timeNow)
     }
   }
+
   onReady() {
     if (this.props.curTime) {
       this.player.getInternalPlayer().playVideo()
@@ -43,6 +37,7 @@ class VideoPlayer extends Component {
       this.player.getInternalPlayer().playVideo()
     })
   }
+
   handlePause = () => {
     this.player.getInternalPlayer().pauseVideo()
   }
@@ -54,20 +49,36 @@ class VideoPlayer extends Component {
       this.player.getInternalPlayer().seekTo(seekAheadOrBack)
     }
   }
+  leaveRoom = () => {
+    const filteredData = this.props.data.filter(item => item.userId !== this.props.userId)
+    socket.emit('leaving', filteredData, this.props.roomId)
+    this.props.history.push('/')
+    //What if someone tries to leave the room when it is turn to sing? or if you are the host?
+  }
+
   render() {
     const vidId = this.props.data[0] && this.props.data[0].id
+
+    //show display btn only if you are the host or it's your turn to sing
+    const yourTurn = this.props.data[0] && this.props.data[0].userId === this.props.userId
+    const displayPlayBtn = yourTurn || this.props.isHost
+
     return (
       <div className="player-wrapper">
         <button type="button" onClick={this.handlePause}>
-          Stop
-        </button>
-        <button type="button" onClick={() => this.seek('+')}>
-          ++
+          Pause
         </button>
         <button type="button" onClick={() => this.seek('-')}>
           --
         </button>
-        <button
+        <button type="button" onClick={() => this.seek('+')}>
+          ++
+        </button>
+        {
+          this.props.isHost
+          ?
+          <>
+          <button
           type="button"
           onClick={() => {
             if (this.player.getInternalPlayer().getPlayerState() === 1) {
@@ -76,7 +87,7 @@ class VideoPlayer extends Component {
               console.log('in else')
               setTimeout(() => {
                 this.player.seekTo(this.player.getDuration() - 1)
-              }, 800)
+              }, 1000)
               this.player.getInternalPlayer().playVideo()
             }
           }}
@@ -89,11 +100,26 @@ class VideoPlayer extends Component {
         >
           Take Me To End
         </button>
-        <button
+          </>
+          :
+          <></>
+        }
+        {
+          displayPlayBtn
+          ?
+          <>
+          <button
           type="button"
           onClick={() => this.player.getInternalPlayer().playVideo()}
         >
           PLAY
+        </button>
+          </>
+          :
+          <></>
+        }
+        <button onClick={this.leaveRoom}>
+          LEAVING ROOM
         </button>
         <ReactPlayer
           style={{pointerEvents: 'none'}}
@@ -110,15 +136,17 @@ class VideoPlayer extends Component {
           onStart={this.onStart}
           onReady={this.onReady}
           // volume={}
-          // onPlay={this.onPlay}
           onError={this.props.handleSkipEnd}
-          onEnded={this.props.handleSkipEnd}
+          onEnded={() => {
+            if(displayPlayBtn){
+              this.props.handleSkipEnd()
+            }
+          }}
         />
       </div>
     )
   }
 }
 
-export default VideoPlayer
+export default withRouter(VideoPlayer)
 
-//TODO: SKIP-BTN, SEEK+/- BTN, Manual START, Disable AutoPlay

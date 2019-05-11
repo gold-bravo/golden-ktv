@@ -13,7 +13,8 @@ class VideoSearchBar extends Component {
       videoData: [],
       videoResults: [],
       curTime: null,
-      userId: ''
+      userId: '',
+      isHost: false
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
@@ -41,8 +42,12 @@ class VideoSearchBar extends Component {
     socket.on('update queue', data => {
       this.setState({videoData: data})
     })
+    socket.on('you are the host', () => {
+      console.log('U DA HOST')
+      this.setState({isHost: true})
+    })
     socket.on('send id', id => {
-      console.log(id)
+      // console.log(id)
       this.setState({userId: id})
     })
   }
@@ -96,7 +101,6 @@ class VideoSearchBar extends Component {
 
   // Adds the clicked videoResult into the queue
   async handleClick(video) {
-    console.log(this.state.userId)
     const newQueueItem = {
       id: video.id.videoId,
       title: video.snippet.title,
@@ -126,6 +130,8 @@ class VideoSearchBar extends Component {
           handleSkipEnd={this.handleSkipEnd}
           curTime={this.state.curTime}
           roomId={this.props.room}
+          userId={this.state.userId}
+          isHost={this.state.isHost}
         />
         <VideoResults
           data={this.state.videoResults}
