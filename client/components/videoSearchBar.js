@@ -24,19 +24,20 @@ class VideoSearchBar extends Component {
     // prob don't need now
     // socket.on('playing', data => this.setState({videoData: data}))
     //STEP FOUR: Now the welcome is finally set.
-    socket.on('welcome', (data, time, id) => {
-      console.log('in welcome, if null means first visit', data, time)
+    //TODO:Possibly adding socket.id to state as userId
+    socket.on('welcome', (data, time) => {
+      console.log(
+        'in welcome, if null means first visit or video has not played',
+        data,
+        time
+      )
       if (data) {
-        this.setState({
-          videoData: data,
-          curTime: time,
-          userId: id
-        })
+        console.log('data mounted on searchBar')
+        this.setState({videoData: data, curTime: time})
       }
     })
     // STEP ONE: EMIT SUCCESSFUL VISIT TO THE ROOM
     socket.emit('success', this.props.room)
-    console.log('mounted')
     socket.on('update queue', data => {
       this.setState({videoData: data})
     })
@@ -104,13 +105,12 @@ class VideoSearchBar extends Component {
     }
 
     await this.setState(state => {
-      return {videoData: state.videoData.concat(newQueueItem)}
+      return {videoData: [...state.videoData, newQueueItem]}
     })
 
     this.setState({
       videoResults: []
     })
-
     socket.emit('queue added', this.state.videoData, this.props.room)
   }
 

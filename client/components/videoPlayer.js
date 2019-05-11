@@ -4,6 +4,7 @@ import ReactPlayer from 'react-player'
 
 class VideoPlayer extends Component {
   constructor(props) {
+    console.log(props, 'in videoPlayer')
     super(props)
     this.onStart = this.onStart.bind(this)
     this.onPlay = this.onPlay.bind(this)
@@ -41,16 +42,6 @@ class VideoPlayer extends Component {
     socket.on('playing', () => {
       this.player.getInternalPlayer().playVideo()
     })
-  }
-  onPlay() {
-    // TODO: This does not work, it runs continously while video is playing
-    // if (this.props.curTime && this.props.data[0]) {
-    //   const timeNow = this.player.getCurrentTime()
-    //   console.log('working', this.props.data[0])
-    //   console.log(timeNow)
-    //   this.player.seekTo(timeNow)
-    //   this.player.getInternalPlayer().playVideo()
-    // }
   }
   handlePause = () => {
     this.player.getInternalPlayer().pauseVideo()
@@ -111,8 +102,8 @@ class VideoPlayer extends Component {
           // height="70%"
           url={
             vidId
-              ? `www.youtube.com/watch?v=${vidId}`
-              : 'www.youtube.com/watch?v=N-E3Hyg7rh4'
+              ? `https://www.youtube.com/watch?v=${vidId}`
+              : 'https://www.youtube.com/watch?v=yKNxeF4KMsY'
           }
           controls={true}
           ref={this.ref}
