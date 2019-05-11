@@ -4,9 +4,15 @@ import ReactPlayer from 'react-player'
 
 class VideoPlayer extends Component {
   constructor(props) {
+    console.log(props, 'in videoPlayer')
     super(props)
     this.onStart = this.onStart.bind(this)
-    this.onPlay = this.onPlay.bind(this)
+    this.onReady = this.onReady.bind(this)
+  }
+  componentDidMount() {
+    socket.on('playing', () => {
+      this.player.getInternalPlayer().playVideo()
+    })
   }
   //This allows the player to be manipulated by React buttons
   ref = player => {
@@ -16,28 +22,15 @@ class VideoPlayer extends Component {
   onStart() {
     console.log('starting now', this.props.data)
     socket.emit('play', this.props.data, Date.now(), this.props.roomId)
+  }
+
+  onReady() {
     if (this.props.curTime && this.props.data[0]) {
       const timeNow = (Date.now() - this.props.curTime) / 1000
       console.log('working', this.props.data[0])
       console.log(timeNow)
-      this.player.seekTo(timeNow)
-      this.player.getInternalPlayer().playVideo()
-      this.player.getInternalPlayer()
-    } else {
-      socket.on('playing', () => {
-        this.player.getInternalPlayer().playVideo()
-      })
+      this.player.seekTo(parseFloat(timeNow))
     }
-  }
-  onPlay() {
-    // TODO: This does not work, it runs continously while video is playing
-    // if (this.props.curTime && this.props.data[0]) {
-    //   const timeNow = this.player.getCurrentTime()
-    //   console.log('working', this.props.data[0])
-    //   console.log(timeNow)
-    //   this.player.seekTo(timeNow)
-    //   this.player.getInternalPlayer().playVideo()
-    // }
   }
   handlePause = () => {
     this.player.getInternalPlayer().pauseVideo()
@@ -70,11 +63,10 @@ class VideoPlayer extends Component {
           className="react-player"
           // width="70%"
           // height="70%"
-          playing={true}
           url={
             vidId
-              ? `www.youtube.com/watch?v=${vidId}`
-              : 'www.youtube.com/watch?v=N-E3Hyg7rh4'
+              ? `https://www.youtube.com/watch?v=${vidId}`
+              : 'https://www.youtube.com/watch?v=yKNxeF4KMsY'
           }
           config={{
             youtube: {
@@ -83,11 +75,7 @@ class VideoPlayer extends Component {
           }}
           ref={this.ref}
           onStart={this.onStart}
-          // onStart={() => {
-          //   console.log('starting now', this.props.data)
-          //   socket.emit('play', this.props.data, Date.now(), this.props.roomId)
-          // }}
-          onPlay={this.onPlay}
+          onReady={this.onReady}
           onEnded={this.props.handleEnd}
         />
       </div>

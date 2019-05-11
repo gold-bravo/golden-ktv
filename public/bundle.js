@@ -100,9 +100,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components */ "./client/components/index.js");
 /* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./routes */ "./client/routes.js");
 /* harmony import */ var _components_room__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/room */ "./client/components/room.js");
-/* harmony import */ var _components_tokbox__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/tokbox */ "./client/components/tokbox.js");
-/* harmony import */ var _components_roomForm__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/roomForm */ "./client/components/roomForm.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _components_roomForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/roomForm */ "./client/components/roomForm.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -120,7 +119,6 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
 
 
 
@@ -147,12 +145,12 @@ function (_Component) {
   _createClass(App, [{
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components__WEBPACK_IMPORTED_MODULE_1__["Navbar"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_routes__WEBPACK_IMPORTED_MODULE_2__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__["Switch"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__["Route"], {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components__WEBPACK_IMPORTED_MODULE_1__["Navbar"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_routes__WEBPACK_IMPORTED_MODULE_2__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Switch"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
         path: "/room",
         component: _components_room__WEBPACK_IMPORTED_MODULE_3__["default"]
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__["Route"], {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
         path: "/",
-        component: _components_roomForm__WEBPACK_IMPORTED_MODULE_5__["default"]
+        component: _components_roomForm__WEBPACK_IMPORTED_MODULE_4__["default"]
       })));
     }
   }]);
@@ -178,13 +176,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var VideoQueue = function VideoQueue(props) {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, props.data.map(function (video) {
+  return props.data.map(function (video) {
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       key: video.id
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
       src: video.img
     }), video.title));
-  }));
+  });
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (VideoQueue);
@@ -403,10 +401,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _videoSearchBar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./videoSearchBar */ "./client/components/videoSearchBar.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var opentok_react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! opentok-react */ "./node_modules/opentok-react/dist/index.js");
-/* harmony import */ var opentok_react__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(opentok_react__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _tokbox__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./tokbox */ "./client/components/tokbox.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _socket__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../socket */ "./client/socket.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -443,15 +440,9 @@ function (_Component) {
   _inherits(Room, _Component);
 
   function Room(props) {
-    var _this;
-
     _classCallCheck(this, Room);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Room).call(this, props));
-    _this.state = {
-      streams: []
-    };
-    return _this;
+    return _possibleConstructorReturn(this, _getPrototypeOf(Room).call(this, props));
   }
 
   _createClass(Room, [{
@@ -460,36 +451,28 @@ function (_Component) {
       var _componentDidMount = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee() {
-        var _this2 = this;
+        var _this = this;
 
-        var roomNum, _ref, data;
+        var _ref, data;
 
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                roomNum = this.props.location.pathname.slice(6);
-                _context.next = 3;
-                return axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/api/room/".concat(roomNum));
+                _context.next = 2;
+                return axios__WEBPACK_IMPORTED_MODULE_4___default.a.get("/api/room/".concat(this.props.room.roomNum));
 
-              case 3:
+              case 2:
                 _ref = _context.sent;
                 data = _ref.data;
-                console.log(data);
+                console.log(data, 'room');
                 _socket__WEBPACK_IMPORTED_MODULE_5__["default"].on('no refresh', function (id) {
                   if (id) {
-                    _this2.props.history.push('/');
+                    _this.props.history.push('/');
                   }
-                }); // this.sessionHelper = createSession({
-                //   //waiting for stuff
-                //   apiKey: data.KEY,
-                //   sessionId: data.sessionId,
-                //   onStreamsUpdated: streams => {
-                //     this.setState({streams})
-                //   }
-                // })
+                });
 
-              case 7:
+              case 6:
               case "end":
                 return _context.stop();
             }
@@ -506,14 +489,9 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      console.log(this.props.room.room);
-    }
-  }, {
-    key: "render",
-    value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_videoSearchBar__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        room: this.props.room.room
-      }));
+        room: this.props.room.roomNum
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_tokbox__WEBPACK_IMPORTED_MODULE_3__["default"], null));
     }
   }]);
 
@@ -614,23 +592,31 @@ function (_Component) {
               case 0:
                 event.preventDefault(); //PROBABLY WANT TO SOCKET.EMIT HERE WITH MY ROOM NUMBER
 
-                this.props.setRoom(this.state.room);
-                _context.next = 4;
+                _context.next = 3;
                 return axios__WEBPACK_IMPORTED_MODULE_3___default.a.put('/api/room', {
                   roomNum: this.state.room,
                   name: this.state.name
                 });
 
-              case 4:
+              case 3:
                 _ref = _context.sent;
                 data = _ref.data;
-                console.log('handling stuff', data);
+                _context.next = 7;
+                return this.props.setRoom({
+                  roomNum: this.state.room,
+                  session: data.sessionId,
+                  token: data.token,
+                  apiKey: data.KEY
+                });
+
+              case 7:
                 this.setState({
                   sessionId: data.sessionId
                 });
+                console.log('handling stuff', this.state);
                 this.props.history.push("/room/".concat(this.state.room));
 
-              case 9:
+              case 10:
               case "end":
                 return _context.stop();
             }
@@ -671,8 +657,8 @@ function (_Component) {
 
 var mDTP = function mDTP(dispatch) {
   return {
-    setRoom: function setRoom(roomNum) {
-      return dispatch(Object(_store_roomReducer__WEBPACK_IMPORTED_MODULE_1__["setRoom"])(roomNum));
+    setRoom: function setRoom(roomInfo) {
+      return dispatch(Object(_store_roomReducer__WEBPACK_IMPORTED_MODULE_1__["setRoom"])(roomInfo));
     }
   };
 };
@@ -692,8 +678,9 @@ var mDTP = function mDTP(dispatch) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var opentok_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! opentok-react */ "./node_modules/opentok-react/dist/index.js");
-/* harmony import */ var opentok_react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(opentok_react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var opentok_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! opentok-react */ "./node_modules/opentok-react/dist/index.js");
+/* harmony import */ var opentok_react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(opentok_react__WEBPACK_IMPORTED_MODULE_2__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -715,11 +702,11 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
- //Remember to fill these fields before use!
 
-var apiKey;
-var token;
-var sessionId;
+ //Remember to fill these fields before use!
+// let apiKey = ''
+// let token = ''
+// let sessionId = ''
 
 var TokBox =
 /*#__PURE__*/
@@ -765,6 +752,7 @@ function (_Component) {
       });
     });
 
+    console.log(_this.props, 'credits');
     _this.state = {
       error: null,
       connection: 'Connecting',
@@ -818,19 +806,22 @@ function (_Component) {
   _createClass(TokBox, [{
     key: "render",
     value: function render() {
-      // const {apiKey, sessionId, token} = this.props.credentials
+      var _this$props$credentia = this.props.credentials,
+          apiKey = _this$props$credentia.apiKey,
+          session = _this$props$credentia.session,
+          token = _this$props$credentia.token;
       var publishVideo = this.state.publishVideo;
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_1__["OTSession"], {
-        apiKey: apiKey,
-        sessionId: sessionId,
-        token: token,
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_2__["OTSession"], {
+        apiKey: this.props.credentials.apiKey,
+        sessionId: this.props.credentials.session,
+        token: this.props.credentials.token,
         onError: this.onSessionError,
         eventHandlers: this.sessionEventHandlers
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         id: "videoButton",
         onClick: this.toggleVideo
-      }, publishVideo ? 'Disable' : 'Enable', " Video"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_1__["OTPublisher"], {
+      }, publishVideo ? 'Disable' : 'Enable', " Video"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_2__["OTPublisher"], {
         properties: {
           publishVideo: publishVideo,
           width: 150,
@@ -839,7 +830,7 @@ function (_Component) {
         onPublish: this.onPublish,
         onError: this.onPublishError,
         eventHandlers: this.publisherEventHandlers
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_1__["OTStreams"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_1__["OTSubscriber"], {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_2__["OTStreams"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_2__["OTSubscriber"], {
         properties: {
           width: 150,
           height: 150
@@ -854,7 +845,13 @@ function (_Component) {
   return TokBox;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-/* harmony default export */ __webpack_exports__["default"] = (TokBox);
+var mSTP = function mSTP(state) {
+  return {
+    credentials: state.roomReducer
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mSTP)(TokBox));
 
 /***/ }),
 
@@ -953,6 +950,7 @@ function (_Component) {
 
     _classCallCheck(this, VideoPlayer);
 
+    console.log(props, 'in videoPlayer');
     _this = _possibleConstructorReturn(this, _getPrototypeOf(VideoPlayer).call(this, props));
 
     _defineProperty(_assertThisInitialized(_this), "ref", function (player) {
@@ -974,43 +972,36 @@ function (_Component) {
     });
 
     _this.onStart = _this.onStart.bind(_assertThisInitialized(_this));
-    _this.onPlay = _this.onPlay.bind(_assertThisInitialized(_this));
+    _this.onReady = _this.onReady.bind(_assertThisInitialized(_this));
     return _this;
-  } //This allows the player to be manipulated by React buttons
-
+  }
 
   _createClass(VideoPlayer, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      _socket__WEBPACK_IMPORTED_MODULE_1__["default"].on('playing', function () {
+        _this2.player.getInternalPlayer().playVideo();
+      });
+    } //This allows the player to be manipulated by React buttons
+
+  }, {
     key: "onStart",
     //TODO: This method is running twice for some reason rn
     value: function onStart() {
-      var _this2 = this;
-
       console.log('starting now', this.props.data);
       _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('play', this.props.data, Date.now(), this.props.roomId);
-
+    }
+  }, {
+    key: "onReady",
+    value: function onReady() {
       if (this.props.curTime && this.props.data[0]) {
         var timeNow = (Date.now() - this.props.curTime) / 1000;
         console.log('working', this.props.data[0]);
         console.log(timeNow);
-        this.player.seekTo(timeNow);
-        this.player.getInternalPlayer().playVideo();
-        this.player.getInternalPlayer();
-      } else {
-        _socket__WEBPACK_IMPORTED_MODULE_1__["default"].on('playing', function () {
-          _this2.player.getInternalPlayer().playVideo();
-        });
+        this.player.seekTo(parseFloat(timeNow));
       }
-    }
-  }, {
-    key: "onPlay",
-    value: function onPlay() {// TODO: This does not work, it runs continously while video is playing
-      // if (this.props.curTime && this.props.data[0]) {
-      //   const timeNow = this.player.getCurrentTime()
-      //   console.log('working', this.props.data[0])
-      //   console.log(timeNow)
-      //   this.player.seekTo(timeNow)
-      //   this.player.getInternalPlayer().playVideo()
-      // }
     }
   }, {
     key: "render",
@@ -1031,8 +1022,7 @@ function (_Component) {
         className: "react-player" // width="70%"
         // height="70%"
         ,
-        playing: true,
-        url: vidId ? "www.youtube.com/watch?v=".concat(vidId) : 'www.youtube.com/watch?v=N-E3Hyg7rh4',
+        url: vidId ? "https://www.youtube.com/watch?v=".concat(vidId) : 'https://www.youtube.com/watch?v=yKNxeF4KMsY',
         config: {
           youtube: {
             playerVars: {
@@ -1041,12 +1031,8 @@ function (_Component) {
           }
         },
         ref: this.ref,
-        onStart: this.onStart // onStart={() => {
-        //   console.log('starting now', this.props.data)
-        //   socket.emit('play', this.props.data, Date.now(), this.props.roomId)
-        // }}
-        ,
-        onPlay: this.onPlay,
+        onStart: this.onStart,
+        onReady: this.onReady,
         onEnded: this.props.handleEnd
       }));
     }
@@ -1095,10 +1081,10 @@ var VideoResults =
 function (_Component) {
   _inherits(VideoResults, _Component);
 
-  function VideoResults(props) {
+  function VideoResults() {
     _classCallCheck(this, VideoResults);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(VideoResults).call(this, props));
+    return _possibleConstructorReturn(this, _getPrototypeOf(VideoResults).apply(this, arguments));
   }
 
   _createClass(VideoResults, [{
@@ -1144,6 +1130,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _VideoQueue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./VideoQueue */ "./client/components/VideoQueue.js");
 /* harmony import */ var _videoResults__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./videoResults */ "./client/components/videoResults.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
@@ -1205,9 +1199,11 @@ function (_Component) {
       // socket.on('playing', data => this.setState({videoData: data}))
       //STEP FOUR: Now the welcome is finally set.
       _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('welcome', function (data, time) {
-        console.log('in welcome, if null means first visit', data, time);
+        console.log('in welcome, if null means first visit or video has not played', data, time);
 
         if (data) {
+          console.log('data mounted on searchBar');
+
           _this2.setState({
             videoData: data,
             curTime: time
@@ -1216,7 +1212,6 @@ function (_Component) {
       }); //STEP ONE: EMIT SUCCESSFUL VISIT TO THE ROOM
 
       _socket__WEBPACK_IMPORTED_MODULE_3__["default"].emit('success', this.props.room);
-      console.log('mounted');
       _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('update queue', function (data) {
         _this2.setState({
           videoData: data
@@ -1329,7 +1324,7 @@ function (_Component) {
                 _context2.next = 3;
                 return this.setState(function (state) {
                   return {
-                    videoData: state.videoData.concat(newQueueItem)
+                    videoData: [].concat(_toConsumableArray(state.videoData), [newQueueItem])
                   };
                 });
 
@@ -1637,44 +1632,78 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 
-var GET_ROOM = 'GET_ROOM';
-var defaultRoom = {
-  room: ''
+
+var GET_ROOM_INFO = 'GET_ROOM_INFO';
+var defaultRoomInfo = {
+  roomNum: '',
+  session: '',
+  token: '',
+  apiKey: ''
 };
 
-var getRoom = function getRoom(roomNum) {
+var getRoom = function getRoom(roomInfo) {
   return {
-    type: GET_ROOM,
-    roomNum: roomNum
+    type: GET_ROOM_INFO,
+    roomInfo: roomInfo
   };
 };
 
-var setRoom = function setRoom(roomNum) {
-  return function (dispatch) {
-    try {
-      _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('join room', roomNum);
-      dispatch(getRoom(roomNum));
-    } catch (error) {
-      console.log('Error in thunk');
-    }
-  };
+var setRoom = function setRoom(roomInfo) {
+  return (
+    /*#__PURE__*/
+    function () {
+      var _ref = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee(dispatch) {
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.prev = 0;
+                _context.next = 3;
+                return _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('join room', roomInfo.roomNum);
+
+              case 3:
+                dispatch(getRoom(roomInfo));
+                _context.next = 9;
+                break;
+
+              case 6:
+                _context.prev = 6;
+                _context.t0 = _context["catch"](0);
+                console.log('Error in thunk');
+
+              case 9:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, null, [[0, 6]]);
+      }));
+
+      return function (_x) {
+        return _ref.apply(this, arguments);
+      };
+    }()
+  );
 };
 
 var roomReducer = function roomReducer() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultRoom;
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultRoomInfo;
   var action = arguments.length > 1 ? arguments[1] : undefined;
 
   switch (action.type) {
-    case GET_ROOM:
-      console.log('here!');
-      return _objectSpread({}, state, {
-        room: action.roomNum
-      });
+    case GET_ROOM_INFO:
+      console.log('here!', action.roomInfo);
+      return _objectSpread({}, action.roomInfo);
 
     default:
-      return defaultRoom;
+      return state;
   }
 };
 
@@ -52885,7 +52914,7 @@ function warning(message) {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
+/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

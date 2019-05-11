@@ -1,33 +1,38 @@
 import axios from 'axios'
 import socket from '../socket'
 
-const GET_ROOM = 'GET_ROOM'
+const GET_ROOM_INFO = 'GET_ROOM_INFO'
 
-const defaultRoom = {room: ''}
+const defaultRoomInfo = {
+  roomNum: '',
+  session: '',
+  token: '',
+  apiKey: ''
+}
 
-const getRoom = roomNum => {
+const getRoom = roomInfo => {
   return {
-    type: GET_ROOM,
-    roomNum
+    type: GET_ROOM_INFO,
+    roomInfo
   }
 }
 
-export const setRoom = roomNum => dispatch => {
+export const setRoom = roomInfo => async dispatch => {
   try {
-    socket.emit('join room', roomNum)
-    dispatch(getRoom(roomNum))
+    await socket.emit('join room', roomInfo.roomNum)
+    dispatch(getRoom(roomInfo))
   } catch (error) {
     console.log('Error in thunk')
   }
 }
 
-const roomReducer = (state = defaultRoom, action) => {
+const roomReducer = (state = defaultRoomInfo, action) => {
   switch (action.type) {
-    case GET_ROOM:
-      console.log('here!')
-      return {...state, room: action.roomNum}
+    case GET_ROOM_INFO:
+      console.log('here!', action.roomInfo)
+      return {...action.roomInfo}
     default:
-      return defaultRoom
+      return state
   }
 }
 
