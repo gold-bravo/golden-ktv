@@ -14,9 +14,7 @@ class RoomForm extends Component {
       sessionId: '',
       email: '',
       err: '',
-      guestLogin: true,
-      login: false,
-      signup: false
+      status: 'guest'
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -28,13 +26,13 @@ class RoomForm extends Component {
     //This is the switch to handle changing which login-component should render.
     switch (event.target.value) {
       case 'login':
-        this.setState({guestLogin: false, login: true, signup: false})
+        this.setState({status: 'login'})
         break
       case 'signup':
-        this.setState({guestLogin: false, login: false, signup: true})
+        this.setState({status: 'signup'})
         break
       default:
-        this.setState({guestLogin: true, login: false, signup: false})
+        this.setState({status: 'guest'})
         break
     }
   }
@@ -82,7 +80,7 @@ class RoomForm extends Component {
     return (
       <div className="login-component">
         <form onSubmit={this.handleSubmit}>
-          {this.state.signup || this.state.guestLogin ? (
+          {this.state.status === 'signup' || this.state.status === 'guest' ? (
             <label>
               Screen Name:
               <input
@@ -93,7 +91,7 @@ class RoomForm extends Component {
               />
             </label>
           ) : null}
-          {this.state.login || this.state.signup ? (
+          {this.state.status === 'login' || this.state.status === 'signup' ? (
             <>
               <label>
                 Email:
@@ -126,17 +124,17 @@ class RoomForm extends Component {
           </label>
           <input type="submit" value="JOIN" />
         </form>
-        {!this.state.login ? (
+        {this.state.status !== 'login' ? (
           <button type="button" onClick={this.handleClick} value="login">
             Regulars
           </button>
         ) : null}
-        {!this.state.signup ? (
+        {this.state.status !== 'signup' ? (
           <button type="button" onClick={this.handleClick} value="signup">
             Sign Up
           </button>
         ) : null}
-        {!this.state.guestLogin ? (
+        {this.state.status !== 'guest' ? (
           <button type="button" onClick={this.handleClick} value="guest">
             Guest
           </button>

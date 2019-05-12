@@ -33,7 +33,6 @@ export const me = () => async dispatch => {
 export const auth = (email, password, method, screenName) => async dispatch => {
   let res
   try {
-    console.log(screenName)
     res = await axios.post(`/auth/${method}`, {
       email,
       password,
@@ -68,7 +67,6 @@ export const logout = () => async dispatch => {
 export default function(state = defaultUser, action) {
   switch (action.type) {
     case GET_USER:
-      console.log(action.user)
       return action.user
     case REMOVE_USER:
       return defaultUser

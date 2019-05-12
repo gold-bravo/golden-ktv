@@ -80,7 +80,6 @@ class TokBox extends Component {
   render() {
     // const {name, apiKey, session, token} = this.props.credentials
     const {publishVideo} = this.state
-    console.log(this.props.credentials)
     return (
       <div>
         <OTSession

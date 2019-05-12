@@ -590,9 +590,7 @@ function (_Component) {
       sessionId: '',
       email: '',
       err: '',
-      guestLogin: true,
-      login: false,
-      signup: false
+      status: 'guest'
     };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
@@ -608,25 +606,19 @@ function (_Component) {
       switch (event.target.value) {
         case 'login':
           this.setState({
-            guestLogin: false,
-            login: true,
-            signup: false
+            status: 'login'
           });
           break;
 
         case 'signup':
           this.setState({
-            guestLogin: false,
-            login: false,
-            signup: true
+            status: 'signup'
           });
           break;
 
         default:
           this.setState({
-            guestLogin: true,
-            login: false,
-            signup: false
+            status: 'guest'
           });
           break;
       }
@@ -730,12 +722,12 @@ function (_Component) {
         className: "login-component"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handleSubmit
-      }, this.state.signup || this.state.guestLogin ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Screen Name:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, this.state.status === 'signup' || this.state.status === 'guest' ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Screen Name:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         name: "name",
         type: "text",
         value: this.state.name,
         onChange: this.handleChange
-      })) : null, this.state.login || this.state.signup ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Email:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      })) : null, this.state.status === 'login' || this.state.status === 'signup' ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Email:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         name: "email",
         type: "text",
         value: this.state.email,
@@ -753,15 +745,15 @@ function (_Component) {
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "submit",
         value: "JOIN"
-      })), !this.state.login ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      })), this.state.status !== 'login' ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         onClick: this.handleClick,
         value: "login"
-      }, "Regulars") : null, !this.state.signup ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, "Regulars") : null, this.state.status !== 'signup' ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         onClick: this.handleClick,
         value: "signup"
-      }, "Sign Up") : null, !this.state.guestLogin ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }, "Sign Up") : null, this.state.status !== 'guest' ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
         onClick: this.handleClick,
         value: "guest"
