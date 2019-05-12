@@ -10,7 +10,6 @@ import {OTSession, OTPublisher, OTStreams, OTSubscriber} from 'opentok-react'
 class TokBox extends Component {
   constructor(props) {
     super(props)
-    console.log(this.props, 'credits')
     this.state = {
       error: null,
       connection: 'Connecting',

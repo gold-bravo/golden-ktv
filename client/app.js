@@ -12,8 +12,8 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Navbar />
-        <Routes />
+        {/* <Navbar /> */}
+        {/* <Routes /> */}
         <Switch>
           <Route path="/room" component={Room} />
           <Route path="/" component={RoomForm} />

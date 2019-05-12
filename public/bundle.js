@@ -145,7 +145,7 @@ function (_Component) {
   _createClass(App, [{
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components__WEBPACK_IMPORTED_MODULE_1__["Navbar"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_routes__WEBPACK_IMPORTED_MODULE_2__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Switch"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Switch"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
         path: "/room",
         component: _components_room__WEBPACK_IMPORTED_MODULE_3__["default"]
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
@@ -356,12 +356,14 @@ __webpack_require__.r(__webpack_exports__);
 var Navbar = function Navbar(_ref) {
   var handleClick = _ref.handleClick,
       isLoggedIn = _ref.isLoggedIn;
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "GOLDEN KARAOKE"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", null, isLoggedIn ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", null, isLoggedIn ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
     to: "/home"
   }, "Home"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     href: "#",
     onClick: handleClick
   }, "Logout")) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
+    to: "/guest"
+  }, "Guest"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
     to: "/login"
   }, "Login"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
     to: "/signup"
@@ -449,10 +451,10 @@ var Room =
 function (_Component) {
   _inherits(Room, _Component);
 
-  function Room(props) {
+  function Room() {
     _classCallCheck(this, Room);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(Room).call(this, props));
+    return _possibleConstructorReturn(this, _getPrototypeOf(Room).apply(this, arguments));
   }
 
   _createClass(Room, [{
@@ -470,7 +472,7 @@ function (_Component) {
             switch (_context.prev = _context.next) {
               case 0:
                 if (!this.props.room.roomNum) {
-                  _context.next = 6;
+                  _context.next = 5;
                   break;
                 }
 
@@ -480,18 +482,15 @@ function (_Component) {
               case 3:
                 _ref = _context.sent;
                 data = _ref.data;
-                console.log(data, 'room');
 
-              case 6:
+              case 5:
                 _socket__WEBPACK_IMPORTED_MODULE_5__["default"].on('no refresh', function (room) {
-                  console.log(room, _socket__WEBPACK_IMPORTED_MODULE_5__["default"].id);
-
                   if (!room) {
                     _this.props.history.push('/');
                   }
                 });
 
-              case 7:
+              case 6:
               case "end":
                 return _context.stop();
             }
@@ -542,6 +541,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../store */ "./client/store/index.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -571,6 +571,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var RoomForm =
 /*#__PURE__*/
 function (_Component) {
@@ -585,14 +586,52 @@ function (_Component) {
     _this.state = {
       name: '',
       room: '',
-      sessionId: ''
+      password: '',
+      sessionId: '',
+      email: '',
+      err: '',
+      guestLogin: true,
+      login: false,
+      signup: false
     };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
+    _this.handleClick = _this.handleClick.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(RoomForm, [{
+    key: "handleClick",
+    value: function handleClick(event) {
+      console.log(event.target.value); //This is the switch to handle changing which login-component should render.
+
+      switch (event.target.value) {
+        case 'login':
+          this.setState({
+            guestLogin: false,
+            login: true,
+            signup: false
+          });
+          break;
+
+        case 'signup':
+          this.setState({
+            guestLogin: false,
+            login: false,
+            signup: true
+          });
+          break;
+
+        default:
+          this.setState({
+            guestLogin: true,
+            login: false,
+            signup: false
+          });
+          break;
+      }
+    }
+  }, {
     key: "handleChange",
     value: function handleChange(event) {
       this.setState(_defineProperty({}, event.target.name, event.target.value));
@@ -603,44 +642,78 @@ function (_Component) {
       var _handleSubmit = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee(event) {
-        var _ref, data;
-
+        var response;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                event.preventDefault(); //PROBABLY WANT TO SOCKET.EMIT HERE WITH MY ROOM NUMBER
+                event.preventDefault();
+                _context.prev = 1;
 
-                _context.next = 3;
+                if (!(this.state.login === true)) {
+                  _context.next = 7;
+                  break;
+                }
+
+                _context.next = 5;
+                return axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('/auth/login', {
+                  email: this.state.email,
+                  password: this.state.password
+                });
+
+              case 5:
+                _context.next = 10;
+                break;
+
+              case 7:
+                if (!(this.state.signup === true)) {
+                  _context.next = 10;
+                  break;
+                }
+
+                _context.next = 10;
+                return this.props.signedUp(this.state.email, this.state.password, 'signup', this.state.name);
+
+              case 10:
+                _context.next = 12;
                 return axios__WEBPACK_IMPORTED_MODULE_3___default.a.put('/api/room', {
                   roomNum: this.state.room,
                   name: this.state.name
                 });
 
-              case 3:
-                _ref = _context.sent;
-                data = _ref.data;
-                _context.next = 7;
+              case 12:
+                response = _context.sent;
+                _context.next = 15;
                 return this.props.setRoom({
                   roomNum: this.state.room,
-                  session: data.sessionId,
-                  token: data.token,
-                  apiKey: data.KEY
+                  session: response.data.sessionId,
+                  token: response.data.token,
+                  apiKey: response.data.KEY
                 });
 
-              case 7:
+              case 15:
                 this.setState({
-                  sessionId: data.sessionId
+                  sessionId: response.data.sessionId
                 });
                 console.log('handling stuff', this.state);
                 this.props.history.push("/room/".concat(this.state.room));
+                _context.next = 24;
+                break;
 
-              case 10:
+              case 20:
+                _context.prev = 20;
+                _context.t0 = _context["catch"](1);
+                console.log(_context.t0);
+                this.setState({
+                  err: 'Invalid Login'
+                });
+
+              case 24:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this);
+        }, _callee, this, [[1, 20]]);
       }));
 
       function handleSubmit(_x) {
@@ -652,22 +725,46 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "login-component"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handleSubmit
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Name:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, this.state.signup || this.state.guestLogin ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Screen Name:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         name: "name",
         type: "text",
         value: this.state.name,
         onChange: this.handleChange
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Room:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      })) : null, this.state.login || this.state.signup ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Email:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        name: "email",
+        type: "text",
+        value: this.state.email,
+        onChange: this.handleChange
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Password:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        name: "password",
+        type: "text",
+        value: this.state.password,
+        onChange: this.handleChange
+      }))) : null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Room:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         name: "room",
         type: "text",
         value: this.state.room,
         onChange: this.handleChange
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "submit",
-        value: "Enter"
-      }));
+        value: "JOIN"
+      })), !this.state.login ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        onClick: this.handleClick,
+        value: "login"
+      }, "Regulars") : null, !this.state.signup ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        onClick: this.handleClick,
+        value: "signup"
+      }, "Sign Up") : null, !this.state.guestLogin ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        onClick: this.handleClick,
+        value: "guest"
+      }, "Guest") : null, this.state.err ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Invalid Attempt") : null);
     }
   }]);
 
@@ -678,6 +775,9 @@ var mDTP = function mDTP(dispatch) {
   return {
     setRoom: function setRoom(roomInfo) {
       return dispatch(Object(_store_roomReducer__WEBPACK_IMPORTED_MODULE_1__["setRoom"])(roomInfo));
+    },
+    signedUp: function signedUp(email, password, formName, screenName) {
+      return dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_4__["auth"])(email, password, formName, screenName));
     }
   };
 };
@@ -771,7 +871,6 @@ function (_Component) {
       });
     });
 
-    console.log(_this.props, 'credits');
     _this.state = {
       error: null,
       connection: 'Connecting',
@@ -968,7 +1067,6 @@ function (_Component) {
 
     _classCallCheck(this, VideoPlayer);
 
-    console.log(props, 'in videoPlayer');
     _this = _possibleConstructorReturn(this, _getPrototypeOf(VideoPlayer).call(this, props));
 
     _defineProperty(_assertThisInitialized(_this), "ref", function (player) {
@@ -1001,15 +1099,6 @@ function (_Component) {
     key: "onStart",
     //TODO: This method is running twice for some reason rn
     value: function onStart() {
-      // console.log('starting now', this.props.data)
-      // socket.emit('play', this.props.data, Date.now(), this.props.roomId)
-      // if (this.props.curTime && this.props.data[0]) {
-      //   const timeNow = (Date.now() - this.props.curTime) / 1000
-      //   console.log('working', this.props.data[0])
-      //   console.log(timeNow)
-      //   this.player.seekTo(timeNow)
-      //   this.player.getInternalPlayer().playVideo()
-      // }
       if (!this.props.curTime) {
         console.log('starting now', this.props.data);
         _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('play', this.props.data, Date.now(), this.props.roomId);
@@ -1059,7 +1148,6 @@ function (_Component) {
           if (_this3.player.getInternalPlayer().getPlayerState() === 1) {
             _this3.player.seekTo(_this3.player.getDuration() - 1);
           } else {
-            console.log('in else');
             setTimeout(function () {
               _this3.player.seekTo(_this3.player.getDuration() - 1);
             }, 800);
@@ -1263,8 +1351,6 @@ function (_Component) {
         console.log('in welcome, if null means first visit or video has not played', data, time);
 
         if (data) {
-          console.log('data mounted on searchBar');
-
           _this2.setState({
             videoData: data,
             curTime: time
@@ -1893,26 +1979,28 @@ var auth = function auth(email, password, method, screenName) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.prev = 0;
-                _context2.next = 3;
+                console.log(screenName);
+                _context2.next = 4;
                 return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/auth/".concat(method), {
                   email: email,
                   password: password,
+                  method: method,
                   screenName: screenName
                 });
 
-              case 3:
+              case 4:
                 res = _context2.sent;
-                _context2.next = 9;
+                _context2.next = 10;
                 break;
 
-              case 6:
-                _context2.prev = 6;
+              case 7:
+                _context2.prev = 7;
                 _context2.t0 = _context2["catch"](0);
                 return _context2.abrupt("return", dispatch(getUser({
                   error: _context2.t0
                 })));
 
-              case 9:
+              case 10:
                 try {
                   dispatch(getUser(res.data));
                   _history__WEBPACK_IMPORTED_MODULE_1__["default"].push('/home');
@@ -1920,12 +2008,12 @@ var auth = function auth(email, password, method, screenName) {
                   console.error(dispatchOrHistoryErr);
                 }
 
-              case 10:
+              case 11:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 6]]);
+        }, _callee2, null, [[0, 7]]);
       }));
 
       return function (_x2) {
