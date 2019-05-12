@@ -9,6 +9,8 @@ module.exports = io => {
     // socket.emit('send id', socket.id)
     socket.on('disconnect', () => {
       console.log(`Connection ${socket.id} has left the building`)
+      //How to handle disconnect aka refresh concerning the data that the user had
+      //Can we make it so that the user's record persist when re-enter?
       // connections.splice(connections.indexOf(socket), 1)
     })
 
@@ -24,8 +26,6 @@ module.exports = io => {
       // socket.join(roomNumber)
       // socket.emit('success', roomNumber)
 
-      //////////////////////////////////////////////////////////
-
       socket.join(roomNumber).emit('success', roomNumber)
       // Socket is now connected to the specific roomNumber
     })
@@ -36,11 +36,13 @@ module.exports = io => {
       const newUser = socket.id
       //STEP THREE: Now emit back the welcome socket.
       if (socket.room) {
-        io.to(newUser).emit(
-          'welcome',
-          rooms[roomNumber].curData,
-          rooms[roomNumber].playTime ? rooms[roomNumber].playTime : null
-        )
+        io
+          .to(newUser)
+          .emit(
+            'welcome',
+            rooms[roomNumber].curData,
+            rooms[roomNumber].playTime ? rooms[roomNumber].playTime : null
+          )
       }
     })
     //Listen for queue added, tell others to update queue
