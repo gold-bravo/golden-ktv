@@ -685,6 +685,7 @@ function (_Component) {
                 response = _context.sent;
                 _context.next = 15;
                 return this.props.setRoom({
+                  name: this.state.name,
                   roomNum: this.state.room,
                   session: response.data.sessionId,
                   token: response.data.token,
@@ -924,11 +925,9 @@ function (_Component) {
   _createClass(TokBox, [{
     key: "render",
     value: function render() {
-      var _this$props$credentia = this.props.credentials,
-          apiKey = _this$props$credentia.apiKey,
-          session = _this$props$credentia.session,
-          token = _this$props$credentia.token;
+      // const {name, apiKey, session, token} = this.props.credentials
       var publishVideo = this.state.publishVideo;
+      console.log(this.props.credentials);
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_2__["OTSession"], {
         apiKey: this.props.credentials.apiKey,
         sessionId: this.props.credentials.session,
@@ -939,7 +938,7 @@ function (_Component) {
         type: "button",
         id: "videoButton",
         onClick: this.toggleVideo
-      }, publishVideo ? 'Disable' : 'Enable', " Video"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_2__["OTPublisher"], {
+      }, publishVideo ? 'Disable' : 'Enable', " Video"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_2__["OTPublisher"], {
         properties: {
           publishVideo: publishVideo,
           width: 150,
@@ -948,7 +947,7 @@ function (_Component) {
         onPublish: this.onPublish,
         onError: this.onPublishError,
         eventHandlers: this.publisherEventHandlers
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_2__["OTStreams"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_2__["OTSubscriber"], {
+      }), this.props.credentials.name), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_2__["OTStreams"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_2__["OTSubscriber"], {
         properties: {
           width: 150,
           height: 150
@@ -1801,6 +1800,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var GET_ROOM_INFO = 'GET_ROOM_INFO';
 var defaultRoomInfo = {
+  name: '',
   roomNum: '',
   session: '',
   token: '',

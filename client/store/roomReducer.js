@@ -4,6 +4,7 @@ import socket from '../socket'
 const GET_ROOM_INFO = 'GET_ROOM_INFO'
 
 const defaultRoomInfo = {
+  name: '',
   roomNum: '',
   session: '',
   token: '',

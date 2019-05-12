@@ -64,6 +64,7 @@ class RoomForm extends Component {
         name: this.state.name
       })
       await this.props.setRoom({
+        name: this.state.name,
         roomNum: this.state.room,
         session: response.data.sessionId,
         token: response.data.token,

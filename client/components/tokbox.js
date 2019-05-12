@@ -78,8 +78,9 @@ class TokBox extends Component {
   }
 
   render() {
-    const {apiKey, session, token} = this.props.credentials
+    // const {name, apiKey, session, token} = this.props.credentials
     const {publishVideo} = this.state
+    console.log(this.props.credentials)
     return (
       <div>
         <OTSession
@@ -92,12 +93,15 @@ class TokBox extends Component {
           <button type="button" id="videoButton" onClick={this.toggleVideo}>
             {publishVideo ? 'Disable' : 'Enable'} Video
           </button>
-          <OTPublisher
-            properties={{publishVideo, width: 150, height: 150}}
-            onPublish={this.onPublish}
-            onError={this.onPublishError}
-            eventHandlers={this.publisherEventHandlers}
-          />
+          <div>
+            <OTPublisher
+              properties={{publishVideo, width: 150, height: 150}}
+              onPublish={this.onPublish}
+              onError={this.onPublishError}
+              eventHandlers={this.publisherEventHandlers}
+            />
+            {this.props.credentials.name}
+          </div>
           <OTStreams>
             <OTSubscriber
               properties={{width: 150, height: 150}}
