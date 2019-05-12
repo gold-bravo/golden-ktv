@@ -12,31 +12,44 @@ class VideoSearchBar extends Component {
       searchWords: '',
       videoData: [],
       videoResults: [],
-      curTime: null
+      curTime: null,
+      userId: ''
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
-    this.handleEnd = this.handleEnd.bind(this)
+    this.handleSkipEnd = this.handleSkipEnd.bind(this)
     this.handleClick = this.handleClick.bind(this)
   }
   componentDidMount() {
     // prob don't need now
     // socket.on('playing', data => this.setState({videoData: data}))
     //STEP FOUR: Now the welcome is finally set.
+    //TODO:Possibly adding socket.id to state as userId
     socket.on('welcome', (data, time) => {
-      console.log('in welcome, if null means first visit', data, time)
+      console.log(
+        'in welcome, if null means first visit or video has not played',
+        data,
+        time
+      )
       if (data) {
+        console.log('data mounted on searchBar')
         this.setState({videoData: data, curTime: time})
       }
     })
-    //STEP ONE: EMIT SUCCESSFUL VISIT TO THE ROOM
+    // STEP ONE: EMIT SUCCESSFUL VISIT TO THE ROOM
     socket.emit('success', this.props.room)
-    console.log('mounted')
     socket.on('update queue', data => {
       this.setState({videoData: data})
     })
+    socket.on('send id', id => {
+      console.log(id)
+      this.setState({userId: id})
+    })
   }
-  handleEnd() {
+  componentWillUnmount() {
+    socket.removeAllListeners()
+  }
+  handleSkipEnd() {
     //changed this to be a callback because VSCode was complaining
     this.setState(prevState => ({
       videoData: prevState.videoData.slice(1),
@@ -83,19 +96,21 @@ class VideoSearchBar extends Component {
 
   // Adds the clicked videoResult into the queue
   async handleClick(video) {
+    console.log(this.state.userId)
     const newQueueItem = {
       id: video.id.videoId,
       title: video.snippet.title,
-      img: video.snippet.thumbnails.default.url
+      img: video.snippet.thumbnails.default.url,
+      userId: this.state.userId
     }
 
     await this.setState(state => {
-      return {videoData: state.videoData.concat(newQueueItem)}
+      return {videoData: [...state.videoData, newQueueItem]}
     })
+
     this.setState({
       videoResults: []
     })
-
     socket.emit('queue added', this.state.videoData, this.props.room)
   }
 
@@ -108,7 +123,7 @@ class VideoSearchBar extends Component {
         </button>
         <VideoPlayer
           data={this.state.videoData}
-          handleEnd={this.handleEnd}
+          handleSkipEnd={this.handleSkipEnd}
           curTime={this.state.curTime}
           roomId={this.props.room}
         />

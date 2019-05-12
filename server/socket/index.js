@@ -5,7 +5,8 @@ module.exports = io => {
 
   io.on('connection', socket => {
     console.log(`A socket connection to the server has been made: ${socket.id}`)
-    socket.emit('no refresh', socket.id)
+    socket.emit('no refresh', socket.room)
+    socket.emit('send id', socket.id)
     socket.on('disconnect', () => {
       console.log(`Connection ${socket.id} has left the building`)
       // connections.splice(connections.indexOf(socket), 1)
@@ -13,52 +14,65 @@ module.exports = io => {
 
     socket.on('join room', roomNumber => {
       // If roomNumber is not in our room storage, add the roomNumber
-      //TODO://create user on join room
+      socket.room = roomNumber
       if (!rooms.hasOwnProperty(roomNumber)) {
         rooms[roomNumber] = {}
       }
-      socket.join(roomNumber)
+      console.log(socket.id)
+      // socket.join(roomNumber)
+      // socket.emit('success', roomNumber)
+
+      //////////////////////////////////////////////////////////
+
+      socket.join(roomNumber).emit('success', roomNumber)
       // Socket is now connected to the specific roomNumber
     })
 
-    //STEP TWO: When successful, the new user can be feed the new data.
+    //STEP TWO: When videoSearchBar component is successfully mounted, the new user can be feed the new data.
     socket.on('success', roomNumber => {
-      console.log('in sucess', roomNumber)
+      console.log('in success', roomNumber, socket.id)
       const newUser = socket.id
       //STEP THREE: Now emit back the welcome socket.
-      io
-        .to(newUser)
-        .emit(
+      if (socket.room) {
+        io.to(newUser).emit(
           'welcome',
           rooms[roomNumber].curData,
           rooms[roomNumber].playTime ? rooms[roomNumber].playTime : null
+          // socket.id
+          // May consider sending id to the front-end
         )
+      }
     })
 
     //Listen for queue added, tell others to update queue
     socket.on('queue added', (data, roomNumber) => {
+      // console.log('queue added', data, roomNumber)
       rooms[roomNumber].curData = data
-      console.log('queue added', data, roomNumber)
+
       socket.to(roomNumber).emit('update queue', rooms[roomNumber].curData)
     })
 
     //console log back-end playing when playing YT video
     socket.on('play', (data, time, roomNumber) => {
-      console.log('play', roomNumber)
+      console.log('play', rooms[roomNumber])
+      console.log('time', time)
+      //If a room has no playTime, either it is the first video or a video that is loaded but not played
       if (!rooms[roomNumber].playTime) {
-        console.log('play', time)
         rooms[roomNumber].playTime = time
-        // rooms[roomNumber].curData = data
-        socket.to(roomNumber).emit('playing')
+        rooms[roomNumber].curData = data
+        // socket.to(roomNumber).emit('playing')
       }
-      //maybe don't need to emit curdata?
-      // socket.to(roomNumber).emit('playing', rooms[roomNumber].curData)
+      socket.to(roomNumber).emit('playing')
+      // else {
+      //   socket.to(socket.id).emit('playing', rooms[roomNumber].curData)
+      // }
     })
 
     socket.on('end', (data, roomNumber) => {
       console.log('ended')
       rooms[roomNumber].playTime = null
       rooms[roomNumber].curData = data
+      socket.to(roomNumber).emit('update queue', rooms[roomNumber].curData)
     })
     // Console log back-end playing when playing YT video
     // roomInfo contains {videoId, roomId} (passed in from videoPlayer component)

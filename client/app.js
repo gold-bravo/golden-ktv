@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import {Navbar} from './components'
 import Routes from './routes'
 import Room from './components/room'
-import TokBox from './components/tokbox'
 import RoomForm from './components/roomForm'
 import {Switch, Route} from 'react-router-dom'
 class App extends Component {
@@ -18,7 +17,6 @@ class App extends Component {
         <Switch>
           <Route path="/room" component={Room} />
           <Route path="/" component={RoomForm} />
-          {/* <TokBox /> */}
         </Switch>
       </div>
     )
