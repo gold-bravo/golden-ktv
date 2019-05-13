@@ -1,5 +1,25 @@
 body {
   font-family: sans-serif;
+  background-image: url('./images/stars-bg.jpg');
+  background-size: cover;
+  max-width: 100%;
+  max-height: 2400px;
+  background-color: purple;
+}
+
+.roomFormBG {
+  background-image: url('./images/golden-ktv-bg.jpg');
+  background-size: cover;
+  max-width: 100%;
+  min-height: 800px;
+  background-color: purple;
+}
+
+.roomForm {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  min-height: 1000;
 }
 
 a {

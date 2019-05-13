@@ -41,27 +41,28 @@ class RoomForm extends Component {
   }
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Name:
-          <input
-            name="name"
-            type="text"
-            value={this.state.name}
-            onChange={this.handleChange}
-          />
-        </label>
-        <label>
-          Room:
-          <input
-            name="room"
-            type="text"
-            value={this.state.room}
-            onChange={this.handleChange}
-          />
-        </label>
-        <input type="submit" value="Enter" />
-      </form>
+      <div className='roomFormBG'>
+        {/* <img src='./images/golden-ktv-bg.jpg' width='100' /> */}
+        <form onSubmit={this.handleSubmit}>
+          <div className='roomForm'>
+              <input
+                name="name"
+                type="text"
+                value={this.state.name}
+                onChange={this.handleChange}
+                placeholder='Name'
+              />
+              <input
+                name="room"
+                type="text"
+                value={this.state.room}
+                onChange={this.handleChange}
+                placeholder='Room'
+              />
+            <input type="submit" value="Enter" />
+          </div>
+        </form>
+      </div>
     )
   }
 }
