@@ -31,12 +31,9 @@ module.exports = io => {
         rooms[roomNumber] = {}
         socket.emit('you are the host')
       }
-<<<<<<< HEAD
 
       console.log(socket.id)
       socket.emit('send id', socket.id)
-=======
->>>>>>> testing
       // socket.join(roomNumber)
       // socket.emit('success', roomNumber)
 
