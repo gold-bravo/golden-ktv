@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {setRoom} from '../store/roomReducer'
 import {connect} from 'react-redux'
 import axios from 'axios'
+import {Button} from 'react-bulma-components/full'
 
 class RoomForm extends Component {
   constructor() {
@@ -41,25 +42,30 @@ class RoomForm extends Component {
   }
   render() {
     return (
-      <div className='roomFormBG'>
+      <div className="roomFormBG">
         {/* <img src='./images/golden-ktv-bg.jpg' width='100' /> */}
         <form onSubmit={this.handleSubmit}>
-          <div className='roomForm'>
-              <input
-                name="name"
-                type="text"
-                value={this.state.name}
-                onChange={this.handleChange}
-                placeholder='Name'
-              />
-              <input
-                name="room"
-                type="text"
-                value={this.state.room}
-                onChange={this.handleChange}
-                placeholder='Room'
-              />
-            <input type="submit" value="Enter" />
+          <div className="roomForm">
+            <input
+              name="name"
+              type="text"
+              value={this.state.name}
+              onChange={this.handleChange}
+              placeholder="Name"
+            />
+            <input
+              name="room"
+              type="text"
+              value={this.state.room}
+              onChange={this.handleChange}
+              placeholder="Room"
+              font="new-led"
+            />
+            <input
+              type="submit"
+              value="Enter"
+              className="button is-primary is-rounded is-warning"
+            />
           </div>
         </form>
       </div>

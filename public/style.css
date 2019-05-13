@@ -1,5 +1,11 @@
+@font-face {
+  font-family: 'new-led';
+  src: url('./fonts/new-led.ttf') format('truetype');
+  font-weight: 400;
+}
+
 body {
-  font-family: sans-serif;
+  font-family: 'new-led';
   background-image: url('./images/stars-bg.jpg');
   background-size: cover;
   max-width: 100%;
@@ -7,15 +13,30 @@ body {
   background-color: purple;
 }
 
+div {
+  font-family: 'new-led', monospace;
+}
+
 .roomFormBG {
+  font-family: 'new-led', monospace;
   background-image: url('./images/golden-ktv-bg.jpg');
   background-size: cover;
   max-width: 100%;
   min-height: 800px;
   background-color: purple;
 }
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  font-family: 'new-led', monospace;
+  opacity: 1; /* Firefox */
+}
+
+p {
+  font-family: 'new-led', monospace;
+}
 
 .roomForm {
+  font-family: 'new-led', monospace;
   display: flex;
   justify-content: space-around;
   align-items: flex-end;
@@ -24,6 +45,10 @@ body {
 
 a {
   text-decoration: none;
+}
+
+.button {
+  font-family: 'new-led', monospace;
 }
 
 label {
