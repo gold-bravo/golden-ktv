@@ -20,13 +20,7 @@ class VideoPlayer extends Component {
   ref = player => {
     this.player = player
   }
-  // onProgress = state => {
-  //   console.log('onProgress', state)
-  //   // We only want to update time slider if we are not currently seeking
-  //   if (!this.state.seeking) {
-  //     this.setState(state)
-  //   }
-  // }
+
   onProgress = e => {
     this.setState({played: e.played})
   }
@@ -55,17 +49,23 @@ class VideoPlayer extends Component {
 
   //TODO: This method is running twice for some reason rn
   onStart() {
-    if (!this.props.curTime) {
-      console.log('starting now', this.props.data)
-      socket.emit('play', this.props.data, Date.now(), this.props.roomId)
-    } else {
-      console.log('PUSH ME TO CURRENT TIME')
-      const timeNow = (Date.now() - this.props.curTime) / 1000
-      this.player.getInternalPlayer().seekTo(timeNow)
+    //if there is something in the queue do the following
+    //preventing uneccessary global update when you are playing the default vid
+    if (this.props.data[0]) {
+      if (!this.props.curTime) {
+        console.log('starting now', this.props.data)
+        socket.emit('play', this.props.data, Date.now(), this.props.roomId)
+      } else {
+        console.log('PUSH ME TO CURRENT TIME')
+        const timeNow = (Date.now() - this.props.curTime) / 1000
+        this.player.getInternalPlayer().seekTo(timeNow)
+      }
     }
   }
 
   onReady() {
+    //setting duration back to 0 on ready
+    if (this.state.played) this.setState({played: 0})
     if (this.props.curTime) {
       this.player.getInternalPlayer().playVideo()
     }
@@ -89,6 +89,7 @@ class VideoPlayer extends Component {
     const filteredData = this.props.data.filter(
       item => item.userId !== this.props.userId
     )
+
     socket.emit('leaving', filteredData, this.props.roomId)
     this.props.history.push('/')
     //when you leave your room, all the songs that you queued up will be gone as well
@@ -143,17 +144,12 @@ class VideoPlayer extends Component {
             <button type="button" onClick={vidId && this.onSkip}>
               NEXT SONG
             </button>
-            {/* <button
-              type="button"
-              onClick={() => this.player.seekTo(this.player.getDuration() - 5)}
-            >
-              Take Me To End
-            </button> */}
           </>
         ) : (
           <></>
         )}
-        {displayPlayBtn ? (
+        {/*only render the btn if there is nothing on the queue or if you are the host or its your turn to play*/}
+        {!this.props.data[0] || displayPlayBtn ? (
           <>
             <button
               type="button"
