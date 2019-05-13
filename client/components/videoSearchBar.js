@@ -32,7 +32,6 @@ class VideoSearchBar extends Component {
         time
       )
       if (data) {
-        console.log('data mounted on searchBar')
         this.setState({videoData: data, curTime: time})
       }
     })
@@ -42,7 +41,6 @@ class VideoSearchBar extends Component {
       this.setState({videoData: data})
     })
     socket.on('send id', id => {
-      console.log(id)
       this.setState({userId: id})
     })
   }
@@ -96,7 +94,6 @@ class VideoSearchBar extends Component {
 
   // Adds the clicked videoResult into the queue
   async handleClick(video) {
-    console.log(this.state.userId)
     const newQueueItem = {
       id: video.id.videoId,
       title: video.snippet.title,
