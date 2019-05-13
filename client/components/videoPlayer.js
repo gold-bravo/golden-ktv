@@ -5,7 +5,6 @@ import {withRouter} from 'react-router-dom'
 
 class VideoPlayer extends Component {
   constructor(props) {
-    console.log(props, 'in videoPlayer')
     super(props)
     this.onStart = this.onStart.bind(this)
     this.onSeek = this.onSeek.bind(this)

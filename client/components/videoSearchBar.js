@@ -33,7 +33,6 @@ class VideoSearchBar extends Component {
         time
       )
       if (data) {
-        console.log('data mounted on searchBar')
         this.setState({videoData: data, curTime: time})
       }
     })

@@ -31,9 +31,12 @@ module.exports = io => {
         rooms[roomNumber] = {}
         socket.emit('you are the host')
       }
+<<<<<<< HEAD
 
       console.log(socket.id)
       socket.emit('send id', socket.id)
+=======
+>>>>>>> testing
       // socket.join(roomNumber)
       // socket.emit('success', roomNumber)
 
@@ -43,7 +46,6 @@ module.exports = io => {
 
     //STEP TWO: When videoSearchBar component is successfully mounted, the new user can be feed the new data.
     socket.on('success', roomNumber => {
-      console.log('in success', roomNumber, socket.id)
       const newUser = socket.id
       //STEP THREE: Now emit back the welcome socket.
       if (socket.room) {
@@ -77,8 +79,6 @@ module.exports = io => {
 
     //console log back-end playing when playing YT video
     socket.on('play', (data, time, roomNumber) => {
-      console.log('play', rooms[roomNumber])
-      console.log('time', time)
       //If a room has no playTime, either it is the first video or a video that is loaded but not played
       if (!rooms[roomNumber].playTime) {
         rooms[roomNumber].playTime = time
