@@ -64,3 +64,14 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+
+:link {
+  padding: 10px;
+  align-items: center;
+}
+
+.login-component {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
