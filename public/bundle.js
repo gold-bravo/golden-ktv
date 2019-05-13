@@ -1066,6 +1066,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _socket__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../socket */ "./client/socket.js");
 /* harmony import */ var react_player__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-player */ "./node_modules/react-player/lib/ReactPlayer.js");
 /* harmony import */ var react_player__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_player__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1090,6 +1091,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 var VideoPlayer =
 /*#__PURE__*/
 function (_Component) {
@@ -1106,11 +1108,51 @@ function (_Component) {
       _this.player = player;
     });
 
-    _defineProperty(_assertThisInitialized(_this), "handlePause", function () {
+    _defineProperty(_assertThisInitialized(_this), "onProgress", function (e) {
+      _this.setState({
+        played: e.played
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "setVolume", function (e) {
+      _this.setState({
+        volume: parseFloat(e.target.value)
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "onBufferEnd", function () {
+      if (_this.state.skipping) {
+        _this.setState({
+          skipping: false
+        });
+
+        _this.player.seekTo(_this.player.getDuration() - 1);
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "onSkip", function () {
+      if (_this.player.getInternalPlayer().getPlayerState() === 1) {
+        _this.player.seekTo(_this.player.getDuration() - 1);
+      } else {
+        console.log('in else');
+
+        _this.setState({
+          skipping: true
+        });
+
+        _this.player.getInternalPlayer().playVideo();
+      }
+
+      _this.setState({
+        played: 0
+      });
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "onPause", function () {
       _this.player.getInternalPlayer().pauseVideo();
     });
 
-    _defineProperty(_assertThisInitialized(_this), "seek", function (direction) {
+    _defineProperty(_assertThisInitialized(_this), "onSeek", function (direction) {
       if (_this.player.getInternalPlayer().getPlayerState() === 1) {
         var curTime = _this.player.getInternalPlayer().getCurrentTime();
 
@@ -1120,10 +1162,26 @@ function (_Component) {
       }
     });
 
-    _this.onStart = _this.onStart.bind(_assertThisInitialized(_this)); // this.onPlay = this.onPlay.bind(this)
+    _defineProperty(_assertThisInitialized(_this), "onLeaveRoom", function () {
+      var filteredData = _this.props.data.filter(function (item) {
+        return item.userId !== _this.props.userId;
+      });
 
-    _this.seek = _this.seek.bind(_assertThisInitialized(_this));
+      _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('leaving', filteredData, _this.props.roomId);
+
+      _this.props.history.push('/'); //when you leave your room, all the songs that you queued up will be gone as well
+      //TODO:What if someone tries to leave the room when it is turn to sing? or if you are the host?
+
+    });
+
+    _this.onStart = _this.onStart.bind(_assertThisInitialized(_this));
+    _this.onSeek = _this.onSeek.bind(_assertThisInitialized(_this));
     _this.onReady = _this.onReady.bind(_assertThisInitialized(_this));
+    _this.state = {
+      played: 0,
+      volume: 0.6,
+      skipping: false
+    };
     return _this;
   } //This allows the player to be manipulated by React buttons
 
@@ -1132,19 +1190,28 @@ function (_Component) {
     key: "onStart",
     //TODO: This method is running twice for some reason rn
     value: function onStart() {
-      if (!this.props.curTime) {
-        console.log('starting now', this.props.data);
-        _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('play', this.props.data, Date.now(), this.props.roomId);
-      } else {
-        console.log('PUSH ME TO CURRENT TIME');
-        var timeNow = (Date.now() - this.props.curTime) / 1000;
-        this.player.getInternalPlayer().seekTo(timeNow);
+      //if there is something in the queue do the following
+      //preventing uneccessary global update when you are playing the default vid
+      if (this.props.data[0]) {
+        if (!this.props.curTime) {
+          console.log('starting now', this.props.data);
+          _socket__WEBPACK_IMPORTED_MODULE_1__["default"].emit('play', this.props.data, Date.now(), this.props.roomId);
+        } else {
+          console.log('PUSH ME TO CURRENT TIME');
+          var timeNow = (Date.now() - this.props.curTime) / 1000;
+          this.player.getInternalPlayer().seekTo(timeNow);
+        }
       }
     }
   }, {
     key: "onReady",
     value: function onReady() {
       var _this2 = this;
+
+      //setting duration back to 0 on ready
+      if (this.state.played) this.setState({
+        played: 0
+      });
 
       if (this.props.curTime) {
         this.player.getInternalPlayer().playVideo();
@@ -1159,46 +1226,13 @@ function (_Component) {
     value: function render() {
       var _this3 = this;
 
-      var vidId = this.props.data[0] && this.props.data[0].id;
+      var vidId = this.props.data[0] && this.props.data[0].id; //show display btn only if you are the host or it's your turn to sing
+
+      var isMyTurn = this.props.data[0] && this.props.data[0].userId === this.props.userId;
+      var displayPlayBtn = isMyTurn || this.props.isHost;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "player-wrapper"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "button",
-        onClick: this.handlePause
-      }, "Stop"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "button",
-        onClick: function onClick() {
-          return _this3.seek('+');
-        }
-      }, "++"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "button",
-        onClick: function onClick() {
-          return _this3.seek('-');
-        }
-      }, "--"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "button",
-        onClick: function onClick() {
-          if (_this3.player.getInternalPlayer().getPlayerState() === 1) {
-            _this3.player.seekTo(_this3.player.getDuration() - 1);
-          } else {
-            setTimeout(function () {
-              _this3.player.seekTo(_this3.player.getDuration() - 1);
-            }, 800);
-
-            _this3.player.getInternalPlayer().playVideo();
-          }
-        }
-      }, "NEXT SONG"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "button",
-        onClick: function onClick() {
-          return _this3.player.seekTo(_this3.player.getDuration() - 5);
-        }
-      }, "Take Me To End"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "button",
-        onClick: function onClick() {
-          return _this3.player.getInternalPlayer().playVideo();
-        }
-      }, "PLAY"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_player__WEBPACK_IMPORTED_MODULE_2___default.a, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_player__WEBPACK_IMPORTED_MODULE_2___default.a, {
         style: {
           pointerEvents: 'none'
         },
@@ -1209,19 +1243,57 @@ function (_Component) {
         controls: true,
         ref: this.ref,
         onStart: this.onStart,
-        onReady: this.onReady // volume={}
-        // onPlay={this.onPlay}
+        onReady: this.onReady,
+        volume: this.state.volume,
+        onProgress: this.onProgress,
+        onError: this.props.handleSkipEnd //when a song ends, queue will skip to next only if you are host or if it was your turn to sing
         ,
-        onError: this.props.handleSkipEnd,
-        onEnded: this.props.handleSkipEnd
-      }));
+        onEnded: function onEnded() {
+          displayPlayBtn && _this3.props.handleSkipEnd();
+        },
+        onBufferEnd: this.onBufferEnd
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        onClick: this.onPause
+      }, "Pause"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        onClick: function onClick() {
+          return _this3.onSeek('-');
+        }
+      }, "\u23EA"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        onClick: function onClick() {
+          return _this3.onSeek('+');
+        }
+      }, "\u23E9"), this.props.isHost ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        onClick: vidId && this.onSkip
+      }, "NEXT SONG")) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null), !this.props.data[0] || displayPlayBtn ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        onClick: function onClick() {
+          return _this3.player.getInternalPlayer().playVideo();
+        }
+      }, "PLAY")) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        onClick: this.onLeaveRoom
+      }, "LEAVING ROOM"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "Volume"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "range",
+        min: 0,
+        max: 1,
+        step: "any",
+        value: this.state.volume,
+        onChange: this.setVolume
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "Duration"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("progress", {
+        max: 1,
+        value: this.state.played
+      })));
     }
   }]);
 
   return VideoPlayer;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-/* harmony default export */ __webpack_exports__["default"] = (VideoPlayer); //TODO: SKIP-BTN, SEEK+/- BTN, Manual START, Disable AutoPlay
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["withRouter"])(VideoPlayer));
 
 /***/ }),
 
@@ -1362,7 +1434,8 @@ function (_Component) {
       videoData: [],
       videoResults: [],
       curTime: null,
-      userId: ''
+      userId: '',
+      isHost: false
     };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
     _this.handleSearch = _this.handleSearch.bind(_assertThisInitialized(_this));
@@ -1391,13 +1464,28 @@ function (_Component) {
         }
       }); // STEP ONE: EMIT SUCCESSFUL VISIT TO THE ROOM
 
-      _socket__WEBPACK_IMPORTED_MODULE_3__["default"].emit('success', this.props.room);
-      _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('update queue', function (data) {
+      _socket__WEBPACK_IMPORTED_MODULE_3__["default"].emit('success', this.props.room); //should you need to update the queue due to a song ending, it should reset the time for others too
+
+      _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('update queue', function (data, msg) {
         _this2.setState({
           videoData: data
         });
+
+        if (msg) {
+          _this2.setState({
+            curTime: null
+          });
+        }
+      });
+      _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('you are the host', function () {
+        console.log('U DA HOST');
+
+        _this2.setState({
+          isHost: true
+        });
       });
       _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('send id', function (id) {
+        // console.log(id)
         _this2.setState({
           userId: id
         });
@@ -1460,14 +1548,20 @@ function (_Component) {
 
               case 5:
                 youtube = _context.sent;
-                _context.next = 8;
+
+                if (!this.state.searchWords) {
+                  _context.next = 13;
+                  break;
+                }
+
+                _context.next = 9;
                 return youtube.get('/search', {
                   params: {
                     q: this.state.searchWords + " karaoke -karafun -singkingkaraoke"
                   }
                 });
 
-              case 8:
+              case 9:
                 _ref = _context.sent;
                 data = _ref.data;
                 // Uncomment to check how the data looks like from Youtube API
@@ -1480,7 +1574,7 @@ function (_Component) {
                   videoResults: videoItems
                 });
 
-              case 12:
+              case 13:
               case "end":
                 return _context.stop();
             }
@@ -1554,7 +1648,9 @@ function (_Component) {
         data: this.state.videoData,
         handleSkipEnd: this.handleSkipEnd,
         curTime: this.state.curTime,
-        roomId: this.props.room
+        roomId: this.props.room,
+        userId: this.state.userId,
+        isHost: this.state.isHost
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_videoResults__WEBPACK_IMPORTED_MODULE_5__["default"], {
         data: this.state.videoResults,
         handleClick: this.handleClick
