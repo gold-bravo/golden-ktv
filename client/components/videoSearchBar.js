@@ -13,7 +13,8 @@ class VideoSearchBar extends Component {
       videoData: [],
       videoResults: [],
       curTime: null,
-      userId: ''
+      userId: '',
+      isHost: false
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
@@ -37,10 +38,19 @@ class VideoSearchBar extends Component {
     })
     // STEP ONE: EMIT SUCCESSFUL VISIT TO THE ROOM
     socket.emit('success', this.props.room)
-    socket.on('update queue', data => {
+    //should you need to update the queue due to a song ending, it should reset the time for others too
+    socket.on('update queue', (data, msg) => {
       this.setState({videoData: data})
+      if (msg) {
+        this.setState({curTime: null})
+      }
+    })
+    socket.on('you are the host', () => {
+      console.log('U DA HOST')
+      this.setState({isHost: true})
     })
     socket.on('send id', id => {
+      // console.log(id)
       this.setState({userId: id})
     })
   }
@@ -76,20 +86,23 @@ class VideoSearchBar extends Component {
         key: KEY.data
       }
     })
-    const {data} = await youtube.get('/search', {
-      params: {
-        q: this.state.searchWords + ` karaoke -karafun -singkingkaraoke`
-      }
-    })
-    // Uncomment to check how the data looks like from Youtube API
-    // console.log(data)
+    //only allow search when you have filled in the searchword
+    if (this.state.searchWords) {
+      const {data} = await youtube.get('/search', {
+        params: {
+          q: this.state.searchWords + ` karaoke -karafun -singkingkaraoke`
+        }
+      })
+      // Uncomment to check how the data looks like from Youtube API
+      // console.log(data)
 
-    // Filters out the videos without a videoId
-    const videoItems = data.items.filter(video => video.id.videoId)
+      // Filters out the videos without a videoId
+      const videoItems = data.items.filter(video => video.id.videoId)
 
-    this.setState({
-      videoResults: videoItems
-    })
+      this.setState({
+        videoResults: videoItems
+      })
+    }
   }
 
   // Adds the clicked videoResult into the queue
@@ -123,6 +136,8 @@ class VideoSearchBar extends Component {
           handleSkipEnd={this.handleSkipEnd}
           curTime={this.state.curTime}
           roomId={this.props.room}
+          userId={this.state.userId}
+          isHost={this.state.isHost}
         />
         <VideoResults
           data={this.state.videoResults}
