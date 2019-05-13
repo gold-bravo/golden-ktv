@@ -4,7 +4,6 @@ import ReactPlayer from 'react-player'
 
 class VideoPlayer extends Component {
   constructor(props) {
-    console.log(props, 'in videoPlayer')
     super(props)
     this.onStart = this.onStart.bind(this)
     // this.onPlay = this.onPlay.bind(this)
@@ -17,15 +16,6 @@ class VideoPlayer extends Component {
   }
   //TODO: This method is running twice for some reason rn
   onStart() {
-    // console.log('starting now', this.props.data)
-    // socket.emit('play', this.props.data, Date.now(), this.props.roomId)
-    // if (this.props.curTime && this.props.data[0]) {
-    //   const timeNow = (Date.now() - this.props.curTime) / 1000
-    //   console.log('working', this.props.data[0])
-    //   console.log(timeNow)
-    //   this.player.seekTo(timeNow)
-    //   this.player.getInternalPlayer().playVideo()
-    // }
     if (!this.props.curTime) {
       console.log('starting now', this.props.data)
       socket.emit('play', this.props.data, Date.now(), this.props.roomId)
@@ -73,7 +63,6 @@ class VideoPlayer extends Component {
             if (this.player.getInternalPlayer().getPlayerState() === 1) {
               this.player.seekTo(this.player.getDuration() - 1)
             } else {
-              console.log('in else')
               setTimeout(() => {
                 this.player.seekTo(this.player.getDuration() - 1)
               }, 800)

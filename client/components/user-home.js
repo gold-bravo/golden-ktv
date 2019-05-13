@@ -6,11 +6,10 @@ import {connect} from 'react-redux'
  * COMPONENT
  */
 export const UserHome = props => {
-  const {email} = props
-
+  const {screenName} = props.info
   return (
     <div>
-      <h3>Welcome, {email}</h3>
+      <h3>Welcome back, {screenName}!</h3>
     </div>
   )
 }
@@ -20,7 +19,7 @@ export const UserHome = props => {
  */
 const mapState = state => {
   return {
-    email: state.user.email
+    info: state.user
   }
 }
 
@@ -29,6 +28,6 @@ export default connect(mapState)(UserHome)
 /**
  * PROP TYPES
  */
-UserHome.propTypes = {
-  email: PropTypes.string
-}
+// UserHome.propTypes = {
+//   email: PropTypes.string
+// }
