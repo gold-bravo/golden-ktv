@@ -149,8 +149,14 @@ function (_Component) {
         path: "/room",
         component: _components_room__WEBPACK_IMPORTED_MODULE_3__["default"]
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
+        path: "/login",
+        component: _components_roomForm__WEBPACK_IMPORTED_MODULE_4__["Login"]
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
+        path: "/signup",
+        component: _components_roomForm__WEBPACK_IMPORTED_MODULE_4__["SignUp"]
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
         path: "/",
-        component: _components_roomForm__WEBPACK_IMPORTED_MODULE_4__["default"]
+        component: _components_roomForm__WEBPACK_IMPORTED_MODULE_4__["Guest"]
       })));
     }
   }]);
@@ -530,18 +536,22 @@ var mSTP = function mSTP(state) {
 /*!***************************************!*\
   !*** ./client/components/roomForm.js ***!
   \***************************************/
-/*! exports provided: default */
+/*! exports provided: Login, SignUp, Guest, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Login", function() { return Login; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SignUp", function() { return SignUp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Guest", function() { return Guest; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _store_roomReducer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../store/roomReducer */ "./client/store/roomReducer.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../store */ "./client/store/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../store */ "./client/store/index.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -572,58 +582,32 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var RoomForm =
 /*#__PURE__*/
 function (_Component) {
   _inherits(RoomForm, _Component);
 
-  function RoomForm() {
+  function RoomForm(props) {
     var _this;
 
     _classCallCheck(this, RoomForm);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(RoomForm).call(this));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(RoomForm).call(this, props));
     _this.state = {
       name: '',
       room: '',
       password: '',
       sessionId: '',
       email: '',
-      err: '',
-      status: 'guest'
+      err: ''
     };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
-    _this.handleClick = _this.handleClick.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(RoomForm, [{
-    key: "handleClick",
-    value: function handleClick(event) {
-      console.log(event.target.value); //This is the switch to handle changing which login-component should render.
-
-      switch (event.target.value) {
-        case 'login':
-          this.setState({
-            status: 'login'
-          });
-          break;
-
-        case 'signup':
-          this.setState({
-            status: 'signup'
-          });
-          break;
-
-        default:
-          this.setState({
-            status: 'guest'
-          });
-          break;
-      }
-    }
-  }, {
     key: "handleChange",
     value: function handleChange(event) {
       this.setState(_defineProperty({}, event.target.name, event.target.value));
@@ -634,7 +618,7 @@ function (_Component) {
       var _handleSubmit = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee(event) {
-        var response;
+        var signup, response;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -642,40 +626,59 @@ function (_Component) {
                 event.preventDefault();
                 _context.prev = 1;
 
-                if (!(this.state.login === true)) {
-                  _context.next = 7;
+                if (!(this.state.roomNum === '')) {
+                  _context.next = 4;
                   break;
                 }
 
-                _context.next = 5;
-                return axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('/auth/login', {
+                throw new Error('No room number provided');
+
+              case 4:
+                if (!(this.props.status === 'login')) {
+                  _context.next = 9;
+                  break;
+                }
+
+                _context.next = 7;
+                return axios__WEBPACK_IMPORTED_MODULE_4___default.a.post('/auth/login', {
                   email: this.state.email,
                   password: this.state.password
                 });
 
-              case 5:
-                _context.next = 10;
+              case 7:
+                _context.next = 16;
                 break;
 
-              case 7:
-                if (!(this.state.signup === true)) {
-                  _context.next = 10;
+              case 9:
+                if (!(this.props.status === 'signup')) {
+                  _context.next = 16;
                   break;
                 }
 
-                _context.next = 10;
+                _context.next = 12;
                 return this.props.signedUp(this.state.email, this.state.password, 'signup', this.state.name);
 
-              case 10:
-                _context.next = 12;
-                return axios__WEBPACK_IMPORTED_MODULE_3___default.a.put('/api/room', {
+              case 12:
+                signup = _context.sent;
+                console.log(signup);
+
+                if (!(signup !== undefined)) {
+                  _context.next = 16;
+                  break;
+                }
+
+                throw new Error('Account already exist');
+
+              case 16:
+                _context.next = 18;
+                return axios__WEBPACK_IMPORTED_MODULE_4___default.a.put('/api/room', {
                   roomNum: this.state.room,
                   name: this.state.name
                 });
 
-              case 12:
+              case 18:
                 response = _context.sent;
-                _context.next = 15;
+                _context.next = 21;
                 return this.props.setRoom({
                   name: this.state.name,
                   roomNum: this.state.room,
@@ -684,29 +687,28 @@ function (_Component) {
                   apiKey: response.data.KEY
                 });
 
-              case 15:
+              case 21:
                 this.setState({
                   sessionId: response.data.sessionId
                 });
                 console.log('handling stuff', this.state);
                 this.props.history.push("/room/".concat(this.state.room));
-                _context.next = 24;
+                _context.next = 29;
                 break;
 
-              case 20:
-                _context.prev = 20;
+              case 26:
+                _context.prev = 26;
                 _context.t0 = _context["catch"](1);
-                console.log(_context.t0);
                 this.setState({
-                  err: 'Invalid Login'
+                  err: _context.t0.message
                 });
 
-              case 24:
+              case 29:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[1, 20]]);
+        }, _callee, this, [[1, 26]]);
       }));
 
       function handleSubmit(_x) {
@@ -722,12 +724,12 @@ function (_Component) {
         className: "login-component"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handleSubmit
-      }, this.state.status === 'signup' || this.state.status === 'guest' ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Screen Name:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, this.props.status === 'signup' || this.props.status === 'guest' ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Screen Name:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         name: "name",
         type: "text",
         value: this.state.name,
         onChange: this.handleChange
-      })) : null, this.state.status === 'login' || this.state.status === 'signup' ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Email:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      })) : null, this.props.status === 'login' || this.props.status === 'signup' ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Email:", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         name: "email",
         type: "text",
         value: this.state.email,
@@ -745,24 +747,36 @@ function (_Component) {
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "submit",
         value: "JOIN"
-      })), this.state.status !== 'login' ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "button",
-        onClick: this.handleClick,
-        value: "login"
-      }, "Regulars") : null, this.state.status !== 'signup' ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "button",
-        onClick: this.handleClick,
-        value: "signup"
-      }, "Sign Up") : null, this.state.status !== 'guest' ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
-        type: "button",
-        onClick: this.handleClick,
-        value: "guest"
-      }, "Guest") : null, this.state.err ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Invalid Attempt") : null);
+      })), this.state.err, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
+        to: "/guest"
+      }, "Guest"), " ", '·', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
+        to: "/login"
+      }, "Login"), " ", '·', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
+        to: "/signup"
+      }, "Sign Up")));
     }
   }]);
 
   return RoomForm;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+var mapLogin = function mapLogin() {
+  return {
+    status: 'login'
+  };
+};
+
+var mapSignup = function mapSignup() {
+  return {
+    status: 'signup'
+  };
+};
+
+var mapGuest = function mapGuest() {
+  return {
+    status: 'guest'
+  };
+};
 
 var mDTP = function mDTP(dispatch) {
   return {
@@ -770,11 +784,14 @@ var mDTP = function mDTP(dispatch) {
       return dispatch(Object(_store_roomReducer__WEBPACK_IMPORTED_MODULE_1__["setRoom"])(roomInfo));
     },
     signedUp: function signedUp(email, password, formName, screenName) {
-      return dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_4__["auth"])(email, password, formName, screenName));
+      return dispatch(Object(_store__WEBPACK_IMPORTED_MODULE_5__["auth"])(email, password, formName, screenName));
     }
   };
 };
 
+var Login = Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapLogin, mDTP)(RoomForm);
+var SignUp = Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapSignup, mDTP)(RoomForm);
+var Guest = Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapGuest, mDTP)(RoomForm);
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(null, mDTP)(RoomForm));
 
 /***/ }),
@@ -919,7 +936,6 @@ function (_Component) {
     value: function render() {
       // const {name, apiKey, session, token} = this.props.credentials
       var publishVideo = this.state.publishVideo;
-      console.log(this.props.credentials);
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_2__["OTSession"], {
         apiKey: this.props.credentials.apiKey,
         sessionId: this.props.credentials.session,
@@ -930,7 +946,9 @@ function (_Component) {
         type: "button",
         id: "videoButton",
         onClick: this.toggleVideo
-      }, publishVideo ? 'Disable' : 'Enable', " Video"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_2__["OTPublisher"], {
+      }, publishVideo ? 'Disable' : 'Enable', " Video"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "publisher"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(opentok_react__WEBPACK_IMPORTED_MODULE_2__["OTPublisher"], {
         properties: {
           publishVideo: publishVideo,
           width: 150,
@@ -1356,8 +1374,6 @@ function (_Component) {
         });
       });
       _socket__WEBPACK_IMPORTED_MODULE_3__["default"].on('send id', function (id) {
-        console.log(id);
-
         _this2.setState({
           userId: id
         });
@@ -1466,27 +1482,26 @@ function (_Component) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                console.log(this.state.userId);
                 newQueueItem = {
                   id: video.id.videoId,
                   title: video.snippet.title,
                   img: video.snippet.thumbnails["default"].url,
                   userId: this.state.userId
                 };
-                _context2.next = 4;
+                _context2.next = 3;
                 return this.setState(function (state) {
                   return {
                     videoData: [].concat(_toConsumableArray(state.videoData), [newQueueItem])
                   };
                 });
 
-              case 4:
+              case 3:
                 this.setState({
                   videoResults: []
                 });
                 _socket__WEBPACK_IMPORTED_MODULE_3__["default"].emit('queue added', this.state.videoData, this.props.room);
 
-              case 6:
+              case 5:
               case "end":
                 return _context2.stop();
             }
@@ -1852,7 +1867,6 @@ var roomReducer = function roomReducer() {
 
   switch (action.type) {
     case GET_ROOM_INFO:
-      console.log('here!', action.roomInfo);
       return _objectSpread({}, action.roomInfo);
 
     default:
@@ -1971,8 +1985,7 @@ var auth = function auth(email, password, method, screenName) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.prev = 0;
-                console.log(screenName);
-                _context2.next = 4;
+                _context2.next = 3;
                 return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/auth/".concat(method), {
                   email: email,
                   password: password,
@@ -1980,32 +1993,31 @@ var auth = function auth(email, password, method, screenName) {
                   screenName: screenName
                 });
 
-              case 4:
+              case 3:
                 res = _context2.sent;
-                _context2.next = 10;
+                _context2.next = 9;
                 break;
 
-              case 7:
-                _context2.prev = 7;
+              case 6:
+                _context2.prev = 6;
                 _context2.t0 = _context2["catch"](0);
                 return _context2.abrupt("return", dispatch(getUser({
                   error: _context2.t0
                 })));
 
-              case 10:
+              case 9:
                 try {
                   dispatch(getUser(res.data));
-                  _history__WEBPACK_IMPORTED_MODULE_1__["default"].push('/home');
                 } catch (dispatchOrHistoryErr) {
                   console.error(dispatchOrHistoryErr);
                 }
 
-              case 11:
+              case 10:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 7]]);
+        }, _callee2, null, [[0, 6]]);
       }));
 
       return function (_x2) {
@@ -2064,7 +2076,6 @@ var logout = function logout() {
 
   switch (action.type) {
     case GET_USER:
-      console.log(action.user);
       return action.user;
 
     case REMOVE_USER:

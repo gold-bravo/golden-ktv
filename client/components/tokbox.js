@@ -92,7 +92,7 @@ class TokBox extends Component {
           <button type="button" id="videoButton" onClick={this.toggleVideo}>
             {publishVideo ? 'Disable' : 'Enable'} Video
           </button>
-          <div>
+          <div id="publisher">
             <OTPublisher
               properties={{publishVideo, width: 150, height: 150}}
               onPublish={this.onPublish}
