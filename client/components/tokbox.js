@@ -52,6 +52,9 @@ class TokBox extends Component {
       }
     }
   }
+  ref = test => {
+    this.test = test
+  }
 
   onSessionError = error => {
     this.setState({error})
@@ -94,15 +97,21 @@ class TokBox extends Component {
           </button>
           <div id="publisher">
             <OTPublisher
-              properties={{publishVideo, width: 150, height: 150}}
+              ref={e => (this.pub = e)}
+              properties={{
+                publishVideo,
+                width: 150,
+                height: 150,
+                name: this.props.credentials.name
+              }}
               onPublish={this.onPublish}
               onError={this.onPublishError}
               eventHandlers={this.publisherEventHandlers}
             />
-            {this.props.credentials.name}
           </div>
           <OTStreams>
             <OTSubscriber
+              ref={e => (this.sub = e)}
               properties={{width: 150, height: 150}}
               onSubscribe={this.onSubscribe}
               onError={this.onSubscribeError}

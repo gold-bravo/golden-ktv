@@ -4,51 +4,58 @@ module.exports = io => {
   let rooms = {}
 
   io.on('connection', socket => {
-    console.log(`A socket connection to the server has been made: ${socket.id}`)
     socket.emit('no refresh', socket.room)
     socket.on('disconnect', () => {
-      console.log(`Connection ${socket.id} has left the building`)
       //if socket left after joining a room, meaning refreshed page
       if (socket.room) {
         //if the room has no queue(data)
         if (rooms[socket.room].curData && !rooms[socket.room].curData.length) {
           rooms[socket.room].curTime = null
         }
-      }
-      //if socket had a name attached to it
-      if (socket.name) {
-        //update our user array minus the socket leaving
-        rooms[socket.room].user = rooms[socket.room].user.filter(
-          user => user !== socket.name
-        )
-        //tell others in the room to update their list
-        io.to(socket.room).emit('update', null, null, rooms[socket.room].user)
-
-        if (!rooms[socket.room].user.length) {
-          delete rooms[socket.room]
+        //if socket had a name attached to it
+        if (socket.name) {
+          //update our user array minus the socket leaving
+          rooms[socket.room].user = rooms[socket.room].user.filter(
+            user => user !== socket.name
+          )
+          //tell others in the room to update their list
+          io.to(socket.room).emit('update', null, null, rooms[socket.room].user)
+          //if you were the host
+          if (socket.host) {
+            console.log(rooms)
+            const newHostIdx = Math.floor(
+              Math.random() * rooms[socket.room].user.length
+            )
+            io.to(socket.room).emit('new host', newHostIdx)
+          }
+          if (!rooms[socket.room].user.length) {
+            delete rooms[socket.room]
+          }
         }
       }
 
-      //clean up or delete room if there is no user
       //How to handle disconnect aka refresh concerning the data that the user had
       //Can we make it so that the user's record persist when re-enter?
-      // connections.splice(connections.indexOf(socket), 1)
     })
 
     socket.on('join room', (roomNumber, name) => {
       //attach roomnumber to socket
       socket.room = roomNumber
+
       //attach name to socket
       socket.name = name
 
       // If roomNumber is not in our room storage, add the roomNumber
       if (!rooms.hasOwnProperty(roomNumber)) {
         rooms[roomNumber] = {}
+        socket.host = true
         socket.emit('you are the host')
       }
+
       // Initialize user array or add to the array
       rooms[roomNumber].user = (rooms[roomNumber].user || []).concat(name)
-      console.log(socket.id)
+      console.log(rooms[roomNumber].user.length)
+
       //tell others in the room that someone just joined in
       setTimeout(() => {
         io.in(roomNumber).emit('send id', socket.id, rooms[roomNumber].user)
@@ -77,36 +84,43 @@ module.exports = io => {
     })
     //Listen for queue added, tell others to update
     socket.on('queue added', (data, roomNumber) => {
-      console.log('queue added', data)
       rooms[roomNumber].curData = data
       //Tell others in the room to update their queue
       socket.to(roomNumber).emit('update', rooms[roomNumber].curData)
     })
 
     socket.on('leaving', (data, roomNumber, name) => {
-      rooms[roomNumber].curData = data
-      //if there is nothing in the queue, meaning no songs playing set curtime to null
-      if (!data.length) {
-        rooms[roomNumber].curTime = null
-      }
       //update our user array to exclude the socket who just left
       rooms[roomNumber].user = rooms[roomNumber].user.filter(
         user => user !== name
       )
-      console.log('leaving', data)
+      rooms[roomNumber].curData = data
+
+      //if there is nothing in the queue, meaning no songs playing set curtime to null
+      if (!data.length) {
+        rooms[roomNumber].curTime = null
+      }
+
       //Tell others in the room to update their queue and userlist
       socket
         .to(roomNumber)
         .emit('update', rooms[roomNumber].curData, null, rooms[roomNumber].user)
-      //leave room
-      socket.leave(roomNumber)
+
+      if (socket.host) {
+        socket.host = null
+        const newHostIdx = Math.floor(
+          Math.random() * rooms[socket.room].user.length
+        )
+        io.to(socket.room).emit('new host', newHostIdx)
+      }
 
       if (!rooms[roomNumber].user.length) {
         delete rooms[roomNumber]
       }
+      //leave room
+      socket.leave(roomNumber)
     })
 
-    //console log back-end playing when playing YT video
     socket.on('play', (data, time, roomNumber) => {
       //If a room has no playTime, either it is the first video or a video that is loaded but not played
       if (!rooms[roomNumber].playTime) {
@@ -121,7 +135,6 @@ module.exports = io => {
     })
 
     socket.on('end', (data, roomNumber) => {
-      console.log('ended')
       rooms[roomNumber].playTime = null
       rooms[roomNumber].curData = data
       //Tell others to update the queue but also set the curtime to null
@@ -138,7 +151,6 @@ module.exports = io => {
     // Console log back-end playing when playing YT video
     // roomInfo contains {videoId, roomId} (passed in from videoPlayer component)
     // socket.on('play', roomInfo => {
-    // console.log('back-end playing', roomInfo)
     // Specific room will play the room's respective video
     // socket.to(roomInfo.roomId).emit('play', roomInfo.videoId)
     // })
