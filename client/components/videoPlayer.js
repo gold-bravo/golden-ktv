@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import socket from '../socket'
 import ReactPlayer from 'react-player'
 import {withRouter} from 'react-router-dom'
+import {Button} from 'react-bulma-components/full'
 
 class VideoPlayer extends Component {
   constructor(props) {
@@ -103,7 +104,7 @@ class VideoPlayer extends Component {
     const displayPlayBtn = isMyTurn || this.props.isHost
 
     return (
-      <div className="player-wrapper">
+      <div className="player-wrapper" align="center">
         <ReactPlayer
           style={{pointerEvents: 'none'}}
           className="react-player"
@@ -127,20 +128,36 @@ class VideoPlayer extends Component {
           }}
           onBufferEnd={this.onBufferEnd}
         />
-        <hr />
 
-        <button type="button" onClick={this.onPause}>
+        <div  id="vol-dur">
+        <button
+          type="button"
+          className="button is-warning"
+          onClick={this.onPause}
+        >
           Pause
         </button>
-        <button type="button" onClick={() => this.onSeek('-')}>
+        <button
+          type="button"
+          className="button is-warning"
+          onClick={() => this.onSeek('-')}
+        >
           &#x23ea;
         </button>
-        <button type="button" onClick={() => this.onSeek('+')}>
+        <button
+          type="button"
+          className="button is-warning"
+          onClick={() => this.onSeek('+')}
+        >
           &#x23e9;
         </button>
         {this.props.isHost ? (
           <>
-            <button type="button" onClick={vidId && this.onSkip}>
+            <button
+              type="button"
+              className="button is-warning"
+              onClick={vidId && this.onSkip}
+            >
               NEXT SONG
             </button>
           </>
@@ -152,6 +169,7 @@ class VideoPlayer extends Component {
           <>
             <button
               type="button"
+              className="button is-warning"
               onClick={() => this.player.getInternalPlayer().playVideo()}
             >
               PLAY
@@ -160,9 +178,15 @@ class VideoPlayer extends Component {
         ) : (
           <></>
         )}
-        <button type="button" onClick={this.onLeaveRoom}>
+        <button
+          type="button"
+          className="button is-warning"
+          onClick={this.onLeaveRoom}
+        >
           LEAVING ROOM
         </button>
+
+        <div>
         <strong>Volume</strong>
         <input
           type="range"
@@ -172,10 +196,10 @@ class VideoPlayer extends Component {
           value={this.state.volume}
           onChange={this.setVolume}
         />
-
-        <div>
           <strong>Duration</strong>
           <progress max={1} value={this.state.played} />
+
+        </div>
         </div>
       </div>
     )

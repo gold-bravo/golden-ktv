@@ -3,6 +3,7 @@ import {setRoom} from '../store/roomReducer'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
+import {Button, Card} from 'react-bulma-components/full'
 import {auth} from '../store'
 
 class RoomForm extends Component {
@@ -67,57 +68,75 @@ class RoomForm extends Component {
   }
   render() {
     return (
-      <div className="login-component">
-        <form onSubmit={this.handleSubmit}>
-          {this.props.status === 'signup' || this.props.status === 'guest' ? (
+      <div className="is-pulled-right">
+        <div className="login-component">
+          <form onSubmit={this.handleSubmit}>
+            {this.props.status === 'signup' || this.props.status === 'guest' ? (
+              <label>
+                <input
+                  name="name"
+                  type="text"
+                  value={this.state.name}
+                  onChange={this.handleChange}
+                  placeholder="screenname"
+                />
+              </label>
+            ) : null}
+            {this.props.status === 'login' || this.props.status === 'signup' ? (
+              <>
+                <label>
+                  <input
+                    name="email"
+                    type="text"
+                    value={this.state.email}
+                    onChange={this.handleChange}
+                    placeholder="email"
+                  />
+                </label>
+                <label>
+                  <input
+                    name="password"
+                    type="text"
+                    value={this.state.password}
+                    onChange={this.handleChange}
+                    placeholder="password"
+                  />
+                </label>
+              </>
+            ) : null}
             <label>
-              Screen Name:
               <input
-                name="name"
+                name="room"
                 type="text"
-                value={this.state.name}
+                value={this.state.room}
                 onChange={this.handleChange}
+                placeholder="room"
               />
             </label>
-          ) : null}
-          {this.props.status === 'login' || this.props.status === 'signup' ? (
-            <>
-              <label>
-                Email:
-                <input
-                  name="email"
-                  type="text"
-                  value={this.state.email}
-                  onChange={this.handleChange}
-                />
-              </label>
-              <label>
-                Password:
-                <input
-                  name="password"
-                  type="text"
-                  value={this.state.password}
-                  onChange={this.handleChange}
-                />
-              </label>
-            </>
-          ) : null}
-          <label>
-            Room:
             <input
-              name="room"
-              type="text"
-              value={this.state.room}
-              onChange={this.handleChange}
+              type="submit"
+              value="JOIN"
+              className="button is-primary is-warning is-large"
             />
-          </label>
-          <input type="submit" value="JOIN" />
-        </form>
-        {this.state.err}
-        <div>
-          <Link to="/guest">Guest</Link> {'·'}
-          <Link to="/login">Login</Link> {'·'}
-          <Link to="/signup">Sign Up</Link>
+          </form>
+          <div className="link-pile">
+            <div>
+              <img src="../favicon.ico" />
+              <Link to="/guest">Guest</Link>
+              <img src="../favicon.ico" />
+            </div>
+            <div>
+              <img src="../favicon.ico" />
+              <Link to="/login">Login</Link>
+              <img src="../favicon.ico" />
+            </div>
+            <div>
+              <img src="../favicon.ico" />
+              <Link to="/signup">Sign Up</Link>
+              <img src="../favicon.ico" />
+            </div>
+          </div>
+          <div className="wrap">{this.state.err}</div>
         </div>
       </div>
     )
