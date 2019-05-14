@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 
-const Room = db.define('room', {
+const Room = db.define('Room', {
   curTime: {type: Sequelize.FLOAT},
   roomNum: {type: Sequelize.STRING},
   queue: {type: Sequelize.ARRAY(Sequelize.TEXT), defaultValue: []},

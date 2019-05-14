@@ -6,10 +6,7 @@ class VideoResults extends Component {
       <div>
         {this.props.data.map(video => {
           return (
-            <div
-              key={video.etag}
-              onClick={() => this.props.handleClick(video)}
-            >
+            <div key={video.etag} onClick={() => this.props.handleClick(video)}>
               <img src={video.snippet.thumbnails.medium.url} />
               <h3>{video.snippet.title}</h3>
             </div>

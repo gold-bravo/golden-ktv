@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Navbar} from './components'
 import Routes from './routes'
 import Room from './components/room'
-import {Guest, Login, SignUp} from './components/roomForm'
+import RoomForm from './components/roomForm'
 import {Switch, Route} from 'react-router-dom'
 class App extends Component {
   constructor() {
@@ -11,15 +11,12 @@ class App extends Component {
   }
   render() {
     return (
-      <div className="body">
-        {/* <Navbar /> */}
-        {/* <Routes /> */}
+      <div>
+        <Navbar />
+        <Routes />
         <Switch>
           <Route path="/room" component={Room} />
-          <Route path="/login" component={Login} />
-          <Route path="/signup" component={SignUp} />
-          <Route path="/" component={Guest} />
-          {/* <Route path="/" component={RoomForm} /> */}
+          <Route path="/" component={RoomForm} />
         </Switch>
       </div>
     )

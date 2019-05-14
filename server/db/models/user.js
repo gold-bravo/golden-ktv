@@ -6,10 +6,7 @@ const User = db.define('user', {
   email: {
     type: Sequelize.STRING,
     unique: true,
-    allowNull: false,
-    validate: {
-      isEmail: true
-    }
+    allowNull: false
   },
   password: {
     type: Sequelize.STRING,
@@ -18,18 +15,6 @@ const User = db.define('user', {
     get() {
       return () => this.getDataValue('password')
     }
-  },
-  screenName: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  songHistory: {
-    type: Sequelize.ARRAY(Sequelize.JSON),
-    defaultValue: []
-  },
-  favoriteSongs: {
-    type: Sequelize.ARRAY(Sequelize.JSON),
-    defaultValue: []
   },
   salt: {
     type: Sequelize.STRING,
