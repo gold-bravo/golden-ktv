@@ -4,6 +4,7 @@ import ReactPlayer from 'react-player'
 import {withRouter} from 'react-router-dom'
 import PlayerButton from './PlayerButton'
 import {connect} from 'react-redux'
+import {Button} from 'react-bulma-components/full'
 
 class VideoPlayer extends Component {
   constructor(props) {
@@ -110,7 +111,7 @@ class VideoPlayer extends Component {
     const displayPlayBtn = isMyTurn || this.props.isHost
     console.log(this.props.credentials.name)
     return (
-      <div className="player-wrapper">
+      <div className="player-wrapper" align="center">
         <ReactPlayer
           style={{pointerEvents: 'none'}}
           className="react-player"
@@ -134,7 +135,6 @@ class VideoPlayer extends Component {
           }}
           onBufferEnd={this.onBufferEnd}
         />
-        <hr />
         <PlayerButton
           {...this.state}
           {...this.props}

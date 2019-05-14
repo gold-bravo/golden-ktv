@@ -2,19 +2,35 @@ import React from 'react'
 
 const PlayerButton = props => {
   return (
-    <div>
-      <button type="button" onClick={props.onPause}>
+    <div id="vol-dur">
+      <button
+        type="button"
+        className="button is-warning"
+        onClick={props.onPause}
+      >
         Pause
       </button>
-      <button type="button" onClick={() => props.onSeek('-')}>
+      <button
+        type="button"
+        className="button is-warning"
+        onClick={() => props.onSeek('-')}
+      >
         &#x23ea;
       </button>
-      <button type="button" onClick={() => props.onSeek('+')}>
+      <button
+        type="button"
+        className="button is-warning"
+        onClick={() => props.onSeek('+')}
+      >
         &#x23e9;
       </button>
       {props.isHost ? (
         <>
-          <button type="button" onClick={props.vidId && props.onSkip}>
+          <button
+            type="button"
+            className="button is-warning"
+            onClick={props.vidId && props.onSkip}
+          >
             NEXT SONG
           </button>
         </>
@@ -26,6 +42,7 @@ const PlayerButton = props => {
         <>
           <button
             type="button"
+            className="button is-warning"
             onClick={() => props.player.getInternalPlayer().playVideo()}
           >
             PLAY
@@ -34,7 +51,11 @@ const PlayerButton = props => {
       ) : (
         <></>
       )}
-      <button type="button" onClick={props.onLeaveRoom}>
+      <button
+        type="button"
+        className="button is-warning"
+        onClick={props.onLeaveRoom}
+      >
         LEAVING ROOM
       </button>
       <strong>Volume</strong>

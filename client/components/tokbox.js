@@ -92,7 +92,12 @@ class TokBox extends Component {
           onError={this.onSessionError}
           eventHandlers={this.sessionEventHandlers}
         >
-          <button type="button" id="videoButton" onClick={this.toggleVideo}>
+          <button
+            type="button"
+            className="button is-warning"
+            id="videoButton"
+            onClick={this.toggleVideo}
+          >
             {publishVideo ? 'Disable' : 'Enable'} Video
           </button>
           <div id="publisher">

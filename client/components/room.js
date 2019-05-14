@@ -24,7 +24,9 @@ class Room extends Component {
           room={this.props.room.roomNum}
           name={this.props.room.name}
         />
-        {this.props.room.apiKey ? <Tokbox /> : <div />}
+        {/* <div className="right-sidebar">
+          {this.props.room.apiKey ? <Tokbox /> : <div />}
+        </div> */}
       </div>
     )
   }
