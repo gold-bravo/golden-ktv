@@ -168,11 +168,11 @@ class VideoSearchBar extends Component {
         </div>
 
         <div id="right-sidebar">
-          <ChatBox />
-          <UserList isHost={this.state.isHost} users={this.state.users} />
+          {/* <UserList isHost={this.state.isHost} users={this.state.users} /> */}
           {/* {this.props.room.apiKey ? */}
           <Tokbox />
           {/* : <div />} */}
+          <ChatBox />
         </div>
       </div>
     )
