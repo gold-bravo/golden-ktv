@@ -97,12 +97,12 @@ class TokBox extends Component {
           </button>
           <div id="publisher">
             <OTPublisher
-              ref={e => (this.pub = e)}
               properties={{
                 publishVideo,
                 width: 150,
                 height: 150,
-                name: this.props.credentials.name
+                name: this.props.credentials.name,
+                style: {nameDisplayMode: 'on'}
               }}
               onPublish={this.onPublish}
               onError={this.onPublishError}
@@ -111,8 +111,11 @@ class TokBox extends Component {
           </div>
           <OTStreams>
             <OTSubscriber
-              ref={e => (this.sub = e)}
-              properties={{width: 150, height: 150}}
+              properties={{
+                width: 150,
+                height: 150,
+                style: {nameDisplayMode: 'on'}
+              }}
               onSubscribe={this.onSubscribe}
               onError={this.onSubscribeError}
               eventHandlers={this.subscriberEventHandlers}
