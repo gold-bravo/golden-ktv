@@ -4,6 +4,7 @@ import axios from 'axios'
 import socket from '../socket'
 import VideoQueue from './VideoQueue'
 import VideoResults from './videoResults'
+import Tokbox from './tokbox'
 
 class VideoSearchBar extends Component {
   constructor(props) {
@@ -13,7 +14,8 @@ class VideoSearchBar extends Component {
       videoData: [],
       videoResults: [],
       curTime: null,
-      userId: ''
+      userId: '',
+      isHost: false
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
@@ -32,17 +34,24 @@ class VideoSearchBar extends Component {
         time
       )
       if (data) {
-        console.log('data mounted on searchBar')
         this.setState({videoData: data, curTime: time})
       }
     })
     // STEP ONE: EMIT SUCCESSFUL VISIT TO THE ROOM
     socket.emit('success', this.props.room)
-    socket.on('update queue', data => {
+    //should you need to update the queue due to a song ending, it should reset the time for others too
+    socket.on('update queue', (data, msg) => {
       this.setState({videoData: data})
+      if (msg) {
+        this.setState({curTime: null})
+      }
+    })
+    socket.on('you are the host', () => {
+      console.log('U DA HOST')
+      this.setState({isHost: true})
     })
     socket.on('send id', id => {
-      console.log(id)
+      // console.log(id)
       this.setState({userId: id})
     })
   }
@@ -78,25 +87,27 @@ class VideoSearchBar extends Component {
         key: KEY.data
       }
     })
-    const {data} = await youtube.get('/search', {
-      params: {
-        q: this.state.searchWords + ` karaoke -karafun -singkingkaraoke`
-      }
-    })
-    // Uncomment to check how the data looks like from Youtube API
-    // console.log(data)
+    //only allow search when you have filled in the searchword
+    if (this.state.searchWords) {
+      const {data} = await youtube.get('/search', {
+        params: {
+          q: this.state.searchWords + ` karaoke -karafun -singkingkaraoke`
+        }
+      })
+      // Uncomment to check how the data looks like from Youtube API
+      // console.log(data)
 
-    // Filters out the videos without a videoId
-    const videoItems = data.items.filter(video => video.id.videoId)
+      // Filters out the videos without a videoId
+      const videoItems = data.items.filter(video => video.id.videoId)
 
-    this.setState({
-      videoResults: videoItems
-    })
+      this.setState({
+        videoResults: videoItems
+      })
+    }
   }
 
   // Adds the clicked videoResult into the queue
   async handleClick(video) {
-    console.log(this.state.userId)
     const newQueueItem = {
       id: video.id.videoId,
       title: video.snippet.title,
@@ -116,23 +127,43 @@ class VideoSearchBar extends Component {
 
   render() {
     return (
-      <div className="video-searchbar">
-        <input placeholder="Start search here" onChange={this.handleChange} />
-        <button type="button" onClick={this.handleSearch}>
-          Search
-        </button>
-        <VideoPlayer
-          data={this.state.videoData}
-          handleSkipEnd={this.handleSkipEnd}
-          curTime={this.state.curTime}
-          roomId={this.props.room}
-        />
-        <VideoResults
-          data={this.state.videoResults}
-          handleClick={this.handleClick}
-        />
-        <VideoQueue data={this.state.videoData} />
-      </div>
+       <div className="container">
+      <div id="left-sidebar">
+            <input
+              type="text"
+              placeholder="search here"
+              onChange={this.handleChange}
+            />
+            <button
+              type="button"
+              className="button is-warning"
+              onClick={this.handleSearch}
+            >
+              search
+            </button>
+            <VideoResults
+              data={this.state.videoResults}
+              handleClick={this.handleClick}
+            />
+            <VideoQueue data={this.state.videoData} />
+        </div>
+        <div id="main-player">
+          <VideoPlayer
+            data={this.state.videoData}
+            handleSkipEnd={this.handleSkipEnd}
+            curTime={this.state.curTime}
+            roomId={this.props.room}
+            userId={this.state.userId}
+            isHost={this.state.isHost}
+          />
+        </div>
+
+        <div id="right-sidebar" >
+          {/* {this.props.room.apiKey ? */}
+          <Tokbox />
+          {/* : <div />} */}
+        </div>
+        </div>
     )
   }
 }

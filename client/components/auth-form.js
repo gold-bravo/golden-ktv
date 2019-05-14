@@ -8,10 +8,18 @@ import {auth} from '../store'
  */
 const AuthForm = props => {
   const {name, displayName, handleSubmit, error} = props
-
+  console.log(displayName)
   return (
     <div>
       <form onSubmit={handleSubmit} name={name}>
+        {displayName === 'Sign Up' ? (
+          <div>
+            <label htmlFor="screenName">
+              <small>Screen Name</small>
+            </label>
+            <input name="screenName" type="text" />
+          </div>
+        ) : null}
         <div>
           <label htmlFor="email">
             <small>Email</small>
@@ -29,7 +37,7 @@ const AuthForm = props => {
         </div>
         {error && error.response && <div> {error.response.data} </div>}
       </form>
-      <a href="/auth/google">{displayName} with Google</a>
+      {/* <a href="/auth/google">{displayName} with Google</a> */}
     </div>
   )
 }
@@ -64,7 +72,12 @@ const mapDispatch = dispatch => {
       const formName = evt.target.name
       const email = evt.target.email.value
       const password = evt.target.password.value
-      dispatch(auth(email, password, formName))
+      if (formName === 'signup') {
+        const screenName = evt.target.screenName.value
+        dispatch(auth(email, password, formName, screenName))
+      } else if (formName === 'login') {
+        dispatch(auth(email, password, formName))
+      }
     }
   }
 }
