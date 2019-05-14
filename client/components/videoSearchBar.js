@@ -62,11 +62,6 @@ class VideoSearchBar extends Component {
       console.log(id)
       this.setState({userId: id, users: usersArr})
     })
-    socket.on('new host', idx => {
-      if (this.state.users[idx] === this.props.name) {
-        this.setState({isHost: true})
-      }
-    })
   }
   componentWillUnmount() {
     socket.removeAllListeners()

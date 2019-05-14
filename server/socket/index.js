@@ -20,14 +20,6 @@ module.exports = io => {
           )
           //tell others in the room to update their list
           io.to(socket.room).emit('update', null, null, rooms[socket.room].user)
-          //if you were the host
-          if (socket.host) {
-            console.log(rooms)
-            const newHostIdx = Math.floor(
-              Math.random() * rooms[socket.room].user.length
-            )
-            io.to(socket.room).emit('new host', newHostIdx)
-          }
           if (!rooms[socket.room].user.length) {
             delete rooms[socket.room]
           }
@@ -48,13 +40,12 @@ module.exports = io => {
       // If roomNumber is not in our room storage, add the roomNumber
       if (!rooms.hasOwnProperty(roomNumber)) {
         rooms[roomNumber] = {}
-        socket.host = true
         socket.emit('you are the host')
       }
 
       // Initialize user array or add to the array
       rooms[roomNumber].user = (rooms[roomNumber].user || []).concat(name)
-      console.log(rooms[roomNumber].user.length)
+      console.log('join room', rooms[roomNumber].user.length)
 
       //tell others in the room that someone just joined in
       setTimeout(() => {
@@ -105,14 +96,6 @@ module.exports = io => {
       socket
         .to(roomNumber)
         .emit('update', rooms[roomNumber].curData, null, rooms[roomNumber].user)
-
-      if (socket.host) {
-        socket.host = null
-        const newHostIdx = Math.floor(
-          Math.random() * rooms[socket.room].user.length
-        )
-        io.to(socket.room).emit('new host', newHostIdx)
-      }
 
       if (!rooms[roomNumber].user.length) {
         delete rooms[roomNumber]
