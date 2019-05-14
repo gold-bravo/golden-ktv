@@ -3,6 +3,7 @@ import socket from '../socket'
 import ReactPlayer from 'react-player'
 import {withRouter} from 'react-router-dom'
 import PlayerButton from './PlayerButton'
+import {connect} from 'react-redux'
 
 class VideoPlayer extends Component {
   constructor(props) {
@@ -90,7 +91,12 @@ class VideoPlayer extends Component {
       item => item.userId !== this.props.userId
     )
 
-    socket.emit('leaving', filteredData, this.props.roomId)
+    socket.emit(
+      'leaving',
+      filteredData,
+      this.props.roomId,
+      this.props.credentials.name
+    )
     this.props.history.push('/')
     //when you leave your room, all the songs that you queued up will be gone as well
     //TODO:What if someone tries to leave the room when it is turn to sing? or if you are the host?
@@ -102,7 +108,7 @@ class VideoPlayer extends Component {
     const isMyTurn =
       this.props.data[0] && this.props.data[0].userId === this.props.userId
     const displayPlayBtn = isMyTurn || this.props.isHost
-
+    console.log(this.props.credentials.name)
     return (
       <div className="player-wrapper">
         <ReactPlayer
@@ -146,4 +152,8 @@ class VideoPlayer extends Component {
   }
 }
 
-export default withRouter(VideoPlayer)
+const mSTP = state => ({
+  credentials: state.roomReducer
+})
+
+export default connect(mSTP)(withRouter(VideoPlayer))
