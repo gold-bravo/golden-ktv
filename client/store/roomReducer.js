@@ -4,7 +4,6 @@ import socket from '../socket'
 const GET_ROOM_INFO = 'GET_ROOM_INFO'
 
 const defaultRoomInfo = {
-  name: '',
   roomNum: '',
   session: '',
   token: '',
@@ -30,6 +29,7 @@ export const setRoom = roomInfo => async dispatch => {
 const roomReducer = (state = defaultRoomInfo, action) => {
   switch (action.type) {
     case GET_ROOM_INFO:
+      console.log('here!', action.roomInfo)
       return {...action.roomInfo}
     default:
       return state

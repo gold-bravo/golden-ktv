@@ -10,6 +10,7 @@ import {OTSession, OTPublisher, OTStreams, OTSubscriber} from 'opentok-react'
 class TokBox extends Component {
   constructor(props) {
     super(props)
+    console.log(this.props, 'credits')
     this.state = {
       error: null,
       connection: 'Connecting',
@@ -78,7 +79,7 @@ class TokBox extends Component {
   }
 
   render() {
-    // const {name, apiKey, session, token} = this.props.credentials
+    const {apiKey, session, token} = this.props.credentials
     const {publishVideo} = this.state
     return (
       <div>
@@ -89,23 +90,15 @@ class TokBox extends Component {
           onError={this.onSessionError}
           eventHandlers={this.sessionEventHandlers}
         >
-          <button
-            type="button"
-            className="button is-warning"
-            id="videoButton"
-            onClick={this.toggleVideo}
-          >
+          <button type="button" id="videoButton" onClick={this.toggleVideo}>
             {publishVideo ? 'Disable' : 'Enable'} Video
           </button>
-          <div id="publisher">
-            <OTPublisher
-              properties={{publishVideo, width: 150, height: 150}}
-              onPublish={this.onPublish}
-              onError={this.onPublishError}
-              eventHandlers={this.publisherEventHandlers}
-            />
-            {this.props.credentials.name}
-          </div>
+          <OTPublisher
+            properties={{publishVideo, width: 150, height: 150}}
+            onPublish={this.onPublish}
+            onError={this.onPublishError}
+            eventHandlers={this.publisherEventHandlers}
+          />
           <OTStreams>
             <OTSubscriber
               properties={{width: 150, height: 150}}
