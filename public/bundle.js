@@ -145,7 +145,9 @@ function (_Component) {
   _createClass(App, [{
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Switch"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "body"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Switch"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
         path: "/room",
         component: _components_room__WEBPACK_IMPORTED_MODULE_3__["default"]
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
@@ -184,7 +186,8 @@ __webpack_require__.r(__webpack_exports__);
 var VideoQueue = function VideoQueue(props) {
   return props.data.map(function (video) {
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      key: video.id
+      key: video.id,
+      className: "queue-card"
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
       src: video.img
     }), video.title));
@@ -373,7 +376,7 @@ var Navbar = function Navbar(_ref) {
     to: "/login"
   }, "Login"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
     to: "/signup"
-  }, "Sign Up"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null));
+  }, "Sign Up"))));
 };
 /**
  * CONTAINER
@@ -513,11 +516,9 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "roomBG"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_videoSearchBar__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_videoSearchBar__WEBPACK_IMPORTED_MODULE_2__["default"], {
         room: this.props.room.roomNum
-      }), this.props.room.apiKey ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_tokbox__WEBPACK_IMPORTED_MODULE_3__["default"], null) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null));
+      }));
     }
   }]);
 
@@ -726,6 +727,8 @@ function (_Component) {
     key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "is-pulled-right"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "login-component"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
         onSubmit: this.handleSubmit
@@ -756,8 +759,8 @@ function (_Component) {
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "submit",
         value: "JOIN",
-        className: "button is-primary is-rounded is-warning"
-      })), this.state.err, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "button is-primary is-warning is-large"
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "link-pile"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
         src: "../favicon.ico"
@@ -777,7 +780,9 @@ function (_Component) {
         to: "/signup"
       }, "Sign Up"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
         src: "../favicon.ico"
-      }))));
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "wrap"
+      }, this.state.err)));
     }
   }]);
 
@@ -968,6 +973,7 @@ function (_Component) {
         eventHandlers: this.sessionEventHandlers
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
+        className: "button is-warning",
         id: "videoButton",
         onClick: this.toggleVideo
       }, publishVideo ? 'Disable' : 'Enable', " Video"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -1067,6 +1073,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_player__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-player */ "./node_modules/react-player/lib/ReactPlayer.js");
 /* harmony import */ var react_player__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_player__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var react_bulma_components_full__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-bulma-components/full */ "./node_modules/react-bulma-components/full/index.js");
+/* harmony import */ var react_bulma_components_full__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_bulma_components_full__WEBPACK_IMPORTED_MODULE_4__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1086,6 +1094,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -1231,7 +1240,8 @@ function (_Component) {
       var isMyTurn = this.props.data[0] && this.props.data[0].userId === this.props.userId;
       var displayPlayBtn = isMyTurn || this.props.isHost;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "player-wrapper"
+        className: "player-wrapper",
+        align: "center"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_player__WEBPACK_IMPORTED_MODULE_2___default.a, {
         style: {
           pointerEvents: 'none'
@@ -1252,41 +1262,49 @@ function (_Component) {
           displayPlayBtn && _this3.props.handleSkipEnd();
         },
         onBufferEnd: this.onBufferEnd
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "vol-dur"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
+        className: "button is-warning",
         onClick: this.onPause
       }, "Pause"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
+        className: "button is-warning",
         onClick: function onClick() {
           return _this3.onSeek('-');
         }
       }, "\u23EA"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
+        className: "button is-warning",
         onClick: function onClick() {
           return _this3.onSeek('+');
         }
       }, "\u23E9"), this.props.isHost ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
+        className: "button is-warning",
         onClick: vidId && this.onSkip
       }, "NEXT SONG")) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null), !this.props.data[0] || displayPlayBtn ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
+        className: "button is-warning",
         onClick: function onClick() {
           return _this3.player.getInternalPlayer().playVideo();
         }
       }, "PLAY")) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
+        className: "button is-warning",
         onClick: this.onLeaveRoom
-      }, "LEAVING ROOM"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "Volume"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      }, "LEAVING ROOM"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "Volume"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "range",
         min: 0,
         max: 1,
         step: "any",
         value: this.state.volume,
         onChange: this.setVolume
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "Duration"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("progress", {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "Duration"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("progress", {
         max: 1,
         value: this.state.played
-      })));
+      }))));
     }
   }]);
 
@@ -1381,6 +1399,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _socket__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../socket */ "./client/socket.js");
 /* harmony import */ var _VideoQueue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./VideoQueue */ "./client/components/VideoQueue.js");
 /* harmony import */ var _videoResults__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./videoResults */ "./client/components/videoResults.js");
+/* harmony import */ var _tokbox__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./tokbox */ "./client/components/tokbox.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
@@ -1410,6 +1429,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -1637,26 +1657,34 @@ function (_Component) {
     key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "video-searchbar"
+        className: "container"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "left-sidebar"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-        placeholder: "Start search here",
+        type: "text",
+        placeholder: "search here",
         onChange: this.handleChange
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         type: "button",
+        className: "button is-warning",
         onClick: this.handleSearch
-      }, "Search"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_videoPlayer__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      }, "search"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_videoResults__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        data: this.state.videoResults,
+        handleClick: this.handleClick
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_VideoQueue__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        data: this.state.videoData
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "main-player"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_videoPlayer__WEBPACK_IMPORTED_MODULE_1__["default"], {
         data: this.state.videoData,
         handleSkipEnd: this.handleSkipEnd,
         curTime: this.state.curTime,
         roomId: this.props.room,
         userId: this.state.userId,
         isHost: this.state.isHost
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_videoResults__WEBPACK_IMPORTED_MODULE_5__["default"], {
-        data: this.state.videoResults,
-        handleClick: this.handleClick
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_VideoQueue__WEBPACK_IMPORTED_MODULE_4__["default"], {
-        data: this.state.videoData
-      }));
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "right-sidebar"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_tokbox__WEBPACK_IMPORTED_MODULE_6__["default"], null)));
     }
   }]);
 

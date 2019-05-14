@@ -6,51 +6,20 @@
 
 body {
   font-family: 'new-led';
-  background-image: url('./images/stars-bg.jpg');
-  background-size: cover;
-  max-width: 100%;
-  max-height: 2400px;
-  background-color: purple;
 }
+
 
 div {
   font-family: 'new-led', monospace;
-}
-
-.roomFormBG {
-  font-family: 'new-led', monospace;
-  background-image: url('./images/golden-ktv-bg.jpg');
-  background-size: cover;
-  max-width: 100%;
-  min-height: 800px;
-  background-color: purple;
-}
-::placeholder {
-  /* Chrome, Firefox, Opera, Safari 10.1+ */
-  font-family: 'new-led', monospace;
-  opacity: 1; /* Firefox */
 }
 
 p {
   font-family: 'new-led', monospace;
 }
 
-.roomForm {
-  font-family: 'new-led', monospace;
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-end;
-  min-height: 1000;
-}
-
 a {
   text-decoration: none;
 }
-
-.button {
-  font-family: 'new-led', monospace;
-}
-
 label {
   display: block;
 }
@@ -64,6 +33,55 @@ form div {
   margin: 1em;
   display: inline-block;
 }
+h3 {
+
+  padding: 10px;
+  font-family: 'new-led', monospace;
+  font-size: 16px;
+}
+
+input {
+  font-size: 10px;
+  font-family: 'new-led', monospace;
+  padding: 10px;
+}
+
+input[type='text'] {
+  font-size: 10px;
+  font-family: 'new-led', monospace;
+}
+
+html {
+  background-image: url('./images/golden-ktv-bg.jpg');
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  background-color: purple;
+}
+
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  font-family: 'new-led', monospace;
+  opacity: 1; /* Firefox */
+}
+
+.roomForm {
+  font-family: 'new-led', monospace;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+}
+
+.roomFormBG {
+  font-family: 'new-led', monospace;
+}
+
+.button {
+  font-family: 'new-led', monospace;
+  padding: 10px;
+}
 
 :link {
   padding: 10px;
@@ -71,7 +89,40 @@ form div {
 }
 
 .login-component {
-  display: flex;
-  flex-direction: column;
   text-align: center;
+
+}
+
+.container {
+  min-width: 100%;
+  font-family: 'new-led';
+  display: flex;
+  justify-content: space-between;
+}
+
+#left-sidebar {
+  position: absolute;
+  left: 0px;
+flex-grow: 1;
+float: left;
+}
+
+#main-player {
+  left: 25.25%;
+  top: 23%;
+  position: fixed;
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}
+
+#right-sidebar {
+  position: absolute;
+  right: 0px;
+  display: flex;
+  flex-grow: 1;
+  align-items: flex-end;
+}
+#vol-dur {
+  background-color: #FFDD57
 }

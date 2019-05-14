@@ -4,6 +4,7 @@ import axios from 'axios'
 import socket from '../socket'
 import VideoQueue from './VideoQueue'
 import VideoResults from './videoResults'
+import Tokbox from './tokbox'
 
 class VideoSearchBar extends Component {
   constructor(props) {
@@ -126,25 +127,43 @@ class VideoSearchBar extends Component {
 
   render() {
     return (
-      <div className="video-searchbar">
-        <input placeholder="Start search here" onChange={this.handleChange} />
-        <button type="button" onClick={this.handleSearch}>
-          Search
-        </button>
-        <VideoPlayer
-          data={this.state.videoData}
-          handleSkipEnd={this.handleSkipEnd}
-          curTime={this.state.curTime}
-          roomId={this.props.room}
-          userId={this.state.userId}
-          isHost={this.state.isHost}
-        />
-        <VideoResults
-          data={this.state.videoResults}
-          handleClick={this.handleClick}
-        />
-        <VideoQueue data={this.state.videoData} />
-      </div>
+       <div className="container">
+      <div id="left-sidebar">
+            <input
+              type="text"
+              placeholder="search here"
+              onChange={this.handleChange}
+            />
+            <button
+              type="button"
+              className="button is-warning"
+              onClick={this.handleSearch}
+            >
+              search
+            </button>
+            <VideoResults
+              data={this.state.videoResults}
+              handleClick={this.handleClick}
+            />
+            <VideoQueue data={this.state.videoData} />
+        </div>
+        <div id="main-player">
+          <VideoPlayer
+            data={this.state.videoData}
+            handleSkipEnd={this.handleSkipEnd}
+            curTime={this.state.curTime}
+            roomId={this.props.room}
+            userId={this.state.userId}
+            isHost={this.state.isHost}
+          />
+        </div>
+
+        <div id="right-sidebar" >
+          {/* {this.props.room.apiKey ? */}
+          <Tokbox />
+          {/* : <div />} */}
+        </div>
+        </div>
     )
   }
 }

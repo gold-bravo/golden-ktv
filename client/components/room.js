@@ -19,9 +19,11 @@ class Room extends Component {
 
   render() {
     return (
-      <div className='roomBG'>
+      <div>
         <VideoSearchBar room={this.props.room.roomNum} />
-        {this.props.room.apiKey ? <Tokbox /> : <div />}
+        {/* <div className="right-sidebar">
+          {this.props.room.apiKey ? <Tokbox /> : <div />}
+        </div> */}
       </div>
     )
   }
