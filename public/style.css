@@ -227,7 +227,7 @@ html {
   transition: opacity 300ms ease-in-out;
   margin: 0;
   position: fixed;
-  top: 80vh;
+  top: 85vh;
   margin-left: 45vw !important;
 }
 
