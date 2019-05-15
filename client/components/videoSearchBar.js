@@ -31,11 +31,6 @@ class VideoSearchBar extends Component {
     //STEP FOUR: Now the welcome is finally set.
     //TODO:Possibly adding socket.id to state as userId
     socket.on('welcome', (data, time) => {
-      console.log(
-        'in welcome, if null means first visit or video has not played',
-        data,
-        time
-      )
       if (data) {
         this.setState({videoData: data, curTime: time})
       }
@@ -55,12 +50,10 @@ class VideoSearchBar extends Component {
       }
     })
     socket.on('you are the host', () => {
-      console.log('U DA HOST')
       this.setState({isHost: true})
     })
 
     socket.on('send id', (id, usersArr) => {
-      console.log(id)
       this.setState({userId: id, users: usersArr})
     })
   }

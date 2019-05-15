@@ -42,7 +42,6 @@ class VideoPlayer extends Component {
     if (this.player.getInternalPlayer().getPlayerState() === 1) {
       this.player.seekTo(this.player.getDuration() - 1)
     } else {
-      console.log('in else')
       this.setState({skipping: true})
       this.player.getInternalPlayer().playVideo()
     }
@@ -55,10 +54,8 @@ class VideoPlayer extends Component {
     //preventing uneccessary global update when you are playing the default vid
     if (this.props.data[0]) {
       if (!this.props.curTime) {
-        console.log('starting now', this.props.data)
         socket.emit('play', this.props.data, Date.now(), this.props.roomId)
       } else {
-        console.log('PUSH ME TO CURRENT TIME')
         const timeNow = (Date.now() - this.props.curTime) / 1000
         this.player.getInternalPlayer().seekTo(timeNow)
       }
