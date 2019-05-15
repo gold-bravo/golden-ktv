@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom'
 import axios from 'axios'
 import {Button, Card} from 'react-bulma-components/full'
 import {auth} from '../store'
+import ReactDOM from 'react-dom'
 
 class RoomForm extends Component {
   constructor(props) {
@@ -23,6 +24,16 @@ class RoomForm extends Component {
 
   handleChange(event) {
     this.setState({[event.target.name]: event.target.value})
+  }
+  componentDidMount() {
+    setTimeout(() => {
+      this.div.style.opacity = 1
+    }, 100)
+  }
+
+  onClick = () => {
+    const body = ReactDOM.findDOMNode(app)
+    body.parentNode.style.backgroundColor = ''
   }
 
   async handleSubmit(event) {
@@ -64,9 +75,14 @@ class RoomForm extends Component {
       this.setState({err: error.message})
     }
   }
+
   render() {
     return (
-      <div className="is-pulled-right">
+      <div
+        className="center-form"
+        ref={e => (this.div = e)}
+        style={{marginLeft: '20px'}}
+      >
         <div className="login-component">
           <form onSubmit={this.handleSubmit}>
             {this.props.status === 'signup' || this.props.status === 'guest' ? (
@@ -112,6 +128,11 @@ class RoomForm extends Component {
               />
             </label>
             <input
+              onClick={this.onClick}
+              style={{
+                marginTop: '15px',
+                marginBottom: '15px'
+              }}
               type="submit"
               value="JOIN"
               className="button is-primary is-warning is-large"
