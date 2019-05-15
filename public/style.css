@@ -41,10 +41,11 @@ h3 {
 input {
   font-size: 10px;
   font-family: 'new-led', monospace;
-  padding: 10px;
+  padding: 7px;
 }
 
-input[type='text'] {
+input[type='text'],
+.messages-wrapper {
   font-size: 10px;
   font-family: 'new-led', monospace;
 }
@@ -62,6 +63,7 @@ html {
 ::placeholder {
   /* Chrome, Firefox, Opera, Safari 10.1+ */
   font-family: 'new-led', monospace;
+  color: #aaaaaa;
   opacity: 1; /* Firefox */
 }
 
@@ -93,20 +95,58 @@ html {
 .container {
   min-width: 100%;
   font-family: 'new-led';
-  display: flex;
-  justify-content: space-between;
+  /* display: flex;
+  justify-content: space-between; */
+}
+
+.search-res {
+  overflow: scroll;
+  width: 275px;
+  height: 400px;
+  font-family: 'new-led', monospace;
+  color: #aaaaaa;
+  padding: 10px;
+  font-size: 10px;
+}
+.queue-card {
+  overflow: scroll;
+  width: 275px;
+  height: 300px;
+  max-height: 400px;
+  font-family: 'new-led', monospace;
+  color: #aaaaaa;
+  padding: 5px;
+  font-size: 10px;
+  justify-content: start;
+}
+
+.message-box {
+  border: 2px dotted;
+  border-color: #ffdd57;
+  width: 275px;
+  height: 200px;
+  font-family: 'new-led', monospace;
+  color: #ffffff;
+  padding: 10px;
+  font-size: 10px;
+  overflow: scroll;
+  align-items: flex-end;
 }
 
 #left-sidebar {
+  overflow: scroll;
+  height: 100vh;
   position: absolute;
   left: 0px;
   flex-grow: 1;
   float: left;
+  background-color: #456567;
+  opacity: 0.6;
 }
 
 #main-player {
   left: 25.25%;
-  top: 23%;
+  top: 27%;
   position: fixed;
   margin: auto;
   width: 50%;
@@ -114,12 +154,15 @@ html {
 }
 
 #right-sidebar {
+  height: 100vh;
   position: absolute;
   right: 0px;
-  display: flex;
   flex-grow: 1;
-  align-items: flex-end;
+  display: flex;
   flex-direction: column;
+  background-color: #456567;
+  opacity: 0.6;
+  align-items: flex-end;
 }
 #vol-dur {
   background-color: #ffdd57;

@@ -97,7 +97,7 @@ class ChatBox extends Component {
             onChange={this.handleChange}
           />
 
-          <input className="submit" type="submit" />
+          <input className="button is-warning" type="submit" />
         </form>
       </div>
     )

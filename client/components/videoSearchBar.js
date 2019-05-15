@@ -143,11 +143,13 @@ class VideoSearchBar extends Component {
           >
             search
           </button>
+          <div className="queue-card">
+            <VideoQueue data={this.state.videoData} />
+          </div>
           <VideoResults
             data={this.state.videoResults}
             handleClick={this.handleClick}
           />
-          <VideoQueue data={this.state.videoData} />
         </div>
         <div id="main-player">
           <VideoPlayer
