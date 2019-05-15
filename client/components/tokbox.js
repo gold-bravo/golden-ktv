@@ -52,6 +52,9 @@ class TokBox extends Component {
       }
     }
   }
+  ref = test => {
+    this.test = test
+  }
 
   onSessionError = error => {
     this.setState({error})
@@ -89,21 +92,35 @@ class TokBox extends Component {
           onError={this.onSessionError}
           eventHandlers={this.sessionEventHandlers}
         >
-          <button type="button" id="videoButton" onClick={this.toggleVideo}>
+          <button
+            type="button"
+            className="button is-warning"
+            id="videoButton"
+            onClick={this.toggleVideo}
+          >
             {publishVideo ? 'Disable' : 'Enable'} Video
           </button>
           <div id="publisher">
             <OTPublisher
-              properties={{publishVideo, width: 150, height: 150}}
+              properties={{
+                publishVideo,
+                width: 150,
+                height: 150,
+                name: this.props.credentials.name,
+                style: {nameDisplayMode: 'on'}
+              }}
               onPublish={this.onPublish}
               onError={this.onPublishError}
               eventHandlers={this.publisherEventHandlers}
             />
-            {this.props.credentials.name}
           </div>
           <OTStreams>
             <OTSubscriber
-              properties={{width: 150, height: 150}}
+              properties={{
+                width: 150,
+                height: 150,
+                style: {nameDisplayMode: 'on'}
+              }}
               onSubscribe={this.onSubscribe}
               onError={this.onSubscribeError}
               eventHandlers={this.subscriberEventHandlers}
