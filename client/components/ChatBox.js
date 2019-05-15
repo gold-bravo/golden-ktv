@@ -83,6 +83,7 @@ class ChatBox extends Component {
   render() {
     return (
       <div className="chat-box">
+        <h2 align="center">CHATROOM</h2>
         <div className="message-box" ref={this.boxRef}>
           {this.renderMessages(this.state.displayMsg)}
         </div>

@@ -3,7 +3,7 @@ import React, {Component} from 'react'
 class VideoResults extends Component {
   render() {
     return (
-      <div className="search-res">
+      <div align="center">
         {this.props.data.map(video => {
           return (
             <div key={video.etag} onClick={() => this.props.handleClick(video)}>
