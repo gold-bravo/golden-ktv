@@ -2,11 +2,6 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {OTSession, OTPublisher, OTStreams, OTSubscriber} from 'opentok-react'
 
-//Remember to fill these fields before use!
-// let apiKey = ''
-// let token = ''
-// let sessionId = ''
-
 class TokBox extends Component {
   constructor(props) {
     super(props)
@@ -52,6 +47,7 @@ class TokBox extends Component {
       }
     }
   }
+
   ref = test => {
     this.test = test
   }
@@ -83,7 +79,7 @@ class TokBox extends Component {
   render() {
     // const {name, apiKey, session, token} = this.props.credentials
     const {publishVideo} = this.state
-    return (
+    return this.props.credentials.apiKey ? (
       <div>
         <OTSession
           apiKey={this.props.credentials.apiKey}
@@ -128,6 +124,8 @@ class TokBox extends Component {
           </OTStreams>
         </OTSession>
       </div>
+    ) : (
+      <div />
     )
   }
 }

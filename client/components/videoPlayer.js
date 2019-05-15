@@ -106,7 +106,6 @@ class VideoPlayer extends Component {
     const isMyTurn =
       this.props.data[0] && this.props.data[0].userId === this.props.userId
     const displayPlayBtn = isMyTurn || this.props.isHost
-    console.log(this.props.credentials.name)
     return (
       <div className="player-wrapper" align="center">
         <ReactPlayer
