@@ -5,7 +5,7 @@ import socket from '../socket'
 import VideoQueue from './VideoQueue'
 import VideoResults from './videoResults'
 import ChatBox from './ChatBox'
-import UserList from './UserList'
+// import UserList from './UserList'
 import Tokbox from './tokbox'
 
 class VideoSearchBar extends Component {
@@ -131,23 +131,32 @@ class VideoSearchBar extends Component {
     return (
       <div className="container">
         <div id="left-sidebar">
-          <input
-            type="text"
-            placeholder="search here"
-            onChange={this.handleChange}
-          />
-          <button
-            type="button"
-            className="button is-warning"
-            onClick={this.handleSearch}
-          >
-            search
-          </button>
-          <VideoResults
-            data={this.state.videoResults}
-            handleClick={this.handleClick}
-          />
-          <VideoQueue data={this.state.videoData} />
+          <div>
+            <input
+              type="text"
+              placeholder="search here"
+              onChange={this.handleChange}
+            />
+            <button
+              type="button"
+              className="button is-warning"
+              onClick={this.handleSearch}
+            >
+              search
+            </button>
+          </div>
+          <div className="queue-card" align="center">
+            <h2>QUEUE:</h2>
+            <VideoQueue data={this.state.videoData} />
+          </div>
+          <br />
+          <div className="search-res" align="center">
+            <h2>SEARCH RESULTS:</h2>
+            <VideoResults
+              data={this.state.videoResults}
+              handleClick={this.handleClick}
+            />
+          </div>
         </div>
         <div id="main-player">
           <VideoPlayer
@@ -164,7 +173,6 @@ class VideoSearchBar extends Component {
           {/* <UserList isHost={this.state.isHost} users={this.state.users} /> */}
           {/* {this.props.room.apiKey ? */}
           <Tokbox />
-          {/* : <div />} */}
           <ChatBox />
         </div>
       </div>

@@ -49,7 +49,7 @@
     "history": "^4.9.0",
     "morgan": "^1.9.1",
     "node-sass": "^4.12.0",
-    "opentok": "^2.8.1",
+    "opentok": "^2.9.0",
     "opentok-react": "^0.9.0",
     "passport": "^0.4.0",
     "passport-google-oauth": "^2.0.0",
