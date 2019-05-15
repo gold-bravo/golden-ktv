@@ -28,11 +28,6 @@ class VideoSearchBar extends Component {
     //STEP FOUR: Now the welcome is finally set.
     //TODO:Possibly adding socket.id to state as userId
     socket.on('welcome', (data, time) => {
-      console.log(
-        'in welcome, if null means first visit or video has not played',
-        data,
-        time
-      )
       if (data) {
         this.setState({videoData: data, curTime: time})
       }
@@ -47,11 +42,9 @@ class VideoSearchBar extends Component {
       }
     })
     socket.on('you are the host', () => {
-      console.log('U DA HOST')
       this.setState({isHost: true})
     })
     socket.on('send id', id => {
-      // console.log(id)
       this.setState({userId: id})
     })
   }
@@ -127,25 +120,25 @@ class VideoSearchBar extends Component {
 
   render() {
     return (
-       <div className="container">
-      <div id="left-sidebar">
-            <input
-              type="text"
-              placeholder="search here"
-              onChange={this.handleChange}
-            />
-            <button
-              type="button"
-              className="button is-warning"
-              onClick={this.handleSearch}
-            >
-              search
-            </button>
-            <VideoResults
-              data={this.state.videoResults}
-              handleClick={this.handleClick}
-            />
-            <VideoQueue data={this.state.videoData} />
+      <div className="container">
+        <div id="left-sidebar">
+          <input
+            type="text"
+            placeholder="search here"
+            onChange={this.handleChange}
+          />
+          <button
+            type="button"
+            className="button is-warning"
+            onClick={this.handleSearch}
+          >
+            search
+          </button>
+          <VideoResults
+            data={this.state.videoResults}
+            handleClick={this.handleClick}
+          />
+          <VideoQueue data={this.state.videoData} />
         </div>
         <div id="main-player">
           <VideoPlayer
@@ -158,12 +151,12 @@ class VideoSearchBar extends Component {
           />
         </div>
 
-        <div id="right-sidebar" >
+        <div id="right-sidebar">
           {/* {this.props.room.apiKey ? */}
           <Tokbox />
           {/* : <div />} */}
         </div>
-        </div>
+      </div>
     )
   }
 }

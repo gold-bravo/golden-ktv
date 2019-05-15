@@ -31,8 +31,6 @@ module.exports = io => {
         rooms[roomNumber] = {}
         socket.emit('you are the host')
       }
-
-      console.log(socket.id)
       socket.emit('send id', socket.id)
       // socket.join(roomNumber)
       // socket.emit('success', roomNumber)
@@ -57,7 +55,6 @@ module.exports = io => {
     })
     //Listen for queue added, tell others to update queue
     socket.on('queue added', (data, roomNumber) => {
-      console.log('queue added', data)
       rooms[roomNumber].curData = data
       socket.to(roomNumber).emit('update queue', rooms[roomNumber].curData)
     })
@@ -68,7 +65,6 @@ module.exports = io => {
       if (!data.length) {
         rooms[roomNumber].curTime = null
       }
-      console.log('leaving', data)
       socket.to(roomNumber).emit('update queue', rooms[roomNumber].curData)
       //leave room
       socket.leave(roomNumber)
@@ -89,7 +85,6 @@ module.exports = io => {
     })
 
     socket.on('end', (data, roomNumber) => {
-      console.log('ended')
       rooms[roomNumber].playTime = null
       rooms[roomNumber].curData = data
       //Tell others to update the queue but also set the curtime to null

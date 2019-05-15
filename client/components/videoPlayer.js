@@ -40,7 +40,6 @@ class VideoPlayer extends Component {
     if (this.player.getInternalPlayer().getPlayerState() === 1) {
       this.player.seekTo(this.player.getDuration() - 1)
     } else {
-      console.log('in else')
       this.setState({skipping: true})
       this.player.getInternalPlayer().playVideo()
     }
@@ -53,10 +52,8 @@ class VideoPlayer extends Component {
     //preventing uneccessary global update when you are playing the default vid
     if (this.props.data[0]) {
       if (!this.props.curTime) {
-        console.log('starting now', this.props.data)
         socket.emit('play', this.props.data, Date.now(), this.props.roomId)
       } else {
-        console.log('PUSH ME TO CURRENT TIME')
         const timeNow = (Date.now() - this.props.curTime) / 1000
         this.player.getInternalPlayer().seekTo(timeNow)
       }
@@ -129,77 +126,76 @@ class VideoPlayer extends Component {
           onBufferEnd={this.onBufferEnd}
         />
 
-        <div  id="vol-dur">
-        <button
-          type="button"
-          className="button is-warning"
-          onClick={this.onPause}
-        >
-          Pause
-        </button>
-        <button
-          type="button"
-          className="button is-warning"
-          onClick={() => this.onSeek('-')}
-        >
-          &#x23ea;
-        </button>
-        <button
-          type="button"
-          className="button is-warning"
-          onClick={() => this.onSeek('+')}
-        >
-          &#x23e9;
-        </button>
-        {this.props.isHost ? (
-          <>
-            <button
-              type="button"
-              className="button is-warning"
-              onClick={vidId && this.onSkip}
-            >
-              NEXT SONG
-            </button>
-          </>
-        ) : (
-          <></>
-        )}
-        {/*only render the btn if there is nothing on the queue or if you are the host or its your turn to play*/}
-        {!this.props.data[0] || displayPlayBtn ? (
-          <>
-            <button
-              type="button"
-              className="button is-warning"
-              onClick={() => this.player.getInternalPlayer().playVideo()}
-            >
-              PLAY
-            </button>
-          </>
-        ) : (
-          <></>
-        )}
-        <button
-          type="button"
-          className="button is-warning"
-          onClick={this.onLeaveRoom}
-        >
-          LEAVING ROOM
-        </button>
+        <div id="vol-dur">
+          <button
+            type="button"
+            className="button is-warning"
+            onClick={this.onPause}
+          >
+            Pause
+          </button>
+          <button
+            type="button"
+            className="button is-warning"
+            onClick={() => this.onSeek('-')}
+          >
+            &#x23ea;
+          </button>
+          <button
+            type="button"
+            className="button is-warning"
+            onClick={() => this.onSeek('+')}
+          >
+            &#x23e9;
+          </button>
+          {this.props.isHost ? (
+            <>
+              <button
+                type="button"
+                className="button is-warning"
+                onClick={vidId && this.onSkip}
+              >
+                NEXT SONG
+              </button>
+            </>
+          ) : (
+            <></>
+          )}
+          {/*only render the btn if there is nothing on the queue or if you are the host or its your turn to play*/}
+          {!this.props.data[0] || displayPlayBtn ? (
+            <>
+              <button
+                type="button"
+                className="button is-warning"
+                onClick={() => this.player.getInternalPlayer().playVideo()}
+              >
+                PLAY
+              </button>
+            </>
+          ) : (
+            <></>
+          )}
+          <button
+            type="button"
+            className="button is-warning"
+            onClick={this.onLeaveRoom}
+          >
+            LEAVING ROOM
+          </button>
 
-        <div>
-        <strong>Volume</strong>
-        <input
-          type="range"
-          min={0}
-          max={1}
-          step="any"
-          value={this.state.volume}
-          onChange={this.setVolume}
-        />
-          <strong>Duration</strong>
-          <progress max={1} value={this.state.played} />
-
-        </div>
+          <div>
+            <strong>Volume</strong>
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step="any"
+              value={this.state.volume}
+              onChange={this.setVolume}
+            />
+            <strong>Duration</strong>
+            <progress max={1} value={this.state.played} />
+          </div>
         </div>
       </div>
     )

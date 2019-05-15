@@ -43,7 +43,6 @@ class RoomForm extends Component {
           'signup',
           this.state.name
         )
-        console.log(signup)
         if (signup !== undefined) {
           throw new Error('Account already exist')
         }
@@ -60,7 +59,6 @@ class RoomForm extends Component {
         apiKey: response.data.KEY
       })
       this.setState({sessionId: response.data.sessionId})
-      console.log('handling stuff', this.state)
       this.props.history.push(`/room/${this.state.room}`)
     } catch (error) {
       this.setState({err: error.message})
