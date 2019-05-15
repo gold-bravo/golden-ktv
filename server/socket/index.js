@@ -6,6 +6,7 @@ module.exports = io => {
   io.on('connection', socket => {
     socket.emit('no refresh', socket.room)
     socket.on('disconnect', () => {
+      console.log(`Connection ${socket.id} has left the building`)
       //if socket left after joining a room, meaning refreshed page
       if (socket.room) {
         //if the room has no queue(data)
@@ -20,6 +21,20 @@ module.exports = io => {
           )
           //tell others in the room to update their list
           io.to(socket.room).emit('update', null, null, rooms[socket.room].user)
+
+          if (socket.host) {
+            const newHostIdx = Math.floor(
+              Math.random() * rooms[socket.room].user.length
+            )
+            console.log(socket.room, 'refresh', rooms[socket.room].user)
+            console.log(
+              'refresh',
+              'new host',
+              rooms[socket.room].user[newHostIdx]
+            )
+            io.to(socket.room).emit('new host', newHostIdx)
+          }
+
           if (!rooms[socket.room].user.length) {
             delete rooms[socket.room]
           }
@@ -33,13 +48,14 @@ module.exports = io => {
     socket.on('join room', (roomNumber, name) => {
       //attach roomnumber to socket
       socket.room = roomNumber
-
       //attach name to socket
       socket.name = name
 
       // If roomNumber is not in our room storage, add the roomNumber
       if (!rooms.hasOwnProperty(roomNumber)) {
         rooms[roomNumber] = {}
+        //indicate you are the host
+        //socket.host = true
         socket.emit('you are the host')
       }
 

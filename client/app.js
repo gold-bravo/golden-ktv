@@ -4,6 +4,8 @@ import Routes from './routes'
 import Room from './components/room'
 import {Guest, Login, SignUp} from './components/roomForm'
 import {Switch, Route} from 'react-router-dom'
+import StartBtn from './components/StartBtn'
+
 class App extends Component {
   constructor() {
     super()
@@ -16,7 +18,8 @@ class App extends Component {
           <Route path="/room" component={Room} />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={SignUp} />
-          <Route path="/" component={Guest} />
+          <Route path="/guest" component={Guest} />
+          <Route path="/" component={StartBtn} />
         </Switch>
       </div>
     )

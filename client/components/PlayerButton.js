@@ -58,19 +58,22 @@ const PlayerButton = props => {
       >
         LEAVING ROOM
       </button>
-      <strong>Volume</strong>
-      <input
-        type="range"
-        min={0}
-        max={1}
-        step="any"
-        value={props.volume}
-        onChange={props.setVolume}
-      />
+      <div id="volume-duration">
+        <strong>Volume</strong>
+        <div id="volume-input">
+          <input
+            style={{padding: 0, paddingBottom: '5px'}}
+            type="range"
+            min={0}
+            max={1}
+            step="any"
+            value={props.volume}
+            onChange={props.setVolume}
+          />
+        </div>
 
-      <div>
-        <strong>Duration</strong>
-        <progress max={1} value={props.played} />
+        <strong id="duration">Duration</strong>
+        <progress id="duration-progress" max={1} value={props.played} />
       </div>
     </div>
   )
