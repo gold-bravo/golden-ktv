@@ -80,7 +80,7 @@ class TokBox extends Component {
     // const {name, apiKey, session, token} = this.props.credentials
     const {publishVideo} = this.state
     return this.props.credentials.apiKey ? (
-      <div>
+      <div align="center" className="scrollTok" id="dots">
         <OTSession
           apiKey={this.props.credentials.apiKey}
           sessionId={this.props.credentials.session}
@@ -100,7 +100,7 @@ class TokBox extends Component {
             <OTPublisher
               properties={{
                 publishVideo,
-                width: 150,
+                width: 200,
                 height: 150,
                 name: this.props.credentials.name,
                 style: {nameDisplayMode: 'on'}

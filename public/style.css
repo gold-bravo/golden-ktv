@@ -46,15 +46,32 @@ h3 {
   font-size: 16px;
 }
 
+h2 {
+  padding: 16px;
+  font-family: 'new-led', monospace;
+  font-size: 24px;
+  color: #000000;
+  background-color: #ffffff;
+}
+
 input {
   font-size: 10px;
   font-family: 'new-led', monospace;
-  padding: 10px;
+  padding: 7px;
 }
 
 input[type='text'] {
   font-size: 10px;
+  color: #000000;
   font-family: 'new-led', monospace;
+}
+
+.messages-wrapper {
+  font-size: 10px;
+  color: #000000;
+  font-family: 'new-led', monospace;
+  color: rgba(0, 0, 0, 1);
+  opacity: 1;
 }
 
 html {
@@ -70,6 +87,7 @@ html {
 ::placeholder {
   /* Chrome, Firefox, Opera, Safari 10.1+ */
   font-family: 'new-led', monospace;
+  color: #000000;
   opacity: 1; /* Firefox */
 }
 
@@ -100,21 +118,69 @@ html {
 
 .container {
   min-width: 100%;
+  max-width: 100%;
   font-family: 'new-led';
-  display: flex;
-  justify-content: space-between;
+  /* display: flex;
+  justify-content: space-between; */
+}
+
+.search-res {
+  border: 2px dotted;
+  border-color: #ffdd57;
+  overflow: scroll;
+  width: 300px;
+  height: 400px;
+  font-family: 'new-led', monospace;
+  color: #aaaaaa;
+  padding: 10px;
+  font-size: 10px;
+  background-color: rgba(69, 101, 103, 0.8);
+}
+.queue-card {
+  border: 2px dotted;
+  border-color: #ffdd57;
+  overflow: scroll;
+  width: 300px;
+  height: 300px;
+  max-height: 400px;
+  font-family: 'new-led', monospace;
+  color: #000000;
+  padding: 5px;
+  font-size: 10px;
+  justify-content: start;
+  background-color: rgba(69, 101, 103, 0.8);
+}
+
+.message-box {
+  border: 2px dotted;
+  border-color: #ffdd57;
+  width: 300px;
+  height: 200px;
+  font-family: 'new-led', monospace;
+  color: #ffffff;
+  padding: 10px;
+  font-size: 10px;
+  overflow: scroll;
+  align-items: flex-end;
+  bottom: 0px;
+
+  background-color: rgba(69, 101, 103, 0.8);
 }
 
 #left-sidebar {
+  overflow: scroll;
+  height: 100vh;
   position: absolute;
   left: 0px;
   flex-grow: 1;
   float: left;
+  background-color: rgba(69, 101, 103, 0.8);
+  /* opacity: 0.8; */
 }
 
 #main-player {
   left: 25.25%;
-  top: 23%;
+  top: 27%;
   position: fixed;
   margin: auto;
   width: 50%;
@@ -126,12 +192,14 @@ html {
 }
 
 #right-sidebar {
+  height: 100vh;
   position: absolute;
   right: 0px;
-  display: flex;
   flex-grow: 1;
-  align-items: flex-end;
+  display: flex;
   flex-direction: column;
+  background-color: rgba(69, 101, 103, 0.6);
+  align-items: flex-end;
 }
 #vol-dur {
   background-color: #ffdd57;
@@ -174,4 +242,17 @@ html {
   background-color: #f2dd57;
   padding: 40px;
   border-radius: 15px;
+}
+#dots {
+  width: 100%;
+  border: 2px dotted;
+  border-color: #ffdd57;
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 1);
+}
+.scrollTok {
+  display: flex;
+  width: 300px;
+  height: 500px;
+  overflow: scroll;
 }
