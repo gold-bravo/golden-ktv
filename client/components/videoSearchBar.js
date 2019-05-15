@@ -4,6 +4,8 @@ import axios from 'axios'
 import socket from '../socket'
 import VideoQueue from './VideoQueue'
 import VideoResults from './videoResults'
+import ChatBox from './ChatBox'
+import UserList from './UserList'
 import Tokbox from './tokbox'
 
 class VideoSearchBar extends Component {
@@ -15,7 +17,8 @@ class VideoSearchBar extends Component {
       videoResults: [],
       curTime: null,
       userId: '',
-      isHost: false
+      isHost: false,
+      users: []
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
@@ -35,17 +38,23 @@ class VideoSearchBar extends Component {
     // STEP ONE: EMIT SUCCESSFUL VISIT TO THE ROOM
     socket.emit('success', this.props.room)
     //should you need to update the queue due to a song ending, it should reset the time for others too
-    socket.on('update queue', (data, msg) => {
-      this.setState({videoData: data})
+    socket.on('update', (data, msg, userArr) => {
+      if (data) {
+        this.setState({videoData: data})
+      }
       if (msg) {
         this.setState({curTime: null})
+      }
+      if (userArr) {
+        this.setState({users: userArr})
       }
     })
     socket.on('you are the host', () => {
       this.setState({isHost: true})
     })
-    socket.on('send id', id => {
-      this.setState({userId: id})
+
+    socket.on('send id', (id, usersArr) => {
+      this.setState({userId: id, users: usersArr})
     })
   }
   componentWillUnmount() {
@@ -152,9 +161,11 @@ class VideoSearchBar extends Component {
         </div>
 
         <div id="right-sidebar">
+          {/* <UserList isHost={this.state.isHost} users={this.state.users} /> */}
           {/* {this.props.room.apiKey ? */}
           <Tokbox />
           {/* : <div />} */}
+          <ChatBox />
         </div>
       </div>
     )

@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import socket from '../socket'
 import ReactPlayer from 'react-player'
 import {withRouter} from 'react-router-dom'
+import PlayerButton from './PlayerButton'
+import {connect} from 'react-redux'
 import {Button} from 'react-bulma-components/full'
 
 class VideoPlayer extends Component {
@@ -87,7 +89,12 @@ class VideoPlayer extends Component {
       item => item.userId !== this.props.userId
     )
 
-    socket.emit('leaving', filteredData, this.props.roomId)
+    socket.emit(
+      'leaving',
+      filteredData,
+      this.props.roomId,
+      this.props.credentials.name
+    )
     this.props.history.push('/')
     //when you leave your room, all the songs that you queued up will be gone as well
     //TODO:What if someone tries to leave the room when it is turn to sing? or if you are the host?
@@ -99,7 +106,7 @@ class VideoPlayer extends Component {
     const isMyTurn =
       this.props.data[0] && this.props.data[0].userId === this.props.userId
     const displayPlayBtn = isMyTurn || this.props.isHost
-
+    console.log(this.props.credentials.name)
     return (
       <div className="player-wrapper" align="center">
         <ReactPlayer
@@ -125,81 +132,25 @@ class VideoPlayer extends Component {
           }}
           onBufferEnd={this.onBufferEnd}
         />
-
-        <div id="vol-dur">
-          <button
-            type="button"
-            className="button is-warning"
-            onClick={this.onPause}
-          >
-            Pause
-          </button>
-          <button
-            type="button"
-            className="button is-warning"
-            onClick={() => this.onSeek('-')}
-          >
-            &#x23ea;
-          </button>
-          <button
-            type="button"
-            className="button is-warning"
-            onClick={() => this.onSeek('+')}
-          >
-            &#x23e9;
-          </button>
-          {this.props.isHost ? (
-            <>
-              <button
-                type="button"
-                className="button is-warning"
-                onClick={vidId && this.onSkip}
-              >
-                NEXT SONG
-              </button>
-            </>
-          ) : (
-            <></>
-          )}
-          {/*only render the btn if there is nothing on the queue or if you are the host or its your turn to play*/}
-          {!this.props.data[0] || displayPlayBtn ? (
-            <>
-              <button
-                type="button"
-                className="button is-warning"
-                onClick={() => this.player.getInternalPlayer().playVideo()}
-              >
-                PLAY
-              </button>
-            </>
-          ) : (
-            <></>
-          )}
-          <button
-            type="button"
-            className="button is-warning"
-            onClick={this.onLeaveRoom}
-          >
-            LEAVING ROOM
-          </button>
-
-          <div>
-            <strong>Volume</strong>
-            <input
-              type="range"
-              min={0}
-              max={1}
-              step="any"
-              value={this.state.volume}
-              onChange={this.setVolume}
-            />
-            <strong>Duration</strong>
-            <progress max={1} value={this.state.played} />
-          </div>
-        </div>
+        <PlayerButton
+          {...this.state}
+          {...this.props}
+          vidId={vidId}
+          displayPlayBtn={displayPlayBtn}
+          player={this.player}
+          setVolume={this.setVolume}
+          onSeek={this.onSeek}
+          onPause={this.onPause}
+          onSkip={this.onSkip}
+          onLeaveRoom={this.onLeaveRoom}
+        />
       </div>
     )
   }
 }
 
-export default withRouter(VideoPlayer)
+const mSTP = state => ({
+  credentials: state.roomReducer
+})
+
+export default connect(mSTP)(withRouter(VideoPlayer))

@@ -8,7 +8,6 @@ body {
   font-family: 'new-led';
 }
 
-
 div {
   font-family: 'new-led', monospace;
 }
@@ -34,7 +33,6 @@ form div {
   display: inline-block;
 }
 h3 {
-
   padding: 10px;
   font-family: 'new-led', monospace;
   font-size: 16px;
@@ -90,7 +88,6 @@ html {
 
 .login-component {
   text-align: center;
-
 }
 
 .container {
@@ -103,8 +100,8 @@ html {
 #left-sidebar {
   position: absolute;
   left: 0px;
-flex-grow: 1;
-float: left;
+  flex-grow: 1;
+  float: left;
 }
 
 #main-player {
@@ -122,7 +119,8 @@ float: left;
   display: flex;
   flex-grow: 1;
   align-items: flex-end;
+  flex-direction: column;
 }
 #vol-dur {
-  background-color: #FFDD57
+  background-color: #ffdd57;
 }
