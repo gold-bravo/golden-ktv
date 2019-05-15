@@ -4,6 +4,8 @@ import axios from 'axios'
 import socket from '../socket'
 import VideoQueue from './VideoQueue'
 import VideoResults from './videoResults'
+import ChatBox from './ChatBox'
+import UserList from './UserList'
 import Tokbox from './tokbox'
 
 class VideoSearchBar extends Component {
@@ -15,7 +17,8 @@ class VideoSearchBar extends Component {
       videoResults: [],
       curTime: null,
       userId: '',
-      isHost: false
+      isHost: false,
+      users: []
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSearch = this.handleSearch.bind(this)
@@ -40,19 +43,25 @@ class VideoSearchBar extends Component {
     // STEP ONE: EMIT SUCCESSFUL VISIT TO THE ROOM
     socket.emit('success', this.props.room)
     //should you need to update the queue due to a song ending, it should reset the time for others too
-    socket.on('update queue', (data, msg) => {
-      this.setState({videoData: data})
+    socket.on('update', (data, msg, userArr) => {
+      if (data) {
+        this.setState({videoData: data})
+      }
       if (msg) {
         this.setState({curTime: null})
+      }
+      if (userArr) {
+        this.setState({users: userArr})
       }
     })
     socket.on('you are the host', () => {
       console.log('U DA HOST')
       this.setState({isHost: true})
     })
-    socket.on('send id', id => {
-      // console.log(id)
-      this.setState({userId: id})
+
+    socket.on('send id', (id, usersArr) => {
+      console.log(id)
+      this.setState({userId: id, users: usersArr})
     })
   }
   componentWillUnmount() {
@@ -127,25 +136,25 @@ class VideoSearchBar extends Component {
 
   render() {
     return (
-       <div className="container">
-      <div id="left-sidebar">
-            <input
-              type="text"
-              placeholder="search here"
-              onChange={this.handleChange}
-            />
-            <button
-              type="button"
-              className="button is-warning"
-              onClick={this.handleSearch}
-            >
-              search
-            </button>
-            <VideoResults
-              data={this.state.videoResults}
-              handleClick={this.handleClick}
-            />
-            <VideoQueue data={this.state.videoData} />
+      <div className="container">
+        <div id="left-sidebar">
+          <input
+            type="text"
+            placeholder="search here"
+            onChange={this.handleChange}
+          />
+          <button
+            type="button"
+            className="button is-warning"
+            onClick={this.handleSearch}
+          >
+            search
+          </button>
+          <VideoResults
+            data={this.state.videoResults}
+            handleClick={this.handleClick}
+          />
+          <VideoQueue data={this.state.videoData} />
         </div>
         <div id="main-player">
           <VideoPlayer
@@ -158,12 +167,14 @@ class VideoSearchBar extends Component {
           />
         </div>
 
-        <div id="right-sidebar" >
+        <div id="right-sidebar">
+          {/* <UserList isHost={this.state.isHost} users={this.state.users} /> */}
           {/* {this.props.room.apiKey ? */}
           <Tokbox />
           {/* : <div />} */}
+          <ChatBox />
         </div>
-        </div>
+      </div>
     )
   }
 }
