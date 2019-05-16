@@ -107,30 +107,34 @@ class VideoPlayer extends Component {
       this.props.data[0] && this.props.data[0].userId === this.props.userId
     const displayPlayBtn = isMyTurn || this.props.isHost
     return (
-      <div className="player-wrapper" align="center">
-        <ReactPlayer
-          style={{pointerEvents: 'none'}}
-          className="react-player"
-          // width="70%"
-          // height="70%"
-          url={
-            vidId
-              ? `https://www.youtube.com/watch?v=${vidId}`
-              : 'https://www.youtube.com/watch?v=yKNxeF4KMsY'
-          }
-          controls={true}
-          ref={this.ref}
-          onStart={this.onStart}
-          onReady={this.onReady}
-          volume={this.state.volume}
-          onProgress={this.onProgress}
-          onError={this.props.handleSkipEnd}
-          //when a song ends, queue will skip to next only if you are host or if it was your turn to sing
-          onEnded={() => {
-            displayPlayBtn && this.props.handleSkipEnd()
-          }}
-          onBufferEnd={this.onBufferEnd}
-        />
+      <div align="center">
+      <div className="player-wrapper">
+          <ReactPlayer
+            style={{pointerEvents: 'none'}}
+            className="react-player"
+            width='100%'
+            height='100%'
+            // width="70%"
+            // height="70%"
+            url={
+              vidId
+                ? `https://www.youtube.com/watch?v=${vidId}`
+                : 'https://www.youtube.com/watch?v=yKNxeF4KMsY'
+            }
+            controls={true}
+            ref={this.ref}
+            onStart={this.onStart}
+            onReady={this.onReady}
+            volume={this.state.volume}
+            onProgress={this.onProgress}
+            onError={this.props.handleSkipEnd}
+            //when a song ends, queue will skip to next only if you are host or if it was your turn to sing
+            onEnded={() => {
+              displayPlayBtn && this.props.handleSkipEnd()
+            }}
+            onBufferEnd={this.onBufferEnd}
+          />
+          </div>
         <PlayerButton
           {...this.state}
           {...this.props}
@@ -143,7 +147,7 @@ class VideoPlayer extends Component {
           onSkip={this.onSkip}
           onLeaveRoom={this.onLeaveRoom}
         />
-      </div>
+        </div>
     )
   }
 }
