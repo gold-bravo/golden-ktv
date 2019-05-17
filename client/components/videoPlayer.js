@@ -54,7 +54,6 @@ class VideoPlayer extends Component {
     }
   }
 
-  //TODO: This method is running twice for some reason rn
   onStart() {
     //if there is something in the queue do the following
     //preventing uneccessary global update when you are playing the default vid
@@ -120,8 +119,6 @@ class VideoPlayer extends Component {
             className="react-player"
             width="100%"
             height="100%"
-            // width="70%"
-            // height="70%"
             url={
               vidId
                 ? `https://www.youtube.com/watch?v=${vidId}`

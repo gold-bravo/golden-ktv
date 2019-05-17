@@ -149,13 +149,6 @@ module.exports = io => {
       //Tell others in the room to update their chatbox
       io.to(socket.room).emit('update msg', msg, name)
     })
-
-    // Console log back-end playing when playing YT video
-    // roomInfo contains {videoId, roomId} (passed in from videoPlayer component)
-    // socket.on('play', roomInfo => {
-    // Specific room will play the room's respective video
-    // socket.to(roomInfo.roomId).emit('play', roomInfo.videoId)
-    // })
   })
 }
 
