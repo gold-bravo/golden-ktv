@@ -113,7 +113,7 @@ class VideoPlayer extends Component {
     const displayPlayBtn = isMyTurn || this.props.isHost
     return (
       <div className="videoPlayer" align="center">
-      <div className="player-wrapper">
+        <div className="player-wrapper">
           <ReactPlayer
             style={{pointerEvents: 'none'}}
             className="react-player"
@@ -122,7 +122,7 @@ class VideoPlayer extends Component {
             url={
               vidId
                 ? `https://www.youtube.com/watch?v=${vidId}`
-                : 'https://www.youtube.com/watch?v=yKNxeF4KMsY'
+                : 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
             }
             controls={true}
             ref={this.ref}
