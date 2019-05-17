@@ -112,8 +112,8 @@ class VideoPlayer extends Component {
       (this.props.data[0] && this.props.data[0].userId) === this.props.userId
     const displayPlayBtn = isMyTurn || this.props.isHost
     return (
-      <div align="center">
-        <div className="player-wrapper">
+      <div className="videoPlayer" align="center">
+      <div className="player-wrapper">
           <ReactPlayer
             style={{pointerEvents: 'none'}}
             className="react-player"
