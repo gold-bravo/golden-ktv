@@ -39,16 +39,21 @@ class VideoPlayer extends Component {
   }
 
   onSkip = () => {
-    if (this.player.getInternalPlayer().getPlayerState() === 1) {
-      this.player.seekTo(this.player.getDuration() - 1)
-    } else {
-      this.setState({skipping: true})
-      this.player.getInternalPlayer().playVideo()
+    const isMyTurn =
+      (this.props.data[0] && this.props.data[0].userId) === this.props.userId
+    console.log('on skip', isMyTurn)
+    //skipping to the next song only if it your turn or you are the host
+    if (isMyTurn || this.props.isHost) {
+      if (this.player.getInternalPlayer().getPlayerState() === 1) {
+        this.player.seekTo(this.player.getDuration() - 1)
+      } else {
+        this.setState({skipping: true})
+        this.player.getInternalPlayer().playVideo()
+      }
+      this.setState({played: 0})
     }
-    this.setState({played: 0})
   }
 
-  //TODO: This method is running twice for some reason rn
   onStart() {
     //if there is something in the queue do the following
     //preventing uneccessary global update when you are playing the default vid
@@ -104,22 +109,20 @@ class VideoPlayer extends Component {
     const vidId = this.props.data[0] && this.props.data[0].id
     //show display btn only if you are the host or it's your turn to sing
     const isMyTurn =
-      this.props.data[0] && this.props.data[0].userId === this.props.userId
+      (this.props.data[0] && this.props.data[0].userId) === this.props.userId
     const displayPlayBtn = isMyTurn || this.props.isHost
     return (
       <div className="videoPlayer" align="center">
-      <div className="player-wrapper">
+        <div className="player-wrapper">
           <ReactPlayer
             style={{pointerEvents: 'none'}}
             className="react-player"
-            width='100%'
-            height='100%'
-            // width="70%"
-            // height="70%"
+            width="100%"
+            height="100%"
             url={
               vidId
                 ? `https://www.youtube.com/watch?v=${vidId}`
-                : 'https://www.youtube.com/watch?v=yKNxeF4KMsY'
+                : 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
             }
             controls={true}
             ref={this.ref}
@@ -134,12 +137,10 @@ class VideoPlayer extends Component {
             }}
             onBufferEnd={this.onBufferEnd}
           />
-          </div>
+        </div>
         <PlayerButton
           {...this.state}
           {...this.props}
-          vidId={vidId}
-          displayPlayBtn={displayPlayBtn}
           player={this.player}
           setVolume={this.setVolume}
           onSeek={this.onSeek}
@@ -147,7 +148,7 @@ class VideoPlayer extends Component {
           onSkip={this.onSkip}
           onLeaveRoom={this.onLeaveRoom}
         />
-        </div>
+      </div>
     )
   }
 }
