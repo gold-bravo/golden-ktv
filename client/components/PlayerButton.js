@@ -1,6 +1,8 @@
 import React from 'react'
 
 const PlayerButton = props => {
+  const isMyTurn = (props.data[0] && props.data[0].userId) === props.userId
+  const allowPlay = isMyTurn || props.isHost
   return (
     <div id="vol-dur">
       <button
@@ -24,33 +26,26 @@ const PlayerButton = props => {
       >
         &#x23e9;
       </button>
-      {props.isHost ? (
-        <>
-          <button
-            type="button"
-            className="button is-warning"
-            onClick={props.vidId && props.onSkip}
-          >
-            NEXT SONG
-          </button>
-        </>
-      ) : (
-        <></>
-      )}
-      {/*only render the btn if there is nothing on the queue or if you are the host or its your turn to play*/}
-      {!props.data[0] || props.displayPlayBtn ? (
-        <>
-          <button
-            type="button"
-            className="button is-warning"
-            onClick={() => props.player.getInternalPlayer().playVideo()}
-          >
-            PLAY
-          </button>
-        </>
-      ) : (
-        <></>
-      )}
+      <button
+        type="button"
+        className="button is-warning"
+        onClick={props.onSkip}
+      >
+        NEXT SONG
+      </button>
+      <button
+        type="button"
+        className="button is-warning"
+        onClick={() => {
+          /*only let you play if there is nothing on the queue or if you are the host or its your turn to play*/
+          console.log('inside play btn', !props.data.length || allowPlay)
+          if (!props.data.length || allowPlay) {
+            props.player.getInternalPlayer().playVideo()
+          }
+        }}
+      >
+        PLAY
+      </button>
       <button
         type="button"
         className="button is-warning"

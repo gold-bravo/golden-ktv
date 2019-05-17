@@ -18,6 +18,7 @@ class VideoSearchBar extends Component {
       curTime: null,
       userId: '',
       isHost: false,
+      //we are not utilizing usersarr for now
       users: []
     }
     this.handleChange = this.handleChange.bind(this)
@@ -52,9 +53,12 @@ class VideoSearchBar extends Component {
     socket.on('you are the host', () => {
       this.setState({isHost: true})
     })
-
+    //setting userId( aka socket.id) only if your userId has not been set
     socket.on('send id', (id, usersArr) => {
-      this.setState({userId: id, users: usersArr})
+      if (!this.state.userId) {
+        this.setState({userId: id})
+      }
+      this.setState({users: usersArr})
     })
   }
   componentWillUnmount() {
@@ -116,7 +120,7 @@ class VideoSearchBar extends Component {
       img: video.snippet.thumbnails.default.url,
       userId: this.state.userId
     }
-
+    console.log(this.state.userId)
     await this.setState(state => {
       return {videoData: [...state.videoData, newQueueItem]}
     })
@@ -171,7 +175,6 @@ class VideoSearchBar extends Component {
 
         <div id="right-sidebar">
           {/* <UserList isHost={this.state.isHost} users={this.state.users} /> */}
-          {/* {this.props.room.apiKey ? */}
           <Tokbox />
           <ChatBox />
         </div>

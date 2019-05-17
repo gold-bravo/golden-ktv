@@ -8,7 +8,7 @@ module.exports = io => {
     socket.on('disconnect', () => {
       console.log(`Connection ${socket.id} has left the building`)
       //if socket left after joining a room, meaning refreshed page
-      if (socket.room) {
+      if (rooms[socket.room]) {
         //if the room has no queue(data)
         if (rooms[socket.room].curData && !rooms[socket.room].curData.length) {
           rooms[socket.room].curTime = null
@@ -65,8 +65,11 @@ module.exports = io => {
 
       //tell others in the room that someone just joined in
       setTimeout(() => {
-        io.in(roomNumber).emit('send id', socket.id, rooms[roomNumber].user)
+        console.log(socket.id)
+        // io.in(roomNumber).emit('send id', socket.id, rooms[roomNumber].user)
+        socket.to(roomNumber).emit('send id', socket.id, rooms[roomNumber].user)
       }, 500)
+
       // socket.emit('send id', socket.id, rooms[roomNumber].user)
       // socket.join(roomNumber)
       // socket.emit('success', roomNumber)
