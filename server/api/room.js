@@ -19,7 +19,6 @@ router.put('/', async (req, res, next) => {
       opentok.createSession((err, session) => {
         if (err) throw err
         let token = opentok.generateToken(session.sessionId)
-        console.log(roomSearch[0])
         roomSearch[0]
           .update({
             sessionId: session.sessionId,

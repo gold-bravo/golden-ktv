@@ -2,11 +2,6 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {OTSession, OTPublisher, OTStreams, OTSubscriber} from 'opentok-react'
 
-//Remember to fill these fields before use!
-// let apiKey = ''
-// let token = ''
-// let sessionId = ''
-
 class TokBox extends Component {
   constructor(props) {
     super(props)
@@ -54,6 +49,10 @@ class TokBox extends Component {
     }
   }
 
+  ref = test => {
+    this.test = test
+  }
+
   onSessionError = error => {
     this.setState({error})
   }
@@ -81,8 +80,8 @@ class TokBox extends Component {
   render() {
     const {apiKey, session, token} = this.props.credentials
     const {publishVideo} = this.state
-    return (
-      <div>
+    return this.props.credentials.apiKey ? (
+      <div align="center" className="scrollTok" id="dots">
         <OTSession
           apiKey={this.props.credentials.apiKey}
           sessionId={this.props.credentials.session}
@@ -93,15 +92,27 @@ class TokBox extends Component {
           <button type="button" id="videoButton" onClick={this.toggleVideo}>
             {publishVideo ? 'Disable' : 'Enable'} Video
           </button>
-          <OTPublisher
-            properties={{publishVideo, width: 150, height: 150}}
-            onPublish={this.onPublish}
-            onError={this.onPublishError}
-            eventHandlers={this.publisherEventHandlers}
-          />
+          <div id="publisher">
+            <OTPublisher
+              properties={{
+                publishVideo,
+                width: 200,
+                height: 150,
+                name: this.props.credentials.name,
+                style: {nameDisplayMode: 'on'}
+              }}
+              onPublish={this.onPublish}
+              onError={this.onPublishError}
+              eventHandlers={this.publisherEventHandlers}
+            />
+          </div>
           <OTStreams>
             <OTSubscriber
-              properties={{width: 150, height: 150}}
+              properties={{
+                width: 150,
+                height: 150,
+                style: {nameDisplayMode: 'on'}
+              }}
               onSubscribe={this.onSubscribe}
               onError={this.onSubscribeError}
               eventHandlers={this.subscriberEventHandlers}
@@ -109,6 +120,8 @@ class TokBox extends Component {
           </OTStreams>
         </OTSession>
       </div>
+    ) : (
+      <div />
     )
   }
 }

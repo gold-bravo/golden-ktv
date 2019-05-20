@@ -4,10 +4,10 @@ const VideoQueue = props => {
   return props.data.map(video => {
     return (
       <div key={video.id}>
-        <li>
-          <img src={video.img} />
-          {video.title}
-        </li>
+        <img src={video.img} />
+        <br />
+        {video.title}
+        <hr />
       </div>
     )
   })
