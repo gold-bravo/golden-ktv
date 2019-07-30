@@ -5,7 +5,6 @@ import socket from '../socket'
 import VideoQueue from './VideoQueue'
 import VideoResults from './VideoResults'
 import ChatBox from './ChatBox'
-// import UserList from './UserList'
 import Tokbox from './TokBox'
 
 class VideoSearchBar extends Component {

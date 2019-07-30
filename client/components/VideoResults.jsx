@@ -1,21 +1,20 @@
-import React, {Component} from 'react'
+import React from 'react'
 
-class VideoResults extends Component {
-  render() {
-    return (
-      <div align="center">
-        {this.props.data.map(video => {
-          return (
-            <div key={video.etag} onClick={() => this.props.handleClick(video)}>
-              <img src={video.snippet.thumbnails.medium.url} />
-              <br />
-              {video.snippet.title}
-            </div>
-          )
-        })}
-      </div>
-    )
-  }
+const VideoResults = props => {
+  const {data, handleClick} = props
+  return (
+    <div align="center">
+      {data.map(video => {
+        return (
+          <div key={video.etag} onClick={() => handleClick(video)}>
+            <img src={video.snippet.thumbnails.medium.url} />
+            <br />
+            {video.snippet.title}
+          </div>
+        )
+      })}
+    </div>
+  )
 }
 
 export default VideoResults
