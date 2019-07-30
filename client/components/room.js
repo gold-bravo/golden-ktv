@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import VideoSearchBar from './videoSearchBar'
-import Tokbox from './tokbox'
 import axios from 'axios'
 import socket from '../socket'
 
