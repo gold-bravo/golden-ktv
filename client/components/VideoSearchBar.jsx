@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
-import VideoPlayer from './videoPlayer'
+import VideoPlayer from './VideoPlayer'
 import axios from 'axios'
 import socket from '../socket'
 import VideoQueue from './VideoQueue'
-import VideoResults from './videoResults'
+import VideoResults from './VideoResults'
 import ChatBox from './ChatBox'
 // import UserList from './UserList'
-import Tokbox from './tokbox'
+import Tokbox from './TokBox'
 
 class VideoSearchBar extends Component {
   constructor(props) {

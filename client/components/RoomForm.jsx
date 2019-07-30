@@ -3,7 +3,6 @@ import {setRoom} from '../store/roomReducer'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
-import {Button, Card} from 'react-bulma-components/full'
 import {auth} from '../store'
 import ReactDOM from 'react-dom'
 

@@ -4,7 +4,7 @@ import ReactPlayer from 'react-player'
 import {withRouter} from 'react-router-dom'
 import PlayerButton from './PlayerButton'
 import {connect} from 'react-redux'
-import {Button} from 'react-bulma-components/full'
+//import {Button} from 'react-bulma-components/full'
 
 class VideoPlayer extends Component {
   constructor(props) {

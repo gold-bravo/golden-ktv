@@ -2,14 +2,6 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 
 class UserList extends Component {
-  // componentDidMount() {
-
-  // }
-
-  // componentWillUnmount() {
-
-  // }
-
   render() {
     const {users} = this.props
     const usersInList = users.map((user, index) => {
@@ -23,11 +15,6 @@ class UserList extends Component {
     return (
       <div className="users-in-party-list">
         <h2 className="title">Users in party</h2>
-        {/* {this.props.isHost ? (
-          <h2>{this.props.credentials.name} IS HOST</h2>
-        ) : (
-          <div />
-        )} */}
         {usersInList}
       </div>
     )

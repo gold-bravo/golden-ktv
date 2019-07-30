@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import VideoSearchBar from './videoSearchBar'
+import VideoSearchBar from './VideoSearchBar'
 import axios from 'axios'
 import socket from '../socket'
 
@@ -23,9 +23,6 @@ class Room extends Component {
           room={this.props.room.roomNum}
           name={this.props.room.name}
         />
-        {/* <div className="right-sidebar">
-          {this.props.room.apiKey ? <Tokbox /> : <div />}
-        </div> */}
       </div>
     )
   }
