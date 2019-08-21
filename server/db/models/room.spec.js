@@ -3,7 +3,6 @@
 const {expect} = require('chai')
 const db = require('../index')
 const Room = db.model('room')
-const Sequelize = require('sequelize')
 
 describe('Room model', () => {
   beforeEach(() => {

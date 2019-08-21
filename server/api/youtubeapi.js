@@ -7,6 +7,6 @@ router.get('/', (req, res, next) => {
     const KEY = process.env.GOOGLE_API_KEY
     res.send(KEY)
   } catch (error) {
-    console.error(error)
+    next(error)
   }
 })

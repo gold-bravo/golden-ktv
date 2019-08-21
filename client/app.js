@@ -3,7 +3,6 @@ import Room from './components/Room'
 import {Guest, Login, SignUp} from './components/RoomForm'
 import {Switch, Route} from 'react-router-dom'
 import StartBtn from './components/StartBtn'
-import {Button} from 'react-bulma-components/full'
 
 const App = () => {
   return (

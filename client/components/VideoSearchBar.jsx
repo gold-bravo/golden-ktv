@@ -4,6 +4,7 @@ import axios from 'axios'
 import socket from '../socket'
 import VideoQueue from './VideoQueue'
 import VideoResults from './VideoResults'
+import BottomBar from './BottomBar'
 import ChatBox from './ChatBox'
 import Tokbox from './TokBox'
 
@@ -177,6 +178,7 @@ class VideoSearchBar extends Component {
           <Tokbox />
           <ChatBox />
         </div>
+        <BottomBar />
       </div>
     )
   }
