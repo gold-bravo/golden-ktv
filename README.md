@@ -6,10 +6,10 @@ Hello! Welcome to Golden-KTV, a fullstack application for karaoke lovers! Our ap
 
 ## Developers
 
-⋅⋅*[Billy Tan](https://github.com/cieltan 'https://github.com/cieltan')
-⋅⋅*[Aaron Nah](https://github.com/chynh 'https://github.com/chynh')
-⋅⋅*[Jenny Wong](https://github.com/jwong-fs 'https://github.com/jwong-fs')
-⋅⋅*[Mia Baz](https://github.com/bazb0t 'https://github.com/bazb0t')
+*[Billy Tan](https://github.com/cieltan 'https://github.com/cieltan')
+*[Aaron Nah](https://github.com/chynh 'https://github.com/chynh')
+*[Jenny Wong](https://github.com/jwong-fs 'https://github.com/jwong-fs')
+*[Mia Baz](https://github.com/bazb0t 'https://github.com/bazb0t')
 
 ## Start
 
