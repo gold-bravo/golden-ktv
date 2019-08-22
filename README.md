@@ -11,6 +11,33 @@ Hello! Welcome to Golden-KTV, a fullstack application for karaoke lovers! Our ap
 - [Jenny Wong](https://github.com/jwong-fs)
 - [Mia Baz](https://github.com/bazb0t)
 
+
+## Folder Structure
+
+```
+├── node_modules
+├── client
+├── public
+│   ├── fonts
+│   ├── images
+│   ├── favicon.ico
+│   ├── index.html
+│   └── style.css
+├── script
+│   ├── seed.js
+│   └── seed.spec.js
+├── server
+│   ├── api
+│   ├── auth
+│   ├── db
+│   ├── socket
+│       ├── index.js
+│   └── index.js
+├── .gitignore
+├── package.json
+└── README.md
+```
+
 ## Start
 
 `npm run start-dev` will make great things happen!
