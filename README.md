@@ -15,8 +15,18 @@ Hello! Welcome to Golden-KTV, a fullstack application for karaoke lovers! Our ap
 ## Folder Structure
 
 ```
-├── node_modules
+├── .github
 ├── client
+│   ├── components
+│   ├── store
+│       ├── index.js
+│       ├── roomReducer.js
+│       ├── user.js
+│       ├── user.spec.js
+│   ├── app.js
+│   ├── history.js
+│   ├── index.js
+│   ├── socket.js
 ├── public
 │   ├── fonts
 │   ├── images
