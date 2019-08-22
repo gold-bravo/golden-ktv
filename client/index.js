@@ -8,6 +8,7 @@ import App from './app'
 
 // establishes socket connection
 import './socket'
+import 'react-bulma-components/full'
 
 ReactDOM.render(
   <Provider store={store}>

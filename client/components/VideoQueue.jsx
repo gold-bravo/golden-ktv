@@ -1,7 +1,8 @@
 import React from 'react'
 
 const VideoQueue = props => {
-  return props.data.map(video => {
+  const {data} = props
+  return data.map(video => {
     return (
       <div key={video.id}>
         <img src={video.img} />

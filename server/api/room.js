@@ -47,7 +47,7 @@ router.put('/', async (req, res, next) => {
         )
     }
   } catch (error) {
-    console.error(error)
+    next(error)
   }
 })
 
@@ -56,6 +56,6 @@ router.get('/:roomId', async (req, res, next) => {
     const foundRoom = await Room.findOne({where: {roomNum: req.params.roomId}})
     res.send({sessionId: foundRoom.sessionId})
   } catch (error) {
-    console.error(error)
+    next(error)
   }
 })

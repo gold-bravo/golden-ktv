@@ -62,20 +62,6 @@ class ChatBox extends Component {
             </div>
           )
         })}
-        {/* {messages.map((message, index) => {
-          const cssClasses = classNames('message', {
-            self: userName === message.userName
-          })
-
-          return (
-            <div className="message-wrapper" key={index}>
-              <div className={cssClasses}>
-                <span className="username">{message.userName}: </span>
-                <span className="body">{message.message}</span>
-              </div>
-            </div>
-          )
-        })} */}
       </div>
     )
   }

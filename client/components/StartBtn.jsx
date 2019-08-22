@@ -15,7 +15,9 @@ class StartBtn extends Component {
     return (
       <input
         style={{marginLeft: '43vw'}}
-        ref={e => (this.start = e)}
+        ref={e => {
+          this.start = e
+        }}
         onClick={this.onClick}
         type="button"
         value="START NOW"
