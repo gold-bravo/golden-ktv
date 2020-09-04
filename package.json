@@ -47,7 +47,7 @@
     "express-session": "^1.15.1",
     "history": "^4.9.0",
     "morgan": "^1.9.1",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.13.1",
     "opentok": "^2.9.0",
     "opentok-react": "^0.9.0",
     "passport": "^0.4.0",
